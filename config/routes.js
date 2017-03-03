@@ -5,13 +5,12 @@ module.exports = function(app, passport) {
 	//	connection.query('SELECT * FROM anouncement',function(err,rows){
 			//if(err) throw err;
 			
-			req.flash('loginFail', "Invalid username or password");
-			res.render('file', { message: req.flash('loginFail') });
+			res.render('file', { message: req.flash('failureFlash') });
 	//	});
 	});
 	
 	app.get('/main', isLoggedIn, function(req, res) {
-        res.render('main.ejs', {
+        res.render('loggedIn.ejs', {
             user : req.user 
         });
     });
@@ -22,10 +21,16 @@ module.exports = function(app, passport) {
         res.redirect('/');
     });
     
-     app.post('/', passport.authenticate('local-login', {
-        successRedirect : '/main', 
-        failureRedirect : '/',
-        failureFlash : true     }));
+    app.post('/', passport.authenticate('login', {
+        successRedirect : '/main',
+        failureRedirect : '/', 
+        failureFlash : true 
+    }));
+     
+    // sends 404 for random urls
+    app.use(function(req, res){
+       res.render('notFound.ejs');
+	});
 
 };
 

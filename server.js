@@ -16,7 +16,9 @@ require('./config/passport')(passport);
 app.set('view engine', 'ejs');
 app.use(morgan('dev'));
 app.use(cookieParser());
-app.use(session({ secret: 'summerwinter' }));
+app.use(bodyParser());
+app.use(session({ secret: 'summerwinter', saveUninitialized: true,
+  resave: true, }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
