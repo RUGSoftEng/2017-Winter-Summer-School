@@ -1,227 +1,253 @@
 <!DOCTYPE html>
 <html lang="en" class='full'>
+
 <head>
-  	<meta charset="utf-8">
-  	<title>Summer and Winter schools - University of Groningen</title>
-  	<link rel="icon" href="https://i1.rgstatic.net/ii/institution.image/AS%3A267455245553682@1440777707747_l">
-  	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-	<style>
-	.full {
-		 height: 100%;
-		 width: auto !important;
-		 overflow-x: hidden !important;
-	}
-	
-	#wrap {
-		background-color: #e3e3e3;
-	}
-	
-	.col-md-4 {
-		padding:10px;
-	}
-	img {
-		height:100%;
-		top:0;
-		position:absolute;
-	}
-	.navbar {
-		background-color: #0A9BEB;
-		border-radius:0px; 
-		margin: 0;
-		padding:0;
-	}
-	.navbar-brand {
-		position: relative;
-		left:0;
-		background-color:#fff;
-	}
-	#menu-bar .navbar-brand:hover,  #menu-bar .navbar-brand:focus{
-		background-color: #fff;
-		outline:none;
-	}
-	.navbar-header {
-		background-color: #fff;
-		margin: 0;
-		padding:0;
-		
-	}
-	#event-screen {
-		background-color: #f0f0f0;
-		padding:30px;
-		min-height:100%;
-	}
-	#event-screen .cols .inner-event:first-child{
-		border-bottom-left-radius: 4px;
-		border-top-left-radius: 4px;
-	}
-	#event-screen .cols .inner-event:last-child{
-		border-bottom-right-radius: 4px;
-		border-top-right-radius: 4px;
-	}
-	.announce {
-		width:100%;
-		margin:0;
-		height:155px;
-		border:1px solid #333;
-		margin-top:15px;
-	}
-	.announce:hover{
-		background-color: #f5f5f5;
-	}
-	.underline-title {
-		padding-bottom:10px;
-		border-bottom: 2px solid #333;
-	}
-	
-	.innerrow {
-		width:100%;
-		margin:0;
-	}
-	.no-select {
-		-webkit-user-select: none;
-		-khtml-user-select: none;
-		-moz-user-select: none;
-		-o-user-select: none;
-		user-select: none;
-	 }
-	 .inner-event {
-		background-color: #fff;
-		padding:8px;
-		-webkit-box-shadow: 1px 1px 1px 1px rgba(170,170,170,1);
--moz-box-shadow: 1px 1px 1px 1px rgba(170,170,170,1);
-box-shadow: 1px 1px 1px 1px rgba(170,170,170,1);
-		 
-	 }
-	 .announce h4>.badge {
-		 vertical-align: middle;
-	 }
-	 .read-more {
-		 color:#0A9BEB;
-		 cursor: pointer;
-	 }
-	#wrap .navbar-nav>li>a {
-		color:#fff;
-	}
-	#wrap .navbar-nav>li>a:focus {
-		color:#0A9BEB;
-		background-color:#fafafa;
-	}
-	.glyphicon-plus {
-		cursor:pointer;
-	}
-	.glyphicon-plus:hover {
-		color:#0A9BEB;
-	}
-	.modal-body textarea {
-		max-width: 100%;
-	}
-	</style>
+    <meta charset="utf-8">
+    <title>Summer and Winter schools - University of Groningen</title>
+    <link rel="icon" href="https://i1.rgstatic.net/ii/institution.image/AS%3A267455245553682@1440777707747_l">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <style>
+        .full {
+            height: 100%;
+            width: auto !important;
+            overflow-x: hidden !important;
+        }
+        
+        #wrap {
+            background-color: #e3e3e3;
+        }
+        
+        .col-md-4 {
+            padding: 10px;
+        }
+        
+        img {
+            height: 100%;
+            top: 0;
+            position: absolute;
+        }
+        
+        .navbar {
+            background-color: #0A9BEB;
+            border-radius: 0px;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .navbar-brand {
+            position: relative;
+            left: 0;
+            background-color: #fff;
+        }
+        
+        #menu-bar .navbar-brand:hover,
+        #menu-bar .navbar-brand:focus {
+            background-color: #fff;
+            outline: none;
+        }
+        
+        .navbar-header {
+            background-color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+        
+        #event-screen {
+            background-color: #f0f0f0;
+            padding: 30px;
+            min-height: 100%;
+        }
+        
+        #event-screen .cols .inner-event:first-child {
+            border-bottom-left-radius: 4px;
+            border-top-left-radius: 4px;
+        }
+        
+        #event-screen .cols .inner-event:last-child {
+            border-bottom-right-radius: 4px;
+            border-top-right-radius: 4px;
+        }
+        
+        .announce {
+            width: 100%;
+            margin: 0;
+            height: 155px;
+            border: 1px solid #333;
+            margin-top: 15px;
+        }
+        
+        .announce:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .underline-title {
+            padding-bottom: 10px;
+            border-bottom: 2px solid #333;
+        }
+        
+        .innerrow {
+            width: 100%;
+            margin: 0;
+        }
+        
+        .no-select {
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -o-user-select: none;
+            user-select: none;
+        }
+        
+        .inner-event {
+            background-color: #fff;
+            padding: 8px;
+            -webkit-box-shadow: 1px 1px 1px 1px rgba(170, 170, 170, 1);
+            -moz-box-shadow: 1px 1px 1px 1px rgba(170, 170, 170, 1);
+            box-shadow: 1px 1px 1px 1px rgba(170, 170, 170, 1);
+        }
+        
+        .announce h4>.badge {
+            vertical-align: middle;
+        }
+        
+        .read-more {
+            color: #0A9BEB;
+            cursor: pointer;
+        }
+        
+        #wrap .navbar-nav>li>a {
+            color: #fff;
+        }
+        
+        #wrap .navbar-nav>li>a:focus {
+            color: #0A9BEB;
+            background-color: #fafafa;
+        }
+        
+        .glyphicon-plus {
+            cursor: pointer;
+        }
+        
+        .glyphicon-plus:hover {
+            color: #0A9BEB;
+        }
+        
+        .modal-body textarea {
+            max-width: 100%;
+        }
+    </style>
 </head>
+
 <body class='full'>
-	<div id='wrap' class='full'>
-		<nav id ='menu-bar' class="navbar navbar-default">
-			<div class="container-fluid">
-				<div class="navbar-header">
-					<a class="navbar-brand" href="index.html">
-						<img alt="Brand" class = "no-select" src="https://3.basecamp.com/3141640/buckets/2744886/uploads/403602869/download/versions/BAh7CEkiCGdpZAY6BkVUSSIpZ2lkOi8vYmMzL1VwbG9hZC8xODAyNzQxMz9leHBpcmVzX2luBjsAVEkiDHB1cnBvc2UGOwBUSSIPYXR0YWNoYWJsZQY7AFRJIg9leHBpcmVzX2F0BjsAVDA=--9afb219b35df04ccd5f0ce07e565c60e92aa97d4/c_206452-l_1-k_rugr_logoen_rood_rgb.jpg" >
-					</a>
-				</div>
-		<ul class="nav navbar-nav navbar-right">
-        <li><a href="#"><?php echo $_SESSION['username'];?></a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Menu <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Announcements</a></li>
-            <li><a href="#">General Information</a></li>
-            <li><a href="#">Schedule</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="../logout">Log out</a></li>
-          </ul>
-        </li>
-      </ul>
-			</div>
-			</nav>
-		<div class='row' id='event-screen'>
-			<div class='col-md-4 cols'>
-				<div class='inner-event'>
-					<h3 class='underline-title'>Announcements<span class="glyphicon glyphicon-plus pull-right" data-toggle="modal" data-target="#add-announcement" aria-hidden="true"></span>
-</h3>
-					<div class='row innerrow'>
-						<div class='col-md-12 announce'>
-							<h4>Hello there!<span class="label label-primary pull-right">New</span></h4>										<p class='lead'>December 13th</p>
-						</div>
-						<div class='col-md-12 announce'>
-							<h4>Bye there!</h4>
-						</div>
-						<div class='col-md-12 announce'>
-							<h4>Goodbye there!</h4>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class='col-md-4 cols'>
-				<div class='inner-event'>
-					<h3 class='underline-title'>General Information<span class="glyphicon glyphicon-plus pull-right" data-toggle="modal" data-target="#add-info" aria-hidden="true"></span></h3>
-					<div class='row innerrow'>
-						<div class='col-md-12 announce'>
-							<h4>Housing<span class="label label-primary pull-right">New</span></h4>
-							<p>Housing in Groningen is fun. There are many houses available, pick one from our list of items. Enjoy the awesome villa in the back end of the park. Furthermore, there are plenty....</p>
-							<small class='read-more'>Read more...</small>
-						</div>
-						<div class='col-md-12 announce'>
-							<h4>Bye there!</h4>
-						</div>
-						<div class='col-md-12 announce'>
-							<h4>Goodbye there!</h4>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class='col-md-4 cols'>
-				<div class='inner-event'>
-					<h3 class='underline-title'>Schedule<span class="glyphicon glyphicon-plus pull-right" data-toggle="modal" data-target="#myModal" aria-hidden="true"></span></h3>
-					<div class='row innerrow'>
-						<div class='col-md-12 announce'>
-							<h4>Hello there!</h4>
-							<p class='lead'>December 13th</p>
-						</div>
-						<div class='col-md-12 announce'>
-							<h4>Bye there!</h4>
-						</div>
-						<div class='col-md-12 announce'>
-							<h4>Goodbye there!</h4>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class='row'>
-			<iframe src="https://calendar.google.com/calendar/embed?src=1ue00hf59k7ms345mtab6dnfqc%40group.calendar.google.com&ctz=Europe/Amsterdam" style="border: 0" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
-		</div>
-		
-		<div class="modal fade" id="add-announcement" tabindex="-1" role="dialog" aria-labelledby="addAnnouncement">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Add a new announcement</h4>
-      </div>
-      <div class="modal-body">
-	      <form>
-	  <div class="form-group">
-	    <label for="exampleInputEmail1">Title of announcement</label>
-	    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Title">
-	  </div>
-	  <div class="form-group">
-	    <label for="exampleInputPassword1">Content</label>
-	    <textarea type="text" class="form-control" id="exampleInputPassword1" placeholder="Text" rows="4"></textarea>
-	  </div>
-	  <div class="form-group">
-	  <label for="exampleInputPassword1">Target</label>
-	  <select class="form-control">
+    <div id='wrap' class='full'>
+        <nav id='menu-bar' class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="index.html">
+                        <img alt="Brand" class="no-select" src="https://3.basecamp.com/3141640/buckets/2744886/uploads/403602869/download/versions/BAh7CEkiCGdpZAY6BkVUSSIpZ2lkOi8vYmMzL1VwbG9hZC8xODAyNzQxMz9leHBpcmVzX2luBjsAVEkiDHB1cnBvc2UGOwBUSSIPYXR0YWNoYWJsZQY7AFRJIg9leHBpcmVzX2F0BjsAVDA=--9afb219b35df04ccd5f0ce07e565c60e92aa97d4/c_206452-l_1-k_rugr_logoen_rood_rgb.jpg">
+                    </a>
+                </div>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="#">
+                            <?php echo $_SESSION['username'];?>
+                        </a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Menu <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Announcements</a></li>
+                            <li><a href="#">General Information</a></li>
+                            <li><a href="#">Schedule</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="../logout">Log out</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class='row' id='event-screen'>
+            <div class='col-md-4 cols'>
+                <div class='inner-event'>
+                    <h3 class='underline-title'>Announcements<span class="glyphicon glyphicon-plus pull-right" data-toggle="modal" data-target="#add-announcement" aria-hidden="true"></span>
+                    </h3>
+                    <div class='row innerrow'>
+                        <div class='col-md-12 announce'>
+                            <h4>Hello there!<span class="label label-primary pull-right">New</span></h4>
+                            <p class='lead'>December 13th</p>
+                        </div>
+                        <div class='col-md-12 announce'>
+                            <h4>Bye there!</h4>
+                        </div>
+                        <div class='col-md-12 announce'>
+                            <h4>Goodbye there!</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='col-md-4 cols'>
+                <div class='inner-event'>
+                    <h3 class='underline-title'>General Information<span class="glyphicon glyphicon-plus pull-right" data-toggle="modal" data-target="#add-info" aria-hidden="true"></span></h3>
+                    <div class='row innerrow'>
+                        <div class='col-md-12 announce'>
+                            <h4>Housing<span class="label label-primary pull-right">New</span></h4>
+                            <p>Housing in Groningen is fun. There are many houses available, pick one from our list of items. Enjoy the awesome villa in the back end of the park. Furthermore, there are plenty....</p>
+                            <small class='read-more'>Read more...</small>
+                        </div>
+                        <div class='col-md-12 announce'>
+                            <h4>Bye there!</h4>
+                        </div>
+                        <div class='col-md-12 announce'>
+                            <h4>Goodbye there!</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='col-md-4 cols'>
+                <div class='inner-event'>
+                    <h3 class='underline-title'>Schedule<span class="glyphicon glyphicon-plus pull-right" data-toggle="modal" data-target="#myModal" aria-hidden="true"></span></h3>
+                    <div class='row innerrow'>
+                        <div class='col-md-12 announce'>
+                            <h4>Hello there!</h4>
+                            <p class='lead'>December 13th</p>
+                        </div>
+                        <div class='col-md-12 announce'>
+                            <h4>Bye there!</h4>
+                        </div>
+                        <div class='col-md-12 announce'>
+                            <h4>Goodbye there!</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='row'>
+            <iframe src="https://calendar.google.com/calendar/embed?src=1ue00hf59k7ms345mtab6dnfqc%40group.calendar.google.com&ctz=Europe/Amsterdam" style="border: 0" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
+        </div>
+
+        <div class="modal fade" id="add-announcement" tabindex="-1" role="dialog" aria-labelledby="addAnnouncement">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Add a new announcement</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Title of announcement</label>
+                                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Title">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Content</label>
+                                <textarea type="text" class="form-control" id="exampleInputPassword1" placeholder="Text" rows="4"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Target</label>
+                                <select class="form-control">
 	  		<option>All students</option>
 		  <option>Spatial Sciences</option>
 		  <option>Gender and Biversity</option>
@@ -229,70 +255,70 @@ box-shadow: 1px 1px 1px 1px rgba(170,170,170,1);
 		  <option>Human Resource Management</option>
 		  <option>Artificial Intelligence</option>
   	</select>
-	  </div>
-	</form>
-              </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-info">Preview</button>
-        <button type="button" class="btn btn-primary">Post announcement</button>
-      </div>
-    </div>
-  </div>
-</div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-info">Preview</button>
+                        <button type="button" class="btn btn-primary">Post announcement</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
 
-<div class="modal fade" id="add-info" tabindex="-1" role="dialog" aria-labelledby="addGeneralInformation">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Add more general information</h4>
-      </div>
-      <div class="modal-body">
-	      <form>
-	  <div class="form-group">
-	    <label for="exampleInputEmail1">Information heading</label>
-	    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Title">
-	  </div>
-	  <div class="form-group">
-	    <label for="exampleInputPassword1">Content</label>
-	    <textarea type="text" class="form-control" id="exampleInputPassword1" placeholder="Text" rows="4"></textarea>
-	  </div>
-	  	</form>
-              </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-info">Preview</button>
-        <button type="button" class="btn btn-primary">Add information</button>
-      </div>
-    </div>
-  </div>
-</div>
+        <div class="modal fade" id="add-info" tabindex="-1" role="dialog" aria-labelledby="addGeneralInformation">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Add more general information</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Information heading</label>
+                                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Title">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Content</label>
+                                <textarea type="text" class="form-control" id="exampleInputPassword1" placeholder="Text" rows="4"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-info">Preview</button>
+                        <button type="button" class="btn btn-primary">Add information</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<!-- schedule pop up-->
+        <!-- schedule pop up-->
 
-<div class="modal fade" id="add-announcement" tabindex="-1" role="dialog" aria-labelledby="addAnnouncement">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Add a new announcement</h4>
-      </div>
-      <div class="modal-body">
-	      <form>
-	  <div class="form-group">
-	    <label for="exampleInputEmail1">Title of announcement</label>
-	    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Title">
-	  </div>
-	  <div class="form-group">
-	    <label for="exampleInputPassword1">Content</label>
-	    <textarea type="text" class="form-control" id="exampleInputPassword1" placeholder="Text" rows="4"></textarea>
-	  </div>
-	  <div class="form-group">
-	  <label for="exampleInputPassword1">Target</label>
-	  <select class="form-control">
+        <div class="modal fade" id="add-announcement" tabindex="-1" role="dialog" aria-labelledby="addAnnouncement">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Add a new announcement</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Title of announcement</label>
+                                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Title">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Content</label>
+                                <textarea type="text" class="form-control" id="exampleInputPassword1" placeholder="Text" rows="4"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Target</label>
+                                <select class="form-control">
 	  		<option>All students</option>
 		  <option>Spatial Sciences</option>
 		  <option>Gender and Biversity</option>
@@ -300,21 +326,22 @@ box-shadow: 1px 1px 1px 1px rgba(170,170,170,1);
 		  <option>Human Resource Management</option>
 		  <option>Artificial Intelligence</option>
   	</select>
-	  </div>
-	</form>
-              </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-info">Preview</button>
-        <button type="button" class="btn btn-primary">Post announcement</button>
-      </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-info">Preview</button>
+                        <button type="button" class="btn btn-primary">Post announcement</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- schedule pop up end-->
+
+
     </div>
-  </div>
-</div>
-<!-- schedule pop up end-->
-		
-		
-	</div>
 
 </body>
+
 </html>
