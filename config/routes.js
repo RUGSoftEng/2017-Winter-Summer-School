@@ -2,7 +2,7 @@ module.exports = function(app, passport) {
 var mongojs = require('mongojs')
 //this is the database connected to the app the first part of the parenthesis
 //is the mongodb database and the second part the collections you use
-var db = mongojs('mongodb://admin:summerwinter@ds119370.mlab.com:19370/summerwinter',['announcements'])
+var db = mongojs('mongodb://admin:summerwinter@ds119370.mlab.com:19370/summerwinter',['announcements','generalinfo'])
 
 
 
@@ -14,9 +14,12 @@ var db = mongojs('mongodb://admin:summerwinter@ds119370.mlab.com:19370/summerwin
 
     app.get('/main', isLoggedIn, function(req, res) {
         db.announcements.find(function (err,docs){
-          res.render('loggedIn.ejs', {
-              user: req.user,
-              announcements: docs
+          db.generalinfo.find(function(err,docs2){
+            res.render('loggedIn.ejs', {
+                user: req.user,
+                announcements: docs,
+                generalinfo: docs2
+          })
           });
         });
     });
