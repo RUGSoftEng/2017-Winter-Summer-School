@@ -36,14 +36,16 @@
                     </h3>
                     <div class='row innerrow'>
                         <div class='col-md-12 announce'>
-                            <h4>Hello there!<span class="label label-primary pull-right">New</span></h4>
-                            <p class='lead'>December 13th</p>
+                          <h4><%= announcements[announcements.length - 1].title %>!<span class="label label-primary pull-right">New</span></h4>
+                          <p class='lead'><%= announcements[announcements.length - 1].description %></p>
                         </div>
                         <div class='col-md-12 announce'>
-                            <h4>Bye there!</h4>
+                          <h4><%= announcements[announcements.length - 2].title%>!<span class="label label-primary pull-right">New</span></h4>
+                          <p class='lead'><%= announcements[announcements.length - 2].description %></p>
                         </div>
                         <div class='col-md-12 announce'>
-                            <h4>Goodbye there!</h4>
+                          <h4><%= announcements[announcements.length - 3].title%>!<span class="label label-primary pull-right">New</span></h4>
+                          <p class='lead'><%= announcements[announcements.length - 3].description %></p>
                         </div>
                     </div>
                 </div>

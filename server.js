@@ -10,7 +10,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 
-
 require('./config/passport')(passport);
 
 app.set('view engine', 'ejs');

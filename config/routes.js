@@ -1,4 +1,9 @@
 module.exports = function(app, passport) {
+var mongojs = require('mongojs')
+//this is the database connected to the app the first part of the parenthesis
+//is the mongodb database and the second part the collections you use
+var db = mongojs('mongodb://admin:summerwinter@ds119370.mlab.com:19370/summerwinter',['announcements'])
+
 
 
     app.get('/', function(req, res) {
@@ -8,8 +13,11 @@ module.exports = function(app, passport) {
     });
 
     app.get('/main', isLoggedIn, function(req, res) {
-        res.render('loggedIn.ejs', {
-            user: req.user
+        db.announcements.find(function (err,docs){
+          res.render('loggedIn.ejs', {
+              user: req.user,
+              announcements: docs
+          });
         });
     });
 
