@@ -11,7 +11,7 @@ var db = mongojs('mongodb://admin:summerwinter@ds119370.mlab.com:19370/summerwin
 	   		res.redirect('/main');
    		} else {
 	        res.render('file', {
-	            message: req.flash('message')
+	            message: req.flash('error')
 	        });
         }
     });

@@ -19,7 +19,7 @@ passport.use('login', new LocalStrategy(
         if (username === users[0].username && password === users[0].password) {
             return done(null, users[0]);
         } else {
-            return done(null, false, {"message": "User not found."});
+            return done(null, false, {"message": "Invalid username or password."});
         }
     })
 );
