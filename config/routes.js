@@ -7,9 +7,13 @@ var db = mongojs('mongodb://admin:summerwinter@ds119370.mlab.com:19370/summerwin
 
 
     app.get('/', function(req, res) {
-        res.render('file', {
-            message: req.flash('failureFlash')
-        });
+        if(req.isAuthenticated()) {
+	   		res.redirect('/main');
+   		} else {
+	        res.render('file', {
+	            message: req.flash('message')
+	        });
+        }
     });
 
     app.get('/main', isLoggedIn, function(req, res) {
@@ -33,6 +37,7 @@ var db = mongojs('mongodb://admin:summerwinter@ds119370.mlab.com:19370/summerwin
     app.post('/', passport.authenticate('login', {
         successRedirect: '/main',
         failureRedirect: '/',
+        badRequestMessage : 'Invalid username or password',
         failureFlash: true
     }));
 
