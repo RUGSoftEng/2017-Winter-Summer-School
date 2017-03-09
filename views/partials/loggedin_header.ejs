@@ -140,4 +140,24 @@
         max-width: 100%;
     }
 </style>
+ <script>
+    var titles = ["Add an announcement", "Add general information"];
+    var buttonTexts = ["Post announcement", "Add section"];
+    var sectionHeaders = ["Title of announcement", "Information header"];
+    var links = ["/announcement/add", "/generalinfo/add"]
+    $(document).ready(function() {
+	    $('.open-modal').click(function(){
+		   $type = $(this).data("type");
+		   $('#add-announcement .modal-title').html("<p>" + titles[$type] + "</p>");
+		   $('#add-announcement #section-header').html(sectionHeaders[$type]);
+		   $('#add-announcement .finish').html(buttonTexts[$type]);
+		   $('#add-announcement form').attr('action', links[$type])
+		   if($type == 1) {
+			   $('#add-announcement .target').hide();
+		   } else {
+			   $('#add-announcement .target').show();
+		   }
+	    });
+    });
+    </script>
 </head>
