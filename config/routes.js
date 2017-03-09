@@ -36,6 +36,9 @@ module.exports = function(app,db, passport) {
         badRequestMessage : 'Invalid username or password',
         failureFlash: true
     }));
+    
+
+
     app.post('/announcement/add',function(req,res){
       var newAnnouncement = {
         title: req.body.title,
