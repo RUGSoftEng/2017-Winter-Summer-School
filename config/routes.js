@@ -1,8 +1,4 @@
-module.exports = function(app, passport) {
-var mongojs = require('mongojs')
-//this is the database connected to the app the first part of the parenthesis
-//is the mongodb database and the second part the collections you use
-var db = mongojs('mongodb://admin:summerwinter@ds119370.mlab.com:19370/summerwinter',['announcements','generalinfo'])
+module.exports = function(app,db, passport) {
 
 
 
@@ -40,6 +36,36 @@ var db = mongojs('mongodb://admin:summerwinter@ds119370.mlab.com:19370/summerwin
         badRequestMessage : 'Invalid username or password',
         failureFlash: true
     }));
+    app.post('/announcement/add',function(req,res){
+      var newAnnouncement = {
+        title: req.body.title,
+        description: req.body.description,
+        poster: "Nikolas Hadjipanayi",
+        date: new Date()
+      }
+      db.announcements.insert(newAnnouncement,function(err,result){
+        if(err){
+          console.log(err);
+        }
+        res.redirect('/main');
+      });
+    });
+
+    app.post('/generalinfo/add',function(req,res){
+      var newGeneralInfo = {
+        title: req.body.title,
+        description: req.body.description,
+        }
+      db.generalinfo.insert(newGeneralInfo,function(err,result){
+        if(err){
+          console.log(err);
+        }
+        res.redirect('/main');
+      });
+    });
+
+
+
 
     // sends 404 for random urls
     app.use(function(req, res) {
