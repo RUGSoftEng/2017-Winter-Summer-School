@@ -24,6 +24,14 @@ module.exports = function(app,db, passport) {
         });
     });
 
+    app.get('/announcepage',isLoggedIn,function(req,res){
+      db.announcements.find(function(err,docs){
+        res.render('announcements.ejs',{
+            user: req.user,
+            announcements: docs
+        });
+      });
+    });
 
     app.get('/logout', function(req, res) {
         req.logout();
@@ -36,7 +44,7 @@ module.exports = function(app,db, passport) {
         badRequestMessage : 'Invalid username or password',
         failureFlash: true
     }));
-    
+
 
 
     app.post('/announcement/add',function(req,res){
