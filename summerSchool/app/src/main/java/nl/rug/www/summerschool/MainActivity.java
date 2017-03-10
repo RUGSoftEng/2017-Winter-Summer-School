@@ -1,14 +1,20 @@
 package nl.rug.www.summerschool;
 
+import android.graphics.Point;
+import android.graphics.Typeface;
 import android.media.Image;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import layout.AnnouncementFragment;
 import layout.ForumFragment;
@@ -30,7 +36,24 @@ public class MainActivity extends AppCompatActivity {
         final ImageButton timetableButton = (ImageButton)findViewById(R.id.timetableButton);
         final ImageButton forumButton = (ImageButton)findViewById(R.id.forumButton);
         final ImageButton profileButton = (ImageButton)findViewById(R.id.profileButton);
-        final LinearLayout mainFragment = (LinearLayout)findViewById(R.id.default_mainFragment);
+        final ScrollView mainFragment = (ScrollView)findViewById(R.id.default_mainFragment);
+
+        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/rugfont.ttf");
+        TextView mainWelcomeText = (TextView) findViewById(R.id.main_welcome);
+        mainWelcomeText.setTypeface(typeface);
+        TextView mainContentsText = (TextView) findViewById(R.id.main_contents);
+        mainContentsText.setTypeface(typeface);
+
+        ImageView poster = (ImageView) findViewById(R.id.poster);
+
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.x * 1023 / 745;
+
+        poster.getLayoutParams().width = width;
+        poster.getLayoutParams().height = height;
 
         announcementButton.setOnClickListener(new View.OnClickListener() {
             @Override
