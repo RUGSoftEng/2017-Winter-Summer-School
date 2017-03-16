@@ -25,6 +25,12 @@ import layout.TimeTableFragment;
 
 public class MainActivity extends AppCompatActivity {
 
+    final static private String WELCOME_EXAMPLE = "Welcome to the University of Groningen Summer School on XXX.\n\n" +
+            "The University of Groningen (UoG) has a rich academic tradition dating back to 1614. From this tradition arose the first female student and the first female lecturer in the Netherlands, the first Dutch astronaut, the first president of the European Central Bank and, in 2016, a Nobel prize winner in Chemistry.\n\n" +
+            "The UoG is a leading research institution and is among the world’s top 100 universities. Although highly research-driven and innovative, UoG acknowledges its heritage and has strong links to the northern Netherlands region. UoG aims to conduct research of high societal relevance and strongly connects with societal stakeholders. It differentiates itself in the international market by having a close link between education and research and by focusing on three key themes: Energy, Healthy Ageing, and Sustainable Society.\n\n" +
+            "The summer school is an initiative of the Faculty of XXX , and it has been developed in conjunction with sponsors, partners.\n\n" +
+            "The summer school is presented under the auspices of XXX (GSG/master track / minor …. Please elaborate and include relevant links).\n";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,9 +46,10 @@ public class MainActivity extends AppCompatActivity {
 
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/rugfont.ttf");
         TextView mainWelcomeText = (TextView) findViewById(R.id.main_welcome);
-        mainWelcomeText.setTypeface(typeface);
+        mainWelcomeText.setTypeface(typeface, Typeface.BOLD);
         TextView mainContentsText = (TextView) findViewById(R.id.main_contents);
-        mainContentsText.setTypeface(typeface);
+        mainContentsText.setTypeface(typeface, Typeface.BOLD);
+        mainContentsText.setText(WELCOME_EXAMPLE);
 
         ImageView poster = (ImageView) findViewById(R.id.poster);
 
