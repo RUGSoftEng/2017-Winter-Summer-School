@@ -6,6 +6,12 @@
     android:layout_height="match_parent"
     tools:context="nl.rug.www.summerschool.MainActivity">
 
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/facebook_invisible_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+
     <ImageView
         android:layout_width="168dp"
         android:layout_height="48dp"

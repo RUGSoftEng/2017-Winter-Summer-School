@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">summerSchool</string>
-    <string name="facebook_app_id">738154266351197</string>
+    <string name="facebook_app_id">1850528335213838</string>
+    <string name="fb_login_protocol_scheme">fb1850528335213838</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

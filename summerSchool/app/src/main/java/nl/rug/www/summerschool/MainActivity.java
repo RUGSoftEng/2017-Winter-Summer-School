@@ -1,5 +1,6 @@
 package nl.rug.www.summerschool;
 
+import android.content.Intent;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.media.Image;
@@ -7,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +17,23 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+import com.facebook.login.widget.ProfilePictureView;
+import com.google.android.gms.common.SignInButton;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Arrays;
 
 import layout.AnnouncementFragment;
 import layout.ForumFragment;
@@ -31,18 +50,26 @@ public class MainActivity extends AppCompatActivity {
             "The summer school is an initiative of the Faculty of XXX , and it has been developed in conjunction with sponsors, partners.\n\n" +
             "The summer school is presented under the auspices of XXX (GSG/master track / minor …. Please elaborate and include relevant links).\n";
 
+    private LoginButton invisibleButton;
+    private CallbackManager callbackManager;
+    private String id;
+    private String email;
+    private String name;
+    private String birthday;
+    private String gender;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final ImageButton announcementButton = (ImageButton)findViewById(R.id.announcementButton);
-        final ImageButton generalinformationButton = (ImageButton)findViewById(R.id.generalinformationButton);
-        final ImageButton schoolinformationButton = (ImageButton)findViewById(R.id.schoolinformationButton);
-        final ImageButton timetableButton = (ImageButton)findViewById(R.id.timetableButton);
-        final ImageButton forumButton = (ImageButton)findViewById(R.id.forumButton);
-        final ImageButton profileButton = (ImageButton)findViewById(R.id.profileButton);
-        final ScrollView mainFragment = (ScrollView)findViewById(R.id.default_mainFragment);
+        final ImageButton announcementButton = (ImageButton) findViewById(R.id.announcementButton);
+        final ImageButton generalinformationButton = (ImageButton) findViewById(R.id.generalinformationButton);
+        final ImageButton schoolinformationButton = (ImageButton) findViewById(R.id.schoolinformationButton);
+        final ImageButton timetableButton = (ImageButton) findViewById(R.id.timetableButton);
+        final ImageButton forumButton = (ImageButton) findViewById(R.id.forumButton);
+        final ImageButton profileButton = (ImageButton) findViewById(R.id.profileButton);
+        final ScrollView mainFragment = (ScrollView) findViewById(R.id.default_mainFragment);
 
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/rugfont.ttf");
         TextView mainWelcomeText = (TextView) findViewById(R.id.main_welcome);
@@ -62,15 +89,15 @@ public class MainActivity extends AppCompatActivity {
         poster.getLayoutParams().width = width;
         poster.getLayoutParams().height = height;
 
+        if(isLoggedIn()) {
+            retrieveData();
+        }
+
         announcementButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mainFragment.setVisibility(View.GONE);
-
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.next_mainFragment, new AnnouncementFragment());
-                fragmentTransaction.commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.next_mainFragment, new AnnouncementFragment()).commit();
             }
         });
 
@@ -78,11 +105,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mainFragment.setVisibility(View.GONE);
-
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.next_mainFragment, new GeneralInformationFragment());
-                fragmentTransaction.commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.next_mainFragment, new GeneralInformationFragment()).commit();
             }
         });
 
@@ -90,11 +113,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mainFragment.setVisibility(View.GONE);
-
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.next_mainFragment, new SchoolInformationFragment());
-                fragmentTransaction.commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.next_mainFragment, new SchoolInformationFragment()).commit();
             }
         });
 
@@ -102,23 +121,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mainFragment.setVisibility(View.GONE);
-
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.next_mainFragment, new TimeTableFragment());
-                fragmentTransaction.commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.next_mainFragment, new TimeTableFragment()).commit();
             }
         });
+
 
         forumButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mainFragment.setVisibility(View.GONE);
-
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.next_mainFragment, new ForumFragment());
-                fragmentTransaction.commit();
+                if (isLoggedIn()) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.next_mainFragment, new ForumFragment()).commit();
+                } else {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.next_mainFragment, new SignInFragment()).commit();
+                }
             }
         });
 
@@ -126,13 +142,83 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mainFragment.setVisibility(View.GONE);
-
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.next_mainFragment, new ProfileFragment());
-                fragmentTransaction.commit();
+                if (isLoggedIn()) {
+                    ProfileFragment pf = ProfileFragment.newInstance(id, email, name, birthday, gender);
+                    Log.v("Main Activity", id + email + name + birthday + gender);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.next_mainFragment, pf).commit();
+                } else {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.next_mainFragment, new SignInFragment()).commit();
+                }
             }
         });
 
+        facebookLogin();
+    }
+
+    private void facebookLogin() {
+        invisibleButton = (LoginButton) findViewById(R.id.facebook_invisible_button);
+        callbackManager = CallbackManager.Factory.create();
+        invisibleButton.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday"));
+        // Callback registration
+        invisibleButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Log.i("Main Activity", loginResult.getAccessToken().toString());
+                retrieveData();
+                getSupportFragmentManager().beginTransaction().replace(R.id.next_mainFragment, new AnnouncementFragment()).commit();
+                Toast.makeText(MainActivity.this.getApplicationContext(), "Login Succeeded", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancel() {
+                Log.i("Main Activity", "Login cancel");
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                Log.i("Main Activity", exception.getMessage());
+            }
+        });
+    }
+
+    private void retrieveData() {
+        GraphRequest request = GraphRequest.newMeRequest(
+                AccessToken.getCurrentAccessToken(),
+                new GraphRequest.GraphJSONObjectCallback() {
+
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        Log.v("Main", response.toString());
+                        setProfileToView(object);
+                    }
+                });
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,name,email,gender,birthday");
+        request.setParameters(parameters);
+        request.executeAsync();
+    }
+
+    private void setProfileToView(JSONObject jsonObject) {
+        try {
+            id = jsonObject.getString("id");
+            email = jsonObject.getString("email");
+            name = jsonObject.getString("name");
+            birthday = jsonObject.getString("birthday");
+            gender = jsonObject.getString("gender");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean isLoggedIn() {
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        return accessToken != null;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 }

@@ -1,0 +1,79 @@
+{
+  "project_info": {
+    "project_number": "267763153918",
+    "project_id": "firebase-summerschool"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:267763153918:android:ec602eaca2450e0a",
+        "android_client_info": {
+          "package_name": "com.example.jk.swschool"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "267763153918-6ei8vm2ms35osm82v74njhg4no1bs4ne.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-ztsLc10D_sgL7FOfumwtLcbZHetpWsI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:267763153918:android:8bb6159706bdc1b3",
+        "android_client_info": {
+          "package_name": "nl.rug.www.summerschool"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "267763153918-i2a82r07cmh39suuceo9f6hpea8u1n32.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "nl.rug.www.summerschool",
+            "certificate_hash": "035fc6961f41af56f7020f575ec4f079cc3bc0be"
+          }
+        },
+        {
+          "client_id": "267763153918-6ei8vm2ms35osm82v74njhg4no1bs4ne.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-ztsLc10D_sgL7FOfumwtLcbZHetpWsI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

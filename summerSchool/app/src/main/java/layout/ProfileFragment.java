@@ -1,37 +1,22 @@
 package layout;
 
-import android.content.Context;
-import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.common.api.GoogleApiClient;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.facebook.login.widget.ProfilePictureView;
 
-import java.util.Arrays;
+import java.net.URL;
 
 import nl.rug.www.summerschool.R;
 
@@ -46,12 +31,24 @@ import nl.rug.www.summerschool.R;
 public class ProfileFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_ID = "id";
+    private static final String ARG_EMAIL = "email";
+    private static final String ARG_NAME = "name";
+    private static final String ARG_BIRTHDAY = "birthday";
+    private static final String ARG_GENDER = "gender";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String id;
+    private String email;
+    private String name;
+    private String birthday;
+    private String gender;
+    private TextView myProfileName;
+    private TextView myName;
+    private TextView myEmail;
+    private TextView myBirthday;
+    private TextView myGender;
+    private ProfilePictureView profilePictureView;
 
     private OnFragmentInteractionListener mListener;
 
@@ -68,11 +65,14 @@ public class ProfileFragment extends Fragment {
      * @return A new instance of fragment ProfileFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ProfileFragment newInstance(String param1, String param2) {
+    public static ProfileFragment newInstance(String param1, String param2, String param3, String param4, String param5) {
         ProfileFragment fragment = new ProfileFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_ID, param1);
+        args.putString(ARG_EMAIL, param2);
+        args.putString(ARG_NAME, param3);
+        args.putString(ARG_BIRTHDAY, param4);
+        args.putString(ARG_GENDER, param5);
         fragment.setArguments(args);
         return fragment;
     }
@@ -81,8 +81,11 @@ public class ProfileFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            id = getArguments().getString(ARG_ID);
+            email = getArguments().getString(ARG_EMAIL);
+            name = getArguments().getString(ARG_NAME);
+            birthday = getArguments().getString(ARG_BIRTHDAY);
+            gender = getArguments().getString(ARG_GENDER);
         }
     }
 
@@ -90,13 +93,31 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        Log.v("Profile Fragment", id + email + name + getArguments());
+        myProfileName = (TextView)view.findViewById(R.id.user_profile_name);
+        myProfileName.setText(name);
+        myName = (TextView)view.findViewById(R.id.user_name);
+        myName.setText(name);
+        myEmail = (TextView)view.findViewById(R.id.user_email);
+        myEmail.setText(email);
+        myBirthday = (TextView)view.findViewById(R.id.user_birthday);
+        myBirthday.setText(birthday);
+        myGender = (TextView)view.findViewById(R.id.user_gender);
+        myGender.setText(gender);
+        profilePictureView = (ProfilePictureView)view.findViewById(R.id.user_profile_photo);
+        profilePictureView.setPresetSize(ProfilePictureView.NORMAL);
+        profilePictureView.setProfileId(id);
+        profilePictureView.setVisibility(View.VISIBLE);
+
+        return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
     }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
