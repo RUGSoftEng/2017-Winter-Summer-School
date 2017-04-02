@@ -5,12 +5,17 @@
               android:layout_height="match_parent"
     android:gravity="center">
 
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/facebook_invisible_log_in_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+
     <Button
         android:id="@+id/facebook_login_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:paddingLeft="16dp"
         android:background="@color/com_facebook_blue"
         android:text="@string/login_with_facebook"
         android:textColor="#ffffff"/>
@@ -20,7 +25,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:paddingLeft="16dp"
         android:background="@color/colorPrimary"
         android:text="@string/login_with_google"
         android:textColor="#ffffff"/>

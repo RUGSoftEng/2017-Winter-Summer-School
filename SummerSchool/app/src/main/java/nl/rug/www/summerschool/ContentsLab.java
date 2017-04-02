@@ -25,6 +25,7 @@ public class ContentsLab {
     private ArrayList<TimeTable> mTimeTables;
     private ArrayList<TimeTableWeek> mTimeTableWeeks;
     private ArrayList<Lecturer> mLecturers;
+    private ArrayList<String> mLogInData;
 
     public static ContentsLab get(Context context) {
         if (sContentsLab == null) {
@@ -34,6 +35,7 @@ public class ContentsLab {
     }
 
     private ContentsLab(Context context) {
+        mLogInData = new ArrayList<>();
         mAnnouncements = new ArrayList<>();
         mGeneralInfos = new ArrayList<>();
         mTimeTables = new ArrayList<>();
@@ -47,6 +49,14 @@ public class ContentsLab {
         mTimeTableWeeks.add(new TimeTableWeek("Sunday"));
         mLecturers = new ArrayList<>();
         createFakeLecturers();
+    }
+
+    public ArrayList<String> getLogInData() {
+        return mLogInData;
+    }
+
+    public void setLogInData(ArrayList<String> logInData) {
+        mLogInData = (ArrayList<String>)logInData.clone();
     }
 
     public List<GeneralInfo> getGeneralInfos() { return mGeneralInfos; }

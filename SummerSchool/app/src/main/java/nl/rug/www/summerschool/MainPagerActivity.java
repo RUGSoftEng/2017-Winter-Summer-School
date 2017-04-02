@@ -3,9 +3,11 @@ package nl.rug.www.summerschool;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -13,6 +15,7 @@ public class MainPagerActivity extends AppCompatActivity {
 
     private static final int FRAGMENTS_SIZE = 6;
 
+    private FragmentPagerAdapter mAdapter;
     private ViewPager mViewPager;
     private ImageButton mAnnouncementButton;
     private ImageButton mGeneralInfoButton;
@@ -27,7 +30,8 @@ public class MainPagerActivity extends AppCompatActivity {
             new LecturerListFragment(),
             new TimeTableFragment(),
             new ForumFragment(),
-            new MyProfileFragment()
+            new SignInFragment(),
+            new RootFragment()
     };
 
     @Override
@@ -80,7 +84,7 @@ public class MainPagerActivity extends AppCompatActivity {
         });
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        mViewPager.setAdapter(new FragmentPagerAdapter(fragmentManager) {
+        mAdapter = new FragmentPagerAdapter(fragmentManager) {
             @Override
             public Fragment getItem(int position) {
                 switch (position) {
@@ -95,7 +99,7 @@ public class MainPagerActivity extends AppCompatActivity {
                     case 4 :
                         return mFragments[4];
                     case 5 :
-                        return mFragments[5];
+                        return mFragments[6];
                     default:
                         return null;
                 }
@@ -105,6 +109,8 @@ public class MainPagerActivity extends AppCompatActivity {
             public int getCount() {
                 return FRAGMENTS_SIZE;
             }
-        });
+        };
+        mViewPager.setAdapter(mAdapter);
     }
+
 }
