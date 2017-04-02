@@ -1,8 +1,6 @@
 package nl.rug.www.summerschool;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +13,8 @@ import java.util.List;
  * Created by jk on 09/03/17.
  */
 
-public class AnnouncementAdapter extends ArrayAdapter<Announcement> {
-    public AnnouncementAdapter(Context context, List<Announcement> objects) {
+public class AnnouncementAdapter extends ArrayAdapter<Contents> {
+    public AnnouncementAdapter(Context context, List<Contents> objects) {
         super(context, 0, objects);
     }
 
@@ -28,7 +26,7 @@ public class AnnouncementAdapter extends ArrayAdapter<Announcement> {
                     R.layout.announcement_list_item, parent, false);
         }
 
-        Announcement currentAnnoucement = getItem(position);
+        Contents currentAnnoucement = getItem(position);
         TextView titleView = (TextView) listItemView.findViewById(R.id.announcementTitle);
         String title = currentAnnoucement.getTitle();
         titleView.setText(title);

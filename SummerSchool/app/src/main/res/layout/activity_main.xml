@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
     android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="nl.rug.www.summerschool.MainActivity">
-
-    <com.facebook.login.widget.LoginButton
-        android:id="@+id/facebook_invisible_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"/>
+    tools:context="nl.rug.www.summerschool.MainPagerActivity">
 
     <ImageView
         android:layout_width="168dp"
@@ -18,62 +13,13 @@
         android:padding="4dp"
         android:src="@drawable/rug_banner"/>
 
-    <FrameLayout
-        android:id="@+id/fragment"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/main_view_pager"
+        android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="0dp">
 
-        <ScrollView
-            android:id="@+id/default_mainFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true">
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:id="@+id/poster"
-                    android:layout_width="745dp"
-                    android:layout_height="1053dp"
-                    android:src="@drawable/poster"
-                    android:scaleType="fitXY"/>
-
-                <TextView
-                    android:id="@+id/main_welcome"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Welcome to Summer/Winter School"
-                    android:textColor="@color/colorPrimary"
-                    android:layout_margin="16dp"
-                    android:textStyle="bold"
-                    android:textSize="24sp"/>
-
-                <TextView
-                    android:id="@+id/main_contents"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="example main"
-                    android:textColor="#000000"
-                    android:layout_margin="16dp"
-                    android:textSize="16sp"/>
-            </LinearLayout>
-
-
-        </ScrollView>
-
-        <RelativeLayout
-            android:id="@+id/next_mainFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </RelativeLayout>
-
-    </FrameLayout>
-
+    </android.support.v4.view.ViewPager>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -82,7 +28,7 @@
         android:background="@color/colorPrimary">
 
         <ImageButton
-            android:id="@+id/announcementButton"
+            android:id="@+id/announcement_button"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
             android:layout_marginLeft="5dp"
@@ -92,7 +38,7 @@
             android:background="@drawable/announcement"/>
 
         <ImageButton
-            android:id="@+id/generalinformationButton"
+            android:id="@+id/generalinfo_button"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
             android:layout_marginLeft="5dp"
@@ -102,7 +48,7 @@
             android:background="@drawable/generalinformation"/>
 
         <ImageButton
-            android:id="@+id/schoolinformationButton"
+            android:id="@+id/lecturerinfo_button"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
             android:layout_marginLeft="5dp"
@@ -112,7 +58,7 @@
             android:background="@drawable/schoolinformation"/>
 
         <ImageButton
-            android:id="@+id/timetableButton"
+            android:id="@+id/timetable_button"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
             android:layout_marginLeft="5dp"
@@ -122,7 +68,7 @@
             android:background="@drawable/schedule"/>
 
         <ImageButton
-            android:id="@+id/forumButton"
+            android:id="@+id/forum_button"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
             android:layout_marginLeft="5dp"
@@ -132,7 +78,7 @@
             android:background="@drawable/forum"/>
 
         <ImageButton
-            android:id="@+id/profileButton"
+            android:id="@+id/my_profile_button"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
             android:layout_marginLeft="5dp"

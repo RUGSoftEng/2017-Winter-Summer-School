@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">SummerSchool</string>
+    <string name="enter_your_code_hint">Enter your code</string>
+    <string name="welcome_to_swapp">Welcome to Summer and Winter school App!</string>
+    <string name="log_in_button">Log in</string>
+    <string name="logo_description">RUG Logo Image</string>
+    <string name="content_title_label">Title</string>
+    <string name="content_detail_label">Details</string>
+
+    <string name="fb_login_protocol_scheme">fb1850528335213838</string>
+    <string name="facebook_app_id">1850528335213838</string>
+
+    <string name="login_with_facebook">Login with Facebook</string>
+    <string name="login_with_google">Login with Google+</string>
+</resources>

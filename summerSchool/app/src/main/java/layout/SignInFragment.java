@@ -91,7 +91,7 @@ public class SignInFragment extends Fragment {
         googleLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "Google login button is clicked", Toast.LENGTH_LONG).show();
+                getActivity().findViewById(R.id.google_invisible_button).performClick();
             }
         });
     }
