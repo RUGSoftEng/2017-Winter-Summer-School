@@ -31,12 +31,20 @@ public class AnnouncementListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         new FetchAnnouncementsTask().execute();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_list, container, false);
+
+        TextView section = (TextView)v.findViewById(R.id.section_name);
+        section.setText(R.string.announcement);
 
         mAnnouncementRecyclerView = (RecyclerView)v.findViewById(R.id.recycler_view);
         mAnnouncementRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

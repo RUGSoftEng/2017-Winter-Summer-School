@@ -19,7 +19,9 @@ import javax.xml.datatype.DatatypeFactory;
  */
 
 public class ContentsLab {
+
     private static ContentsLab sContentsLab;
+
     private ArrayList<Announcement> mAnnouncements;
     private ArrayList<GeneralInfo> mGeneralInfos;
     private ArrayList<TimeTable> mTimeTables;

@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:textSize="24sp"
             android:layout_margin="4dp"
-            android:text="title is here"/>
+            android:text="@string/title_is_here"/>
 
         <TextView
             style="?android:listSeparatorTextViewStyle"
@@ -41,7 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:text="detail is here"/>
+            android:text="@string/detail_is_here"/>
 
     </LinearLayout>
 

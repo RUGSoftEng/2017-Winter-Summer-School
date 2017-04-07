@@ -34,12 +34,15 @@ public class TimeTableFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        new FetchTimeTablesTask().execute();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
+
+        TextView section = (TextView)view.findViewById(R.id.section_name);
+        section.setText("Time Table");
+
         mTimeTableRecyclerView = (RecyclerView)view.findViewById(R.id.recycler_view);
         mTimeTableRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -49,6 +52,7 @@ public class TimeTableFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        new FetchTimeTablesTask().execute();
         updateUI();
     }
 

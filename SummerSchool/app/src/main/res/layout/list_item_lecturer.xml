@@ -6,9 +6,11 @@
               android:layout_height="wrap_content">
 
     <ImageView
+        android:id="@+id/lecturer_image_view"
         android:layout_width="120dp"
         android:layout_height="120dp"
-        android:src="@drawable/profile"/>
+        android:src="@drawable/profile"
+        android:contentDescription="@string/lecturer_image_view"/>
 
     <TextView
         android:id="@+id/lecturer_item_name_text_view"
@@ -16,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:text="name"
+        android:text="@string/name"
         android:textSize="18sp"/>
 
 </LinearLayout>

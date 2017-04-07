@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 public class LecturerFragment extends Fragment {
 
-    private static final String ARG_CONTENT_ID = "lecturer_id";
+    private static final String ARG_LECTURER_ID = "lecturer_id";
 
     private Lecturer mLecturer;
     private TextView mTitle;
@@ -23,7 +23,7 @@ public class LecturerFragment extends Fragment {
 
     public static LecturerFragment newInstance(String lecturerId) {
         Bundle args = new Bundle();
-        args.putSerializable(ARG_CONTENT_ID, lecturerId);
+        args.putSerializable(ARG_LECTURER_ID, lecturerId);
 
         LecturerFragment fragment = new LecturerFragment();
         fragment.setArguments(args);
@@ -33,7 +33,7 @@ public class LecturerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String lecturerId = (String) getArguments().getSerializable(ARG_CONTENT_ID);
+        String lecturerId = (String) getArguments().getSerializable(ARG_LECTURER_ID);
         mLecturer = ContentsLab.get(getActivity()).getLecturer(lecturerId);
     }
 

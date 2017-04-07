@@ -5,13 +5,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFF"
     tools:context="nl.rug.www.summerschool.MainPagerActivity">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:src="@drawable/appheader"/>
+        android:src="@drawable/appheader"
+        android:contentDescription="@string/app_header"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/main_view_pager"
@@ -19,73 +19,79 @@
         android:layout_width="match_parent"
         android:layout_height="0dp">
 
+
     </android.support.v4.view.ViewPager>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:background="#ffffff">
+        android:gravity="center_horizontal">
 
         <ImageButton
             android:id="@+id/announcement_button"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/announcement"/>
+            android:background="@drawable/announcementblack"
+            android:contentDescription="@string/announcement_button"/>
 
         <ImageButton
             android:id="@+id/generalinfo_button"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/generalinformation"/>
+            android:background="@drawable/generalinformation"
+            android:contentDescription="@string/general_information_button"/>
 
         <ImageButton
             android:id="@+id/lecturerinfo_button"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/schoolinformation"/>
+            android:background="@drawable/lecturer"
+            android:contentDescription="@string/lecturer_information_button"/>
 
         <ImageButton
             android:id="@+id/timetable_button"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/schedule"/>
+            android:background="@drawable/timetable"
+            android:contentDescription="@string/time_table_button"/>
 
         <ImageButton
             android:id="@+id/forum_button"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/forum"/>
+            android:background="@drawable/forum"
+            android:contentDescription="@string/forum_button"/>
 
         <ImageButton
             android:id="@+id/my_profile_button"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/my_account"/>
+            android:background="@drawable/my_account"
+            android:contentDescription="@string/my_profile_button"/>
 
     </LinearLayout>
 

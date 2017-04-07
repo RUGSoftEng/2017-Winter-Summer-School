@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 public class MainPagerActivity extends AppCompatActivity {
@@ -110,7 +111,50 @@ public class MainPagerActivity extends AppCompatActivity {
                 return FRAGMENTS_SIZE;
             }
         };
-        mViewPager.setAdapter(mAdapter);
-    }
 
+        mViewPager.setAdapter(mAdapter);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mAnnouncementButton.setImageDrawable(getResources().getDrawable(R.drawable.announcement));
+                mGeneralInfoButton.setImageDrawable(getResources().getDrawable(R.drawable.generalinformation));
+                mLecturerButton.setImageDrawable(getResources().getDrawable(R.drawable.lecturer));
+                mTimeTableButton.setImageDrawable(getResources().getDrawable(R.drawable.timetable));
+                mForumButton.setImageDrawable(getResources().getDrawable(R.drawable.forum));
+                mMyProfileButton.setImageDrawable(getResources().getDrawable(R.drawable.my_account));
+                switch (position) {
+                    case 0 :
+                        mAnnouncementButton.setImageDrawable(getResources().getDrawable(R.drawable.announcementblack));
+                        break;
+                    case 1 :
+                        mGeneralInfoButton.setImageDrawable(getResources().getDrawable(R.drawable.generalinformationblack));
+                        break;
+                    case 2 :
+                        mLecturerButton.setImageDrawable(getResources().getDrawable(R.drawable.lecturerblack));
+                        break;
+                    case 3 :
+                        mTimeTableButton.setImageDrawable(getResources().getDrawable(R.drawable.timetableblack));
+                        break;
+                    case 4 :
+                        mForumButton.setImageDrawable(getResources().getDrawable(R.drawable.forumblack));
+                        break;
+                    case 5 :
+                        mMyProfileButton.setImageDrawable(getResources().getDrawable(R.drawable.my_accountblack));
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+    }
 }

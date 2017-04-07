@@ -15,7 +15,8 @@
             android:layout_height="120dp"
             android:layout_margin="4dp"
             android:src="@drawable/profile"
-            android:background="#ffffff"/>
+            android:background="#ffffff"
+            android:contentDescription="@string/lecturer_picture"/>
 
         <LinearLayout
             android:orientation="vertical"
@@ -30,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:padding="4dp"
-                android:text="NAME"
+                android:text="@string/name"
                 android:textColor="#ffffff"/>
 
             <TextView
@@ -39,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:padding="4dp"
-                android:text="name is here"/>
+                android:text="@string/name_is_here"/>
 
             <TextView
                 style="?android:listSeparatorTextViewStyle"
@@ -48,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:padding="4dp"
-                android:text="Department"
+                android:text="@string/department"
                 android:textColor="#ffffff"/>
 
             <TextView
@@ -57,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:padding="4dp"
-                android:text="department is here"/>
+                android:text="@string/department_is_here"/>
 
         </LinearLayout>
 
@@ -71,7 +72,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:padding="4dp"
-        android:text="Details"
+        android:text="@string/content_detail_label"
         android:textColor="#ffffff"/>
 
     <TextView
@@ -80,6 +81,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:padding="4dp"
-        android:text="department is here"/>
+        android:text="@string/detail_is_here"/>
 
 </LinearLayout>

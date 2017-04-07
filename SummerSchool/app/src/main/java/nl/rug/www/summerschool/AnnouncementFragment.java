@@ -1,6 +1,7 @@
 package nl.rug.www.summerschool;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.util.TypedValue;
@@ -9,13 +10,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Enumeration;
+import java.util.ResourceBundle;
+
 /**
  * Created by jk on 3/31/17.
  */
 
 public class AnnouncementFragment extends Fragment {
 
-    private static final String ARG_CONTENT_ID = "announcement_id";
+    private static final String ARG_ANNOUNCEMENT_ID = "announcement_id";
 
     private Announcement mAnnouncement;
     private TextView mTitle;
@@ -25,7 +29,7 @@ public class AnnouncementFragment extends Fragment {
 
     public static AnnouncementFragment newInstance(String announcementId) {
         Bundle args = new Bundle();
-        args.putSerializable(ARG_CONTENT_ID, announcementId);
+        args.putSerializable(ARG_ANNOUNCEMENT_ID, announcementId);
 
         AnnouncementFragment fragment = new AnnouncementFragment();
         fragment.setArguments(args);
@@ -35,7 +39,7 @@ public class AnnouncementFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String announcementId = (String) getArguments().getSerializable(ARG_CONTENT_ID);
+        String announcementId = (String) getArguments().getSerializable(ARG_ANNOUNCEMENT_ID);
         mAnnouncement = ContentsLab.get(getActivity()).getAnnouncement(announcementId);
     }
 

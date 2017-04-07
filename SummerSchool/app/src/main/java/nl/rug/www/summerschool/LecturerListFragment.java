@@ -39,6 +39,9 @@ public class LecturerListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_list, container, false);
 
+        TextView section = (TextView)v.findViewById(R.id.section_name);
+        section.setText(R.string.lecturer_info);
+
         mLecturerRecyclerView = (RecyclerView)v.findViewById(R.id.recycler_view);
         mLecturerRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 
