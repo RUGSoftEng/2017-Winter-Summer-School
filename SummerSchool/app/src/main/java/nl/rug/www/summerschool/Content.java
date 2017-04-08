@@ -4,13 +4,20 @@ import java.util.Date;
 import java.util.UUID;
 
 /**
- * Created by jk on 3/31/17.
+ * Content is a class of model that contains minimum attributes of
+ *
+ * @since 08/04/2017
+ * @author Jeongkyun Oh
  */
-
 public class Content {
 
+    /** unique identification number */
     private String mId;
+
+    /** title of content */
     private String mTitle;
+
+    /** description of content */
     private String mDescription;
 
     public String getId() {

@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,7 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by jk on 3/29/17.
+ * This class is a fragment on main pager activity.
+ * It shows a list of title of all announcements in database.
+ *
+ * @since 08/04/2017
+ * @author Jeongkyun Oh
  */
 
 public class AnnouncementListFragment extends Fragment {
@@ -26,16 +31,12 @@ public class AnnouncementListFragment extends Fragment {
 
     private RecyclerView mAnnouncementRecyclerView;
     private List<Announcement> mItems = new ArrayList<>();
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         new FetchAnnouncementsTask().execute();
     }
 
@@ -45,6 +46,14 @@ public class AnnouncementListFragment extends Fragment {
 
         TextView section = (TextView)v.findViewById(R.id.section_name);
         section.setText(R.string.announcement);
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout)v.findViewById(R.id.refresh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new FetchAnnouncementsTask().execute();
+            }
+        });
 
         mAnnouncementRecyclerView = (RecyclerView)v.findViewById(R.id.recycler_view);
         mAnnouncementRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -124,6 +133,9 @@ public class AnnouncementListFragment extends Fragment {
             mItems = announcements;
             setupAdatper();
             ContentsLab.get(getActivity()).updateAnnouncements(mItems);
+            if (mSwipeRefreshLayout.isRefreshing()) {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
         }
     }
 }

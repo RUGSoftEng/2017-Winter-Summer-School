@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -25,16 +26,12 @@ public class GeneralInfoListFragment extends Fragment {
 
     private RecyclerView mGeneralInfoRecyclerView;
     private List<GeneralInfo> mItems = new ArrayList<>();
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         new FetchGeneralInfosTask().execute();
     }
 
@@ -44,6 +41,14 @@ public class GeneralInfoListFragment extends Fragment {
 
         TextView section = (TextView)v.findViewById(R.id.section_name);
         section.setText(R.string.general_info);
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout)v.findViewById(R.id.refresh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new FetchGeneralInfosTask().execute();
+            }
+        });
 
         mGeneralInfoRecyclerView = (RecyclerView)v.findViewById(R.id.recycler_view);
         mGeneralInfoRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -123,6 +128,9 @@ public class GeneralInfoListFragment extends Fragment {
             mItems = generalInfos;
             setupAdatper();
             ContentsLab.get(getActivity()).updateGeneralInfos(mItems);
+            if (mSwipeRefreshLayout.isRefreshing()) {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
         }
     }
 }

@@ -22,7 +22,7 @@ public class GeneralInfoFragment extends Fragment {
 
     public static GeneralInfoFragment newInstance(String generalinfoId) {
         Bundle args = new Bundle();
-        args.putSerializable(ARG_GENERAL_INFO_ID, generalinfoId);
+        args.putString(ARG_GENERAL_INFO_ID, generalinfoId);
 
         GeneralInfoFragment fragment = new GeneralInfoFragment();
         fragment.setArguments(args);
@@ -32,7 +32,7 @@ public class GeneralInfoFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String generalInfoId = (String) getArguments().getSerializable(ARG_GENERAL_INFO_ID);
+        String generalInfoId = getArguments().getString(ARG_GENERAL_INFO_ID);
         mGeneralInfo = ContentsLab.get(getActivity()).getGeneralInfo(generalInfoId);
     }
 

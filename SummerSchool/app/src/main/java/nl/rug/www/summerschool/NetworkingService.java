@@ -1,6 +1,7 @@
 package nl.rug.www.summerschool;
 
 import android.net.Uri;
+import android.text.format.DateUtils;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -12,8 +13,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
+import java.util.logging.SimpleFormatter;
 
 public class NetworkingService {
 
@@ -100,13 +108,25 @@ public class NetworkingService {
         List<TimeTable> timeTables = new ArrayList<>();
 
         try {
+
+            Calendar c = GregorianCalendar.getInstance();
+
+            c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            String startDate = "", endDate = "";
+
+            startDate = df.format(c.getTime());
+            c.add(Calendar.DATE, 7);
+            endDate = df.format(c.getTime());
+
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("http").
                     encodedAuthority("10.0.2.2:8080")
                     .appendPath("calendar")
                     .appendPath("event")
-                    .appendQueryParameter("startDate", "2017-03-01T22:00:00.000Z")
-                    .appendQueryParameter("endDate", "2017-04-02T22:00:00.000Z");
+                    .appendQueryParameter("startDate", startDate + "T00:00:00.000Z")
+                    .appendQueryParameter("endDate", endDate + "T00:00:00.000Z");
             Log.d(TAG, "URL string :" + builder.toString());
             String jsonString = getUrlString(builder.toString());
 //            String jsonString = TEMP_JSON_TIMETABLE;

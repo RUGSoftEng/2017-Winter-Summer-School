@@ -29,7 +29,7 @@ public class MyProfileFragment extends Fragment{
 
     public static MyProfileFragment newInstance(ArrayList<String> logInData) {
         Bundle args = new Bundle();
-        args.putSerializable(ARG_CONTENT_ID, logInData);
+        args.putStringArrayList(ARG_CONTENT_ID, logInData);
 
         MyProfileFragment fragment = new MyProfileFragment();
         fragment.setArguments(args);
@@ -39,8 +39,7 @@ public class MyProfileFragment extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mLogInData = (ArrayList<String>)getArguments().getSerializable(ARG_CONTENT_ID);
-        Log.d("MyProfileFragment", "onCreate is called");
+        mLogInData = getArguments().getStringArrayList(ARG_CONTENT_ID);
     }
 
     @Override

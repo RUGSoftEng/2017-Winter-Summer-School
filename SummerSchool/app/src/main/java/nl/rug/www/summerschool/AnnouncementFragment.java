@@ -1,26 +1,27 @@
 package nl.rug.www.summerschool;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.Html;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.Enumeration;
-import java.util.ResourceBundle;
-
 /**
- * Created by jk on 3/31/17.
+ * Announcement fragment is to show the details of announcement
+ * when any item is clicked on Announcement list fragment.
+ *
+ * @since 08/04/2017
+ * @author Jeongkyun Oh
  */
 
 public class AnnouncementFragment extends Fragment {
 
+    /** a key for transferring announcement id */
     private static final String ARG_ANNOUNCEMENT_ID = "announcement_id";
 
+    /** instance of the announcement on this fragment */
     private Announcement mAnnouncement;
     private TextView mTitle;
     private TextView mDescription;
@@ -29,7 +30,7 @@ public class AnnouncementFragment extends Fragment {
 
     public static AnnouncementFragment newInstance(String announcementId) {
         Bundle args = new Bundle();
-        args.putSerializable(ARG_ANNOUNCEMENT_ID, announcementId);
+        args.putString(ARG_ANNOUNCEMENT_ID, announcementId);
 
         AnnouncementFragment fragment = new AnnouncementFragment();
         fragment.setArguments(args);
@@ -39,7 +40,7 @@ public class AnnouncementFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String announcementId = (String) getArguments().getSerializable(ARG_ANNOUNCEMENT_ID);
+        String announcementId = getArguments().getString(ARG_ANNOUNCEMENT_ID);
         mAnnouncement = ContentsLab.get(getActivity()).getAnnouncement(announcementId);
     }
 

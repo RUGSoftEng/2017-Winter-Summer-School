@@ -23,7 +23,7 @@ public class LecturerFragment extends Fragment {
 
     public static LecturerFragment newInstance(String lecturerId) {
         Bundle args = new Bundle();
-        args.putSerializable(ARG_LECTURER_ID, lecturerId);
+        args.putString(ARG_LECTURER_ID, lecturerId);
 
         LecturerFragment fragment = new LecturerFragment();
         fragment.setArguments(args);
@@ -33,7 +33,7 @@ public class LecturerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String lecturerId = (String) getArguments().getSerializable(ARG_LECTURER_ID);
+        String lecturerId = getArguments().getString(ARG_LECTURER_ID);
         mLecturer = ContentsLab.get(getActivity()).getLecturer(lecturerId);
     }
 

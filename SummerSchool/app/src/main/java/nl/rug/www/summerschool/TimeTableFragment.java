@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -29,11 +30,13 @@ public class TimeTableFragment extends Fragment {
 
     private RecyclerView mTimeTableRecyclerView;
     private TimeTableExpandableAdapter mTimeTableExpandableAdapter;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+        new FetchTimeTablesTask().execute();
     }
 
     @Override
@@ -42,6 +45,14 @@ public class TimeTableFragment extends Fragment {
 
         TextView section = (TextView)view.findViewById(R.id.section_name);
         section.setText("Time Table");
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.refresh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new FetchTimeTablesTask().execute();
+            }
+        });
 
         mTimeTableRecyclerView = (RecyclerView)view.findViewById(R.id.recycler_view);
         mTimeTableRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -52,7 +63,6 @@ public class TimeTableFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        new FetchTimeTablesTask().execute();
         updateUI();
     }
 
@@ -159,6 +169,9 @@ public class TimeTableFragment extends Fragment {
             mItems = timeTables;
             ContentsLab.get(getActivity()).updateTimeTables(mItems);
             updateUI();
+            if (mSwipeRefreshLayout.isRefreshing()) {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
         }
     }
 
