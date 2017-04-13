@@ -1,0 +1,54 @@
+<resources>
+    <string name="app_name">SummerSchool</string>
+    <string name="enter_your_code_hint">Enter your code</string>
+    <string name="welcome_to_swapp">Welcome to Summer and Winter school App!</string>
+    <string name="log_in_button">Log in</string>
+    <string name="logo_description">RUG Logo Image</string>
+    <string name="content_title_label">Title</string>
+    <string name="content_detail_label">Details</string>
+    <string name="not_correct_code">Wrong code, please try again</string>
+
+    <string name="fb_login_protocol_scheme">fb1850528335213838</string>
+    <string name="facebook_app_id">1850528335213838</string>
+
+    <string name="login_with_facebook">Login with Facebook</string>
+    <string name="login_with_google">Login with Google+</string>
+
+    <string name="app_header">App header</string>
+    <string name="announcement_button">Announcement button</string>
+    <string name="announcement">Announcement</string>
+    <string name="forum_button">Forum button</string>
+    <string name="forum">Forum</string>
+    <string name="general_information_button">General information button</string>
+    <string name="general_info">General Information</string>
+    <string name="lecturer_information_button">Lecturer information button</string>
+    <string name="lecturer_info">Lecturer Information</string>
+    <string name="my_profile_button">My profile button</string>
+    <string name="time_table_button">Time table button</string>
+    <string name="sign_in">Sign In</string>
+    <string name="time_table">Time Table</string>
+
+
+    <string name="title_is_here">title is here</string>
+    <string name="detail_is_here">detail is here</string>
+    <string name="date_is_here">date is here</string>
+    <string name="author_is_here">author is here</string>
+    <string name="name_is_here">name is here</string>
+    <string name="department_is_here">department is here</string>
+
+    <string name="author">author</string>
+    <string name="date">date</string>
+    <string name="lecturer_picture">Lecturer picture</string>
+    <string name="department">Department</string>
+
+
+    <string name="name">NAME</string>
+    <string name="lecturer_image_view">Lecturer image view</string>
+    <string name="time_example">00:00 ~ 00:00</string>
+    <string name="day_of_week_example">Day of week</string>
+    <string name="expand_arrow">Expand arrow</string>
+    <string name="birthday">Birthday</string>
+    <string name="log_out_button">Log out</string>
+    <string name="university_of_groningen_summer_2017">University of Groningen - Summer 2017</string>
+    <string name="header_cover_image">Header cover image</string>
+</resources>
