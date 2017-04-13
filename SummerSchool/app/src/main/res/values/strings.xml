@@ -6,6 +6,7 @@
     <string name="logo_description">RUG Logo Image</string>
     <string name="content_title_label">Title</string>
     <string name="content_detail_label">Details</string>
+    <string name="not_correct_code">Wrong code, please try again</string>
 
     <string name="fb_login_protocol_scheme">fb1850528335213838</string>
     <string name="facebook_app_id">1850528335213838</string>

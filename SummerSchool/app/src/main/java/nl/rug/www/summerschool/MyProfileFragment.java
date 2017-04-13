@@ -19,7 +19,11 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
- * Created by jk on 4/2/17.
+ * This class is to show the data fetched from facebook or google+.
+ * By using the data from this, the user can access to the forum in the app.
+ *
+ * @since 13/04/2017
+ * @author Jeongkyun Oh
  */
 
 public class MyProfileFragment extends Fragment{
@@ -49,25 +53,29 @@ public class MyProfileFragment extends Fragment{
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Log out button is pressed", Toast.LENGTH_SHORT).show();
                 LoginManager.getInstance().logOut();
+                SignInFragment signInFragment = new SignInFragment();
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, signInFragment)
+                        .commit();
             }
         });
 
-        TextView myProfileName = (TextView)view.findViewById(R.id.user_profile_name);
-        myProfileName.setText(mLogInData.get(0));
-        TextView myName = (TextView)view.findViewById(R.id.user_name);
-        myName.setText(mLogInData.get(0));
-        TextView myEmail = (TextView)view.findViewById(R.id.user_email);
-        myEmail.setText(mLogInData.get(1));
-        TextView myBirthday = (TextView)view.findViewById(R.id.user_birthday);
-        myBirthday.setText(mLogInData.get(2));
-        TextView myGender = (TextView)view.findViewById(R.id.user_gender);
-        myGender.setText(mLogInData.get(3));
         ProfilePictureView profilePictureView = (ProfilePictureView)view.findViewById(R.id.user_profile_photo);
         profilePictureView.setPresetSize(ProfilePictureView.NORMAL);
-        profilePictureView.setProfileId(mLogInData.get(4));
+        profilePictureView.setProfileId(mLogInData.get(0));
         profilePictureView.setVisibility(View.VISIBLE);
+        TextView myProfileName = (TextView)view.findViewById(R.id.user_profile_name);
+        myProfileName.setText(mLogInData.get(1));
+        TextView myName = (TextView)view.findViewById(R.id.user_name);
+        myName.setText(mLogInData.get(2));
+        TextView myEmail = (TextView)view.findViewById(R.id.user_email);
+        myEmail.setText(mLogInData.get(3));
+        TextView myBirthday = (TextView)view.findViewById(R.id.user_birthday);
+        myBirthday.setText(mLogInData.get(4));
+        TextView myGender = (TextView)view.findViewById(R.id.user_gender);
+        myGender.setText(mLogInData.get(5));
 
         return view;
     }

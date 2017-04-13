@@ -23,7 +23,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by jk on 3/31/17.
+ * This class is time table fragment on main pager activity.
+ * It shows days of week from Monday, ... Sunday.
+ * Each of day is a expandable drawer, so after clicking each item, it shows details of the day.
+ *
+ * @since 13/04/2017
+ * @author Jeongkyun Oh
  */
 
 public class TimeTableFragment extends Fragment {

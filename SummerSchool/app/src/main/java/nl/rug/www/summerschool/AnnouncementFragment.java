@@ -10,18 +10,18 @@ import android.widget.TextView;
 
 /**
  * Announcement fragment is to show the details of announcement
- * when any item is clicked on Announcement list fragment.
+ * when any item is clicked on AnnouncementListFragment.
  *
- * @since 08/04/2017
+ * @since 13/04/2017
  * @author Jeongkyun Oh
  */
 
 public class AnnouncementFragment extends Fragment {
 
-    /** a key for transferring announcement id */
+    /** key for transferring announcement id */
     private static final String ARG_ANNOUNCEMENT_ID = "announcement_id";
 
-    /** instance of the announcement on this fragment */
+    /** instance of the announcement shown on this fragment */
     private Announcement mAnnouncement;
     private TextView mTitle;
     private TextView mDescription;
@@ -55,6 +55,7 @@ public class AnnouncementFragment extends Fragment {
         mPoster = (TextView)view.findViewById(R.id.announcement_author);
         mPoster.setText(mAnnouncement.getPoster());
         mDate = (TextView)view.findViewById(R.id.announcement_date);
+        /** fetched date is ISO string. Spliting by "T", the date can be gotten */
         String[] part = mAnnouncement.getDate().split("T");
         mDate.setText(part[0]);
 

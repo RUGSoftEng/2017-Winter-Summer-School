@@ -19,18 +19,21 @@ import java.util.List;
 
 /**
  * This class is a fragment on main pager activity.
- * It shows a list of title of all announcements in database.
+ * It shows a list of titles of all announcements fetched from database.
  *
- * @since 08/04/2017
+ * @since 13/04/2017
  * @author Jeongkyun Oh
  */
 
 public class AnnouncementListFragment extends Fragment {
 
-    private static final String TAG = "AnnounceListFragment";
-
+    /** recycler view inflates list of announcement by using viewholder */
     private RecyclerView mAnnouncementRecyclerView;
+
+    /** instance of the announcement list */
     private List<Announcement> mItems = new ArrayList<>();
+
+    /** refresh layout in order to update lists of announcement */
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
@@ -68,7 +71,6 @@ public class AnnouncementListFragment extends Fragment {
             mAnnouncementRecyclerView.setAdapter(new AnnouncementAdapter(mItems));
         }
     }
-
 
     private class AnnouncementHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 

@@ -6,7 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by jk on 4/1/17.
+ * This class is a model of time table for a week
+ *
+ * @since 13/04/2017
+ * @author Jeongkyun Oh
  */
 
 public class TimeTableWeek implements ParentObject {

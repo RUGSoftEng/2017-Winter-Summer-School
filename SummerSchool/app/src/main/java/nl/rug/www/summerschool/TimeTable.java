@@ -1,7 +1,10 @@
 package nl.rug.www.summerschool;
 
 /**
- * Created by jk on 4/1/17.
+ * This class is a model of time table.
+ *
+ * @since 13/04/2017
+ * @author Jeongkyun Oh
  */
 
 public class TimeTable extends Content {

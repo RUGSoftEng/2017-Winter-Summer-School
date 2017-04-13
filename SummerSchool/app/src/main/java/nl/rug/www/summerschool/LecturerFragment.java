@@ -9,7 +9,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 /**
- * Created by jk on 3/31/17.
+ * Lecturer fragment is to show the details of lecturer information
+ * when any item is clicked on LecturerListFragment.
+ *
+ * @since 13/04/2017
+ * @author Jeongkyun Oh
  */
 
 public class LecturerFragment extends Fragment {

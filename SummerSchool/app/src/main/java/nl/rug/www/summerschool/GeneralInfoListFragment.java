@@ -17,12 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by jk on 3/29/17.
+ * This class is a fragment on main pager activity.
+ * It shows a list of titles of all general infomation in database.
+ *
+ * @since 13/04/2017
+ * @author Jeongkyun Oh
  */
 
 public class GeneralInfoListFragment extends Fragment {
-
-    private static final String TAG = "GeneralInfoListFragment";
 
     private RecyclerView mGeneralInfoRecyclerView;
     private List<GeneralInfo> mItems = new ArrayList<>();

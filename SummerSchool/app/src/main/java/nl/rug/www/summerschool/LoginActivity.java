@@ -8,9 +8,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+/**
+ * This class is an acitivty started when the application is opened.
+ * Only correct code can start main pager activity.
+ *
+ * @since 13/04/2017
+ * @author Jeongkyun Oh
+ */
 
 public class LoginActivity extends AppCompatActivity {
 
+    /** temporary correct code to enter main activity */
     final static private String CORRECT_CODE = "aaaa";
     private Button mLoginButton;
 
@@ -31,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 } else {
-                    Toast.makeText(getApplicationContext(), "Code is not correct. Please try again.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.not_correct_code, Toast.LENGTH_SHORT).show();
                 }
             }
         });

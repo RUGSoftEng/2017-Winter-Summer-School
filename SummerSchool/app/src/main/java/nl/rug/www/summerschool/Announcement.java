@@ -3,7 +3,7 @@ package nl.rug.www.summerschool;
 /**
  * Announcement class is a model of contents that contains author and date that is posted.
  *
- * @since 08/04/2017
+ * @since 13/04/2017
  * @author Jeongkyun Oh
  */
 

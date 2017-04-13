@@ -13,7 +13,10 @@ import android.support.v7.app.AppCompatActivity;
 import java.util.List;
 
 /**
- * Created by jk on 3/30/17.
+ * This class is an acitivty that allows the general information fragments on this to be slided by.
+ *
+ * @since 13/04/2017
+ * @author Jeongkyun Oh
  */
 
 public class GeneralInfoPagerActivity extends AppCompatActivity {

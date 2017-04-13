@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.UUID;
 
 /**
- * Content is a class of model that contains minimum attributes of
+ * Content is a class of model that contains minimum attributes of a content
  *
  * @since 08/04/2017
  * @author Jeongkyun Oh

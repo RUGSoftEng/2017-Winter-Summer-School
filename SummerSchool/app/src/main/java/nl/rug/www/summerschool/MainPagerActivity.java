@@ -12,6 +12,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+/**
+ * This class is main activity that contains basic layout of the app.
+ * It consists of header, viewpager, and buttons.
+ * Fragments (Announcements, Generalninfos, ...) will be inflated in view pager.
+ *
+ * @since 13/04/2017
+ * @author Jeongkyun Oh
+ */
+
 public class MainPagerActivity extends AppCompatActivity {
 
     private static final int FRAGMENTS_SIZE = 6;

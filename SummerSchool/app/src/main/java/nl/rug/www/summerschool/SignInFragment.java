@@ -27,7 +27,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * Created by jk on 3/31/17.
+ * This class is to sign in via Google or Facebook accounts.
+ * Currently, Google account does not work.
+ *
+ * @since 13/04/2017
+ * @author Jeongkyun Oh
  */
 
 public class SignInFragment extends Fragment {
@@ -50,6 +54,7 @@ public class SignInFragment extends Fragment {
             public void onSuccess(LoginResult loginResult) {
                 Log.d(TAG, "Log in success");
                 retrieveData();
+
             }
 
             @Override
@@ -99,11 +104,11 @@ public class SignInFragment extends Fragment {
 
     private void setProfileToVariables(JSONObject jsonObject) {
         try {
+            mLogInDataSet.add(jsonObject.getString("id"));
             mLogInDataSet.add(jsonObject.getString("name"));
             mLogInDataSet.add(jsonObject.getString("email"));
-            mLogInDataSet.add(jsonObject.getString("birthday"));
             mLogInDataSet.add(jsonObject.getString("gender"));
-            mLogInDataSet.add(jsonObject.getString("id"));
+            mLogInDataSet.add(jsonObject.getString("birthday"));
         } catch (JSONException e) {
             e.printStackTrace();
         }

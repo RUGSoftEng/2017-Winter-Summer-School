@@ -11,7 +11,13 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 /**
- * Created by jk on 4/2/17.
+ * This class is a container fragment of SignInFragment and MyProfileFragment.
+ * By using nested fragments, it is possible to transact fragments on the viewpager.
+ * If an user logged in, it inflates MyProfileFragment.
+ * Otherwise, SignInFragment is inflated.
+ *
+ * @since 13/04/2017
+ * @author Jeongkyun Oh
  */
 
 public class RootFragment extends Fragment {

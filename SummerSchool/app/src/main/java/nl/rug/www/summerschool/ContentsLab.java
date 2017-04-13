@@ -15,11 +15,16 @@ import java.util.List;
 import javax.xml.datatype.DatatypeFactory;
 
 /**
- * Created by jk on 3/31/17.
+ * ContentsLab stores data that fetched from the database.
+ * Singleton pattern is used so that any class can access to the data.
+ *
+ * @since 13/04/2017
+ * @author Jeongkyun Oh
  */
 
 public class ContentsLab {
 
+    /** unique instance of ContentsLab */
     private static ContentsLab sContentsLab;
 
     private ArrayList<Announcement> mAnnouncements;
@@ -163,6 +168,10 @@ public class ContentsLab {
         mTimeTableWeeks.get(6).setChildObjectList(sunday);
     }
 
+    /**
+     * this method is to create instances of lecturer
+     * needs to be updated
+     */
     private void createFakeLecturers() {
         Lecturer a = new Lecturer();
         a.setId("001");
