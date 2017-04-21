@@ -1,0 +1,1 @@
+This is the repository for the Winter & Summer Schools project.
