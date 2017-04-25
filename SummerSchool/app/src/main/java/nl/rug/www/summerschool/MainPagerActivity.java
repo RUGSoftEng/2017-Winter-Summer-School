@@ -40,7 +40,6 @@ public class MainPagerActivity extends AppCompatActivity {
             new LecturerListFragment(),
             new TimeTableFragment(),
             new ForumFragment(),
-            new SignInFragment(),
             new RootFragment()
     };
 
@@ -109,7 +108,7 @@ public class MainPagerActivity extends AppCompatActivity {
                     case 4 :
                         return mFragments[4];
                     case 5 :
-                        return mFragments[6];
+                        return mFragments[5];
                     default:
                         return null;
                 }

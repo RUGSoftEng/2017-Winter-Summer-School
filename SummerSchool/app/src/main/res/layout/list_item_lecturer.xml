@@ -9,12 +9,15 @@
         android:id="@+id/lecturer_image_view"
         android:layout_width="120dp"
         android:layout_height="120dp"
+        android:layout_marginTop="16dp"
         android:src="@drawable/profile"
+        android:scaleType="centerCrop"
         android:contentDescription="@string/lecturer_image_view"/>
 
     <TextView
         android:id="@+id/lecturer_item_name_text_view"
         android:layout_gravity="center"
+        android:gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"

@@ -6,6 +6,7 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -21,6 +22,7 @@ public class LecturerFragment extends Fragment {
     private static final String ARG_LECTURER_ID = "lecturer_id";
 
     private Lecturer mLecturer;
+    private ImageView mLecturerImageView;
     private TextView mTitle;
     private TextView mDepartment;
     private TextView mDescription;
@@ -51,6 +53,8 @@ public class LecturerFragment extends Fragment {
         mDepartment.setText(mLecturer.getDepartment());
         mDescription = (TextView)view.findViewById(R.id.lecturer_decription_text_view);
         mDescription.setText(mLecturer.getDescription());
+        mLecturerImageView = (ImageView)view.findViewById(R.id.lecturer_image_view);
+        mLecturerImageView.setImageDrawable(mLecturer.getProfilePicture());
 
         return view;
     }

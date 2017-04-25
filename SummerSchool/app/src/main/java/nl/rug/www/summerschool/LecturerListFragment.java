@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -36,8 +37,7 @@ public class LecturerListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         mItems = ContentsLab.get(getActivity()).getLecturers();
-        //TODO : fetch lecturer data from database
-//        new FetchLecturersTask().execute();
+        new FetchLecturersTask().execute();
     }
 
     @Override
@@ -46,6 +46,14 @@ public class LecturerListFragment extends Fragment {
 
         TextView section = (TextView)v.findViewById(R.id.section_name);
         section.setText(R.string.lecturer_info);
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout)v.findViewById(R.id.refresh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new FetchLecturersTask().execute();
+            }
+        });
 
         mLecturerRecyclerView = (RecyclerView)v.findViewById(R.id.recycler_view);
         mLecturerRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
@@ -66,17 +74,20 @@ public class LecturerListFragment extends Fragment {
 
         private Lecturer mLecturer;
         private TextView mTitleTextView;
+        private ImageView mLecturerImageView;
 
         public LecturerHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_lecturer, parent, false));
 
             mTitleTextView = (TextView)itemView.findViewById(R.id.lecturer_item_name_text_view);
+            mLecturerImageView = (ImageView)itemView.findViewById(R.id.lecturer_image_view);
             itemView.setOnClickListener(this);
         }
 
         public void bind(Lecturer lecturer){
             mLecturer = lecturer;
             mTitleTextView.setText(mLecturer.getTitle());
+            mLecturerImageView.setImageDrawable(mLecturer.getProfilePicture());
         }
 
         @Override
@@ -113,18 +124,21 @@ public class LecturerListFragment extends Fragment {
         }
     }
 
-//    private class FetchLecturersTask extends AsyncTask<Void, Void, List<Announcement>> {
-//
-//        @Override
-//        protected List<Lecturer> doInBackground(Void... params) {
-//            return new NetworkingService().fetchLecturers();
-//        }
-//
-//        @Override
-//        protected void onPostExecute(List<Lecturer> lecturers) {
-//            mItems = lecturers;
-//            setupAdatper();
-//            ContentsLab.get(getActivity()).updateAnnouncements(mItems);
-//        }
-//    }
+    private class FetchLecturersTask extends AsyncTask<Void, Void, List<Lecturer>> {
+
+        @Override
+        protected List<Lecturer> doInBackground(Void... params) {
+            return new NetworkingService().fetchLecturers();
+        }
+
+        @Override
+        protected void onPostExecute(List<Lecturer> lecturers) {
+            mItems = lecturers;
+            setupAdatper();
+            ContentsLab.get(getActivity()).updateLecturers(mItems);
+            if (mSwipeRefreshLayout.isRefreshing()) {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        }
+    }
 }

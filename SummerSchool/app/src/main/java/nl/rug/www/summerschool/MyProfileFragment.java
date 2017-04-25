@@ -74,8 +74,8 @@ public class MyProfileFragment extends Fragment{
         myEmail.setText(mLogInData.get(3));
         TextView myBirthday = (TextView)view.findViewById(R.id.user_birthday);
         myBirthday.setText(mLogInData.get(4));
-        TextView myGender = (TextView)view.findViewById(R.id.user_gender);
-        myGender.setText(mLogInData.get(5));
+//        TextView myGender = (TextView)view.findViewById(R.id.user_gender);
+//        myGender.setText(mLogInData.get(5));
 
         return view;
     }

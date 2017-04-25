@@ -1,5 +1,6 @@
 package nl.rug.www.summerschool;
 
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -39,6 +40,8 @@ public class NetworkingService {
 
     private static final String TAG = "NetworkingService";
 
+    private static final String URL_DATABASE = "summer-schools.herokuapp.com";
+
     /** temporary JSON data fetched from the database */
     private static final String ANNOUNCEMENT_JSON = "[{\"_id\":\"58e0d5da735cbb602adbfda1\",\"title\":\"Welcome to Summer School\",\"description\":\"                            <h4>Welcome</h4><br>Welcome to the University of Groningen Summer School on 2017.<br><br>The University of Groningen (UoG) has a rich academic tradition dating back to 1614. From this tradition arose the first female student and the first female lecturer in the Netherlands, the first Dutch astronaut, the first president of the European Central Bank and, in 2016, a Nobel prize winner in Chemistry. <br><br>The UoG is a leading research institution and is among the worldâ€™s top 100 universities. Although highly research-driven and innovative, UoG acknowledges its heritage and has strong links to the northern Netherlands region. UoG aims to conduct research of high societal relevance and strongly connects with societal stakeholders. It differentiates itself in the international market by having a close link between education and research and by focusing on three key themes: Energy, Healthy Ageing, and Sustainable Society.<br><br>The summer school is an initiative of the Faculty of XXX , and it has been developed in conjunction with sponsors, partners. <br><br>The summer school is presented under the auspices of XXX.                                               \"},{\"_id\":\"58eab2560750057609a0ca6e\",\"title\":\"This is not a drill\",\"description\":\"Please turn off your cell phones and stow them in your carry on. \",\"poster\":\"Nikolas Hadjipanayi\",\"date\":\"2017-04-09T22:14:46.104Z\"},{\"_id\":\"58eaae927901e2903a2ffe90\",\"title\":\"This is a test announcement\",\"description\":\"Hello world this is a cow.\",\"poster\":\"Nikolas Hadjipanayi\",\"date\":\"2017-04-09T21:58:42.376Z\"},{\"_id\":\"58ea6a3666c5ce143538dc3a\",\"title\":\"ive been wondering\",\"description\":\"about some stuff\",\"poster\":\"Nikolas Hadjipanayi\",\"date\":\"2017-04-09T17:07:02.918Z\"},{\"_id\":\"58ea6a2966c5ce143538dc39\",\"title\":\"hello\",\"description\":\"its me\\r\\n\",\"poster\":\"Nikolas Hadjipanayi\",\"date\":\"2017-04-09T17:06:49.129Z\"},{\"_id\":\"58ea69ea66c5ce143538dc37\",\"title\":\"Does this work?\",\"description\":\"Yes it does!!!<h4>WOOOP</h4>\",\"poster\":\"Nikolas Hadjipanayi\",\"date\":\"2017-04-09T17:05:46.566Z\"},{\"_id\":\"58e4e336e92900dc52157656\",\"title\":\"Hello\",\"description\":\"Bye\",\"poster\":\"Nikolas Hadjipanayi\",\"date\":\"2017-04-05T12:29:42.100Z\"},{\"_id\":\"58c179e28683ba42f86b192a\",\"title\":\"There has been some heavy rainfall\",\"description\":\"Don't mind me\"},{\"_id\":\"58c178298683ba42f86b1928\",\"title\":\"Hello\",\"description\":\"My andjls\",\"poster\":\"Nikolas Hadjipanayi\",\"date\":\"2017-03-09T15:43:37.915Z\"},{\"_id\":\"58bd28cdc64d4232b2d2e016\",\"title\":\"Meeting today\",\"description\":\"There is going to be a change in the lecture room for the meeting today we will be taking the lecture in the academia building lecture room 00.250\",\"poster\":\"Nikolas Hadjipanayi\",\"date\":\"2017-03-06T09:15:57.450Z\"},{\"_id\":\"58bd296bc64d4232b2d2e017\",\"title\":\"Hello everyone\",\"description\":\"I welcome everyone to this new summer winter school. Lets all have some fun :)\",\"poster\":\"Nikolas Hadjipanayi\",\"date\":\"2017-03-06T09:18:35.896Z\"}]";
     private static final String TIMETABLE_JSON = "[{\"kind\":\"calendar#event\",\"etag\":\"\\\"2982181530824000\\\"\",\"id\":\"va34vgjdbkov4eu6rvr2um35mo_20170402T052500Z\",\"status\":\"confirmed\",\"htmlLink\":\"https://www.google.com/calendar/event?eid=dmEzNHZnamRia292NGV1NnJ2cjJ1bTM1bW9fMjAxNzA0MDJUMDUyNTAwWiBydWcubmxfN21rMWs5ZmN1MGExbzkwbzQyOGVsdmpiYmdAZw\",\"created\":\"2017-04-01T23:52:45.000Z\",\"updated\":\"2017-04-01T23:52:45.534Z\",\"summary\":\"Hei\",\"description\":\"No description provided\",\"location\":\"Zernike Campus, University of Groningen\",\"creator\":{\"email\":\"schedulingagent@rugwintersummerschool.iam.gserviceaccount.com\"},\"organizer\":{\"email\":\"rug.nl_7mk1k9fcu0a1o90o428elvjbbg@group.calendar.google.com\",\"displayName\":\"RUGWinterSummerSchool\",\"self\":true},\"start\":{\"dateTime\":\"2017-04-02T07:25:00+02:00\",\"timeZone\":\"Europe/Amsterdam\"},\"end\":{\"dateTime\":\"2017-04-02T09:35:00+02:00\",\"timeZone\":\"Europe/Amsterdam\"},\"recurringEventId\":\"va34vgjdbkov4eu6rvr2um35mo\",\"originalStartTime\":{\"dateTime\":\"2017-04-02T07:25:00+02:00\",\"timeZone\":\"Europe/Amsterdam\"},\"iCalUID\":\"va34vgjdbkov4eu6rvr2um35mo@google.com\",\"sequence\":0,\"attendees\":[{\"email\":\"lpage@example.com\",\"responseStatus\":\"needsAction\"}],\"reminders\":{\"useDefault\":false,\"overrides\":[{\"method\":\"popup\",\"minutes\":10}]}},{\"kind\":\"calendar#event\",\"etag\":\"\\\"2983297763684000\\\"\",\"id\":\"igusucv8i6lhk705p68thoig58_20170403T082500Z\",\"status\":\"confirmed\",\"htmlLink\":\"https://www.google.com/calendar/event?eid=aWd1c3VjdjhpNmxoazcwNXA2OHRob2lnNThfMjAxNzA0MDNUMDgyNTAwWiBydWcubmxfN21rMWs5ZmN1MGExbzkwbzQyOGVsdmpiYmdAZw\",\"created\":\"2017-04-08T10:54:41.000Z\",\"updated\":\"2017-04-08T10:54:41.911Z\",\"summary\":\"Football\",\"description\":\"No description provided\",\"location\":\"Zernike Campus, University of Groningen\",\"creator\":{\"email\":\"schedulingagent@rugwintersummerschool.iam.gserviceaccount.com\"},\"organizer\":{\"email\":\"rug.nl_7mk1k9fcu0a1o90o428elvjbbg@group.calendar.google.com\",\"displayName\":\"RUGWinterSummerSchool\",\"self\":true},\"start\":{\"dateTime\":\"2017-04-03T10:25:00+02:00\",\"timeZone\":\"Europe/Amsterdam\"},\"end\":{\"dateTime\":\"2017-04-03T11:00:00+02:00\",\"timeZone\":\"Europe/Amsterdam\"},\"recurringEventId\":\"igusucv8i6lhk705p68thoig58\",\"originalStartTime\":{\"dateTime\":\"2017-04-03T10:25:00+02:00\",\"timeZone\":\"Europe/Amsterdam\"},\"iCalUID\":\"igusucv8i6lhk705p68thoig58@google.com\",\"sequence\":0,\"attendees\":[{\"email\":\"lpage@example.com\",\"responseStatus\":\"needsAction\"}],\"reminders\":{\"useDefault\":false,\"overrides\":[{\"method\":\"popup\",\"minutes\":10}]}},{\"kind\":\"calendar#event\",\"etag\":\"\\\"2982453914292000\\\"\",\"id\":\"ul1amah31ssp9ulnpot2rd6or0_20170404T103000Z\",\"status\":\"confirmed\",\"htmlLink\":\"https://www.google.com/calendar/event?eid=dWwxYW1haDMxc3NwOXVsbnBvdDJyZDZvcjBfMjAxNzA0MDRUMTAzMDAwWiBydWcubmxfN21rMWs5ZmN1MGExbzkwbzQyOGVsdmpiYmdAZw\",\"created\":\"2017-04-03T13:42:36.000Z\",\"updated\":\"2017-04-03T13:42:37.254Z\",\"summary\":\"Balloon\",\"description\":\"Null\",\"location\":\"Null\",\"creator\":{\"email\":\"schedulingagent@rugwintersummerschool.iam.gserviceaccount.com\"},\"organizer\":{\"email\":\"rug.nl_7mk1k9fcu0a1o90o428elvjbbg@group.calendar.google.com\",\"displayName\":\"RUGWinterSummerSchool\",\"self\":true},\"start\":{\"dateTime\":\"2017-04-04T12:30:00+02:00\",\"timeZone\":\"Europe/Amsterdam\"},\"end\":{\"dateTime\":\"2017-04-04T15:35:00+02:00\",\"timeZone\":\"Europe/Amsterdam\"},\"recurringEventId\":\"ul1amah31ssp9ulnpot2rd6or0\",\"originalStartTime\":{\"dateTime\":\"2017-04-04T12:30:00+02:00\",\"timeZone\":\"Europe/Amsterdam\"},\"iCalUID\":\"ul1amah31ssp9ulnpot2rd6or0@google.com\",\"sequence\":0,\"reminders\":{\"useDefault\":false,\"overrides\":[{\"method\":\"popup\",\"minutes\":10}]}},{\"kind\":\"calendar#event\",\"etag\":\"\\\"2982454274571000\\\"\",\"id\":\"32iso46eior2q33k8pg397qf7s_20170406T032000Z\",\"status\":\"confirmed\",\"htmlLink\":\"https://www.google.com/calendar/event?eid=MzJpc280NmVpb3IycTMzazhwZzM5N3FmN3NfMjAxNzA0MDZUMDMyMDAwWiBydWcubmxfN21rMWs5ZmN1MGExbzkwbzQyOGVsdmpiYmdAZw\",\"created\":\"2017-04-03T13:45:37.000Z\",\"updated\":\"2017-04-03T13:45:37.371Z\",\"summary\":\"Amber\",\"description\":\"Null\",\"location\":\"Null\",\"creator\":{\"email\":\"schedulingagent@rugwintersummerschool.iam.gserviceaccount.com\"},\"organizer\":{\"email\":\"rug.nl_7mk1k9fcu0a1o90o428elvjbbg@group.calendar.google.com\",\"displayName\":\"RUGWinterSummerSchool\",\"self\":true},\"start\":{\"dateTime\":\"2017-04-06T05:20:00+02:00\",\"timeZone\":\"Europe/Amsterdam\"},\"end\":{\"dateTime\":\"2017-04-06T09:30:00+02:00\",\"timeZone\":\"Europe/Amsterdam\"},\"recurringEventId\":\"32iso46eior2q33k8pg397qf7s\",\"originalStartTime\":{\"dateTime\":\"2017-04-06T05:20:00+02:00\",\"timeZone\":\"Europe/Amsterdam\"},\"iCalUID\":\"32iso46eior2q33k8pg397qf7s@google.com\",\"sequence\":0,\"reminders\":{\"useDefault\":false,\"overrides\":[{\"method\":\"popup\",\"minutes\":10}]}},{\"kind\":\"calendar#event\",\"etag\":\"\\\"2983544081627000\\\"\",\"id\":\"j20qfnoealu9masfa16phuphdg_20170406T040000Z\",\"status\":\"confirmed\",\"htmlLink\":\"https://www.google.com/calendar/event?eid=ajIwcWZub2VhbHU5bWFzZmExNnBodXBoZGdfMjAxNzA0MDZUMDQwMDAwWiBydWcubmxfN21rMWs5ZmN1MGExbzkwbzQyOGVsdmpiYmdAZw\",\"created\":\"2017-04-09T21:07:20.000Z\",\"updated\":\"2017-04-09T21:07:20.880Z\",\"summary\":\"fgads\",\"description\":\"No description provided\",\"location\":\"Zernike Campus, University of Groningen\",\"creator\":{\"email\":\"schedulingagent@rugwintersummerschool.iam.gserviceaccount.com\"},\"organizer\":{\"email\":\"rug.nl_7mk1k9fcu0a1o90o428elvjbbg@group.calendar.google.com\",\"displayName\":\"RUGWinterSummerSchool\",\"self\":true},\"start\":{\"dateTime\":\"2017-04-06T06:00:00+02:00\",\"timeZone\":\"Europe/Amsterdam\"},\"end\":{\"dateTime\":\"2017-04-06T08:00:00+02:00\",\"timeZone\":\"Europe/Amsterdam\"},\"recurringEventId\":\"j20qfnoealu9masfa16phuphdg\",\"originalStartTime\":{\"dateTime\":\"2017-04-06T06:00:00+02:00\",\"timeZone\":\"Europe/Amsterdam\"},\"iCalUID\":\"j20qfnoealu9masfa16phuphdg@google.com\",\"sequence\":0,\"attendees\":[{\"email\":\"lpage@example.com\",\"responseStatus\":\"needsAction\"}],\"reminders\":{\"useDefault\":false,\"overrides\":[{\"method\":\"popup\",\"minutes\":10}]}},{\"kind\":\"calendar#event\",\"etag\":\"\\\"2982447531657000\\\"\",\"id\":\"5u86mstfcog97ufndb8lk2l0d0_20170406T094500Z\",\"status\":\"confirmed\",\"htmlLink\":\"https://www.google.com/calendar/event?eid=NXU4Nm1zdGZjb2c5N3VmbmRiOGxrMmwwZDBfMjAxNzA0MDZUMDk0NTAwWiBydWcubmxfN21rMWs5ZmN1MGExbzkwbzQyOGVsdmpiYmdAZw\",\"created\":\"2017-04-03T12:49:25.000Z\",\"updated\":\"2017-04-03T12:49:25.891Z\",\"summary\":\"Frisbee\",\"description\":\"Null\",\"location\":\"Nettelbosje 2, 9747 AC Groningen\",\"creator\":{\"email\":\"schedulingagent@rugwintersummerschool.iam.gserviceaccount.com\"},\"organizer\":{\"email\":\"rug.nl_7mk1k9fcu0a1o90o428elvjbbg@group.calendar.google.com\",\"displayName\":\"RUGWinterSummerSchool\",\"self\":true},\"start\":{\"dateTime\":\"2017-04-06T11:45:00+02:00\",\"timeZone\":\"Europe/Amsterdam\"},\"end\":{\"dateTime\":\"2017-04-06T12:00:00+02:00\",\"timeZone\":\"Europe/Amsterdam\"},\"recurringEventId\":\"5u86mstfcog97ufndb8lk2l0d0\",\"originalStartTime\":{\"dateTime\":\"2017-04-06T11:45:00+02:00\",\"timeZone\":\"Europe/Amsterdam\"},\"transparency\":\"transparent\",\"visibility\":\"public\",\"iCalUID\":\"5u86mstfcog97ufndb8lk2l0d0@google.com\",\"sequence\":0,\"extendedProperties\":{\"shared\":{\"ssid\":\"ssid\",\"summerSchoolId\":\"Null\"}},\"anyoneCanAddSelf\":true,\"reminders\":{\"useDefault\":false,\"overrides\":[{\"method\":\"popup\",\"minutes\":60}]}},{\"kind\":\"calendar#event\",\"etag\":\"\\\"2982455292806000\\\"\",\"id\":\"rugh5oaa0o25gh1o4oie03d1ec_20170407T073000Z\",\"status\":\"confirmed\",\"htmlLink\":\"https://www.google.com/calendar/event?eid=cnVnaDVvYWEwbzI1Z2gxbzRvaWUwM2QxZWNfMjAxNzA0MDdUMDczMDAwWiBydWcubmxfN21rMWs5ZmN1MGExbzkwbzQyOGVsdmpiYmdAZw\",\"created\":\"2017-04-03T13:54:06.000Z\",\"updated\":\"2017-04-03T13:54:06.482Z\",\"summary\":\"Kanel\",\"description\":\"Null\",\"location\":\"Nettelbosje 2, 9747 AC Groningen\",\"creator\":{\"email\":\"schedulingagent@rugwintersummerschool.iam.gserviceaccount.com\"},\"organizer\":{\"email\":\"rug.nl_7mk1k9fcu0a1o90o428elvjbbg@group.calendar.google.com\",\"displayName\":\"RUGWinterSummerSchool\",\"self\":true},\"start\":{\"dateTime\":\"2017-04-07T09:30:00+02:00\",\"timeZone\":\"Europe/Amsterdam\"},\"end\":{\"dateTime\":\"2017-04-07T10:25:00+02:00\",\"timeZone\":\"Europe/Amsterdam\"},\"recurringEventId\":\"rugh5oaa0o25gh1o4oie03d1ec\",\"originalStartTime\":{\"dateTime\":\"2017-04-07T09:30:00+02:00\",\"timeZone\":\"Europe/Amsterdam\"},\"transparency\":\"transparent\",\"visibility\":\"public\",\"iCalUID\":\"rugh5oaa0o25gh1o4oie03d1ec@google.com\",\"sequence\":0,\"extendedProperties\":{\"shared\":{\"ssid\":\"ssid\"}},\"anyoneCanAddSelf\":true,\"reminders\":{\"useDefault\":false,\"overrides\":[{\"method\":\"popup\",\"minutes\":60}]}}]";
@@ -76,12 +79,12 @@ public class NetworkingService {
         try {
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("http")
-                    .encodedAuthority("10.0.2.2:8080")
+                    .encodedAuthority(URL_DATABASE)
                     .appendPath("announcement")
                     .appendPath("item");
             Log.d(TAG, "URL string :" + builder.toString());
-//            String jsonString = getUrlString(builder.toString()); // fetch data from online database
-            String jsonString = ANNOUNCEMENT_JSON; // use temporary json
+            String jsonString = getUrlString(builder.toString()); // fetch data from online database
+//            String jsonString = ANNOUNCEMENT_JSON; // use temporary json
             Log.i(TAG, "Received Announcement JSON: " + jsonString);
             JSONArray jsonBody = new JSONArray(jsonString);
             parseAnnouncements(announcements, jsonBody);
@@ -100,13 +103,13 @@ public class NetworkingService {
 
         try {
             Uri.Builder builder = new Uri.Builder();
-            builder.scheme("http").
-                    encodedAuthority("10.0.2.2:8080")
+            builder.scheme("http")
+                    .encodedAuthority(URL_DATABASE)
                     .appendPath("generalinfo")
                     .appendPath("item");
             Log.d(TAG, "URL string :" + builder.toString());
-//            String jsonString = getUrlString(builder.toString());
-            String jsonString = GENERALINFO_JSON;
+            String jsonString = getUrlString(builder.toString());
+//            String jsonString = GENERALINFO_JSON;
             Log.i(TAG, "Received GeneralInfo JSON: " + jsonString);
             JSONArray jsonBody = new JSONArray(jsonString);
             parseGeneralInfos(generalInfos, jsonBody);
@@ -138,15 +141,15 @@ public class NetworkingService {
             endDate = df.format(c.getTime());
 
             Uri.Builder builder = new Uri.Builder();
-            builder.scheme("http").
-                    encodedAuthority("10.0.2.2:8080")
+            builder.scheme("http")
+                    .encodedAuthority(URL_DATABASE)
                     .appendPath("calendar")
                     .appendPath("event")
                     .appendQueryParameter("startDate", startDate + "T00:00:00.000Z")
                     .appendQueryParameter("endDate", endDate + "T00:00:00.000Z");
             Log.d(TAG, "URL string :" + builder.toString());
-//            String jsonString = getUrlString(builder.toString());
-            String jsonString = TIMETABLE_JSON;
+            String jsonString = getUrlString(builder.toString());
+//            String jsonString = TIMETABLE_JSON;
             Log.i(TAG, "Received TimeTable JSON: " + jsonString);
             JSONArray jsonBody = new JSONArray(jsonString);
             parseTimeTables(timeTables, jsonBody);
@@ -157,6 +160,30 @@ public class NetworkingService {
         }
 
         return timeTables;
+    }
+
+    public List<Lecturer> fetchLecturers() {
+
+        List<Lecturer> lecturers = new ArrayList<>();
+
+        try {
+            Uri.Builder builder = new Uri.Builder();
+            builder.scheme("http")
+                    .encodedAuthority(URL_DATABASE)
+                    .appendPath("lecturer")
+                    .appendPath("item");
+            Log.d(TAG, "URL string :" + builder.toString());
+            String jsonString = getUrlString(builder.toString());
+            Log.i(TAG, "Received Lecturer JSON: " + jsonString);
+            JSONArray jsonBody = new JSONArray(jsonString);
+            parseLecturers(lecturers, jsonBody);
+        } catch (IOException ioe) {
+            Log.e(TAG, "Failed to fetch TimeTables", ioe);
+        } catch (JSONException je) {
+            Log.e(TAG, "Failed to parse TimeTable JSON", je);
+        }
+
+        return lecturers;
     }
 
     private void parseAnnouncements(List<Announcement> items, JSONArray jsonBody)
@@ -215,6 +242,30 @@ public class NetworkingService {
             timeTable.setEndDate(endDate.getString("dateTime"));
 
             items.add(timeTable);
+        }
+    }
+
+    private void parseLecturers(List<Lecturer> items, JSONArray jsonBody)
+            throws IOException, JSONException {
+
+        for (int i = 0; i < jsonBody.length(); i++) {
+            JSONObject contentJsonObject = jsonBody.getJSONObject(i);
+
+            Lecturer lecturer = new Lecturer();
+            lecturer.setId(contentJsonObject.getString("_id"));
+            lecturer.setTitle(contentJsonObject.getString("name"));
+            lecturer.setDescription(contentJsonObject.getString("description"));
+            Uri.Builder builder = new Uri.Builder();
+            builder.scheme("http")
+                    .encodedAuthority(URL_DATABASE)
+                    .appendPath(contentJsonObject.getString("imagepath"));
+            Log.d(TAG, "URL string :" + builder.toString());
+            URL url = new URL(builder.toString());
+            InputStream content = (InputStream)url.getContent();
+            Drawable picture = Drawable.createFromStream(content, "src");
+            lecturer.setProfilePicture(picture);
+
+            items.add(lecturer);
         }
     }
 }

@@ -1,5 +1,8 @@
 package nl.rug.www.summerschool;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+
 /**
  * This class is a model of lecturer information that contains
  *
@@ -9,7 +12,9 @@ package nl.rug.www.summerschool;
 
 public class Lecturer extends Content {
 
+    private Drawable mProfilePicture;
     private String mDepartment;
+    private String mImagePath;
 
     public String getDepartment() {
         return mDepartment;
@@ -17,5 +22,21 @@ public class Lecturer extends Content {
 
     public void setDepartment(String department) {
         mDepartment = department;
+    }
+
+    public String getImagePath() {
+        return mImagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        mImagePath = imagePath;
+    }
+
+    public Drawable getProfilePicture() {
+        return mProfilePicture;
+    }
+
+    public void setProfilePicture(Drawable profilePicture) {
+        mProfilePicture = profilePicture;
     }
 }
