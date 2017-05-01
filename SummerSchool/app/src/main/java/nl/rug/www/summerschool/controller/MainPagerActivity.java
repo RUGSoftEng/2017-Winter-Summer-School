@@ -1,16 +1,22 @@
-package nl.rug.www.summerschool;
+package nl.rug.www.summerschool.controller;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
+
+import nl.rug.www.summerschool.R;
+import nl.rug.www.summerschool.controller.announcement.AnnouncementListFragment;
+import nl.rug.www.summerschool.controller.forum.ForumFragment;
+import nl.rug.www.summerschool.controller.generalinfo.GeneralInfoListFragment;
+import nl.rug.www.summerschool.controller.lecturer.LecturerListFragment;
+import nl.rug.www.summerschool.controller.myprofile.RootFragment;
+import nl.rug.www.summerschool.controller.timetable.TimeTableFragment;
 
 /**
  * This class is main activity that contains basic layout of the app.
@@ -25,7 +31,6 @@ public class MainPagerActivity extends AppCompatActivity {
 
     private static final int FRAGMENTS_SIZE = 6;
 
-    private FragmentPagerAdapter mAdapter;
     private ViewPager mViewPager;
     private ImageButton mAnnouncementButton;
     private ImageButton mGeneralInfoButton;
@@ -40,7 +45,6 @@ public class MainPagerActivity extends AppCompatActivity {
             new LecturerListFragment(),
             new TimeTableFragment(),
             new ForumFragment(),
-            new SignInFragment(),
             new RootFragment()
     };
 
@@ -94,7 +98,7 @@ public class MainPagerActivity extends AppCompatActivity {
         });
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        mAdapter = new FragmentPagerAdapter(fragmentManager) {
+        FragmentPagerAdapter mAdapter = new FragmentPagerAdapter(fragmentManager) {
             @Override
             public Fragment getItem(int position) {
                 switch (position) {
@@ -109,7 +113,7 @@ public class MainPagerActivity extends AppCompatActivity {
                     case 4 :
                         return mFragments[4];
                     case 5 :
-                        return mFragments[6];
+                        return mFragments[5];
                     default:
                         return null;
                 }
@@ -130,30 +134,30 @@ public class MainPagerActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                mAnnouncementButton.setImageDrawable(getResources().getDrawable(R.drawable.announcement));
-                mGeneralInfoButton.setImageDrawable(getResources().getDrawable(R.drawable.generalinformation));
-                mLecturerButton.setImageDrawable(getResources().getDrawable(R.drawable.lecturer));
-                mTimeTableButton.setImageDrawable(getResources().getDrawable(R.drawable.timetable));
-                mForumButton.setImageDrawable(getResources().getDrawable(R.drawable.forum));
-                mMyProfileButton.setImageDrawable(getResources().getDrawable(R.drawable.my_account));
+                mAnnouncementButton.setImageDrawable(ContextCompat.getDrawable(MainPagerActivity.this, R.drawable.announcement));
+                mGeneralInfoButton.setImageDrawable(ContextCompat.getDrawable(MainPagerActivity.this, R.drawable.generalinformation));
+                mLecturerButton.setImageDrawable(ContextCompat.getDrawable(MainPagerActivity.this, R.drawable.lecturer));
+                mTimeTableButton.setImageDrawable(ContextCompat.getDrawable(MainPagerActivity.this, R.drawable.timetable));
+                mForumButton.setImageDrawable(ContextCompat.getDrawable(MainPagerActivity.this, R.drawable.forum));
+                mMyProfileButton.setImageDrawable(ContextCompat.getDrawable(MainPagerActivity.this, R.drawable.my_account));
                 switch (position) {
                     case 0 :
-                        mAnnouncementButton.setImageDrawable(getResources().getDrawable(R.drawable.announcementblack));
+                        mAnnouncementButton.setImageDrawable(ContextCompat.getDrawable(MainPagerActivity.this, R.drawable.announcementblack));
                         break;
                     case 1 :
-                        mGeneralInfoButton.setImageDrawable(getResources().getDrawable(R.drawable.generalinformationblack));
+                        mGeneralInfoButton.setImageDrawable(ContextCompat.getDrawable(MainPagerActivity.this, R.drawable.generalinformationblack));
                         break;
                     case 2 :
-                        mLecturerButton.setImageDrawable(getResources().getDrawable(R.drawable.lecturerblack));
+                        mLecturerButton.setImageDrawable(ContextCompat.getDrawable(MainPagerActivity.this, R.drawable.lecturerblack));
                         break;
                     case 3 :
-                        mTimeTableButton.setImageDrawable(getResources().getDrawable(R.drawable.timetableblack));
+                        mTimeTableButton.setImageDrawable(ContextCompat.getDrawable(MainPagerActivity.this, R.drawable.timetableblack));
                         break;
                     case 4 :
-                        mForumButton.setImageDrawable(getResources().getDrawable(R.drawable.forumblack));
+                        mForumButton.setImageDrawable(ContextCompat.getDrawable(MainPagerActivity.this, R.drawable.forumblack));
                         break;
                     case 5 :
-                        mMyProfileButton.setImageDrawable(getResources().getDrawable(R.drawable.my_accountblack));
+                        mMyProfileButton.setImageDrawable(ContextCompat.getDrawable(MainPagerActivity.this, R.drawable.my_accountblack));
                         break;
                     default:
                         break;

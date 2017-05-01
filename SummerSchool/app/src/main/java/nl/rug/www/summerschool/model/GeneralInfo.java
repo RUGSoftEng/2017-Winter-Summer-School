@@ -1,4 +1,4 @@
-package nl.rug.www.summerschool;
+package nl.rug.www.summerschool.model;
 
 /**
  * This class is a model of general information that contains

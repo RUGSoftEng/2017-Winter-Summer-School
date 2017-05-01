@@ -1,10 +1,8 @@
-package nl.rug.www.summerschool;
+package nl.rug.www.summerschool.controller.myprofile;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +23,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import nl.rug.www.summerschool.R;
 
 /**
  * This class is to sign in via Google or Facebook accounts.

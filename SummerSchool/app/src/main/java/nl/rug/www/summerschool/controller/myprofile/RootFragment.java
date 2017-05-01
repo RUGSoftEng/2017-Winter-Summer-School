@@ -1,14 +1,12 @@
-package nl.rug.www.summerschool;
+package nl.rug.www.summerschool.controller.myprofile;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
+import nl.rug.www.summerschool.R;
 
 /**
  * This class is a container fragment of SignInFragment and MyProfileFragment.

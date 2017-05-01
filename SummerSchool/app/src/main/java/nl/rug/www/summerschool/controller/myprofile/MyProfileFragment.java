@@ -1,22 +1,19 @@
-package nl.rug.www.summerschool;
+package nl.rug.www.summerschool.controller.myprofile;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
 import com.facebook.login.widget.ProfilePictureView;
 
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+
+import nl.rug.www.summerschool.R;
 
 /**
  * This class is to show the data fetched from facebook or google+.
@@ -74,8 +71,8 @@ public class MyProfileFragment extends Fragment{
         myEmail.setText(mLogInData.get(3));
         TextView myBirthday = (TextView)view.findViewById(R.id.user_birthday);
         myBirthday.setText(mLogInData.get(4));
-        TextView myGender = (TextView)view.findViewById(R.id.user_gender);
-        myGender.setText(mLogInData.get(5));
+//        TextView myGender = (TextView)view.findViewById(R.id.user_gender);
+//        myGender.setText(mLogInData.get(5));
 
         return view;
     }

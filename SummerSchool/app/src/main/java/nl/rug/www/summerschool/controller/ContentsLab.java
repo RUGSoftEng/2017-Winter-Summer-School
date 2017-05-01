@@ -1,18 +1,19 @@
-package nl.rug.www.summerschool;
+package nl.rug.www.summerschool.controller;
 
-import android.content.Context;
-import android.os.AsyncTask;
 import android.util.Log;
 
-import java.sql.Time;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
-import javax.xml.datatype.DatatypeFactory;
+import nl.rug.www.summerschool.model.Announcement;
+import nl.rug.www.summerschool.model.GeneralInfo;
+import nl.rug.www.summerschool.model.Lecturer;
+import nl.rug.www.summerschool.model.TimeTable;
+import nl.rug.www.summerschool.model.TimeTableWeek;
 
 /**
  * ContentsLab stores data that fetched from the database.
@@ -32,17 +33,15 @@ public class ContentsLab {
     private ArrayList<TimeTable> mTimeTables;
     private ArrayList<TimeTableWeek> mTimeTableWeeks;
     private ArrayList<Lecturer> mLecturers;
-    private ArrayList<String> mLogInData;
 
-    public static ContentsLab get(Context context) {
+    public static ContentsLab get() {
         if (sContentsLab == null) {
-            sContentsLab = new ContentsLab(context);
+            sContentsLab = new ContentsLab();
         }
         return sContentsLab;
     }
 
-    private ContentsLab(Context context) {
-        mLogInData = new ArrayList<>();
+    private ContentsLab() {
         mAnnouncements = new ArrayList<>();
         mGeneralInfos = new ArrayList<>();
         mTimeTables = new ArrayList<>();
@@ -55,15 +54,6 @@ public class ContentsLab {
         mTimeTableWeeks.add(new TimeTableWeek("Saterday"));
         mTimeTableWeeks.add(new TimeTableWeek("Sunday"));
         mLecturers = new ArrayList<>();
-        createFakeLecturers();
-    }
-
-    public ArrayList<String> getLogInData() {
-        return mLogInData;
-    }
-
-    public void setLogInData(ArrayList<String> logInData) {
-        mLogInData = (ArrayList<String>)logInData.clone();
     }
 
     public List<GeneralInfo> getGeneralInfos() { return mGeneralInfos; }
@@ -84,23 +74,7 @@ public class ContentsLab {
         return null;
     }
 
-    public List<TimeTable> getTimeTables() { return mTimeTables; }
-
-    public TimeTable getTimeTable(String id) {
-        for (TimeTable c : mTimeTables) {
-            if (c.getId().equals(id)) return c;
-        }
-        return null;
-    }
-
     public List<TimeTableWeek> getTimeTableWeeks() { return mTimeTableWeeks; }
-
-    public TimeTableWeek getTimeTableWeek(String dayOfWeek) {
-        for (TimeTableWeek c : mTimeTableWeeks) {
-            if (c.getDayOfWeek().equals(dayOfWeek)) return c;
-        }
-        return null;
-    }
 
     public List<Lecturer> getLecturers() { return mLecturers; }
 
@@ -111,7 +85,24 @@ public class ContentsLab {
         return null;
     }
 
-    public void createTimeTableWeek() {
+    public void updateAnnouncements(List<Announcement> announcements) {
+        mAnnouncements = (ArrayList<Announcement>) announcements;
+    }
+
+    public void updateGeneralInfos(List<GeneralInfo> generalInfos) {
+        mGeneralInfos = (ArrayList<GeneralInfo>) generalInfos;
+    }
+
+    public void updateTimeTables(List<TimeTable> timeTables) {
+        mTimeTables = (ArrayList<TimeTable>) timeTables;
+        createTimeTableWeek();
+    }
+
+    public void updateLecturers(List<Lecturer> lecturers) {
+        mLecturers = (ArrayList<Lecturer>) lecturers;
+    }
+
+    private void createTimeTableWeek() {
         List<Object> monday = new ArrayList<>();
         List<Object> tuesday = new ArrayList<>();
         List<Object> wednesday = new ArrayList<>();
@@ -122,11 +113,12 @@ public class ContentsLab {
 
         for (TimeTable t : mTimeTables) {
             String[] parts = t.getStartDate().split("T");
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
-            SimpleDateFormat dayOfWeek = new SimpleDateFormat("EEEE");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            SimpleDateFormat dayOfWeek = new SimpleDateFormat("EEEE", Locale.getDefault());
             try {
                 Date date = format.parse(parts[0]);
                 Log.d("ContentsLab", "Received date : " + date.toString());
+                Log.d("ContentsLab", "day of week : " + dayOfWeek.format(date));
 
                 switch (dayOfWeek.format(date)) {
                     case "Monday" :
@@ -144,7 +136,7 @@ public class ContentsLab {
                     case "Friday" :
                         friday.add(t);
                         break;
-                    case "Saterday" :
+                    case "Saturday" :
                         saterday.add(t);
                         break;
                     case "Sunday" :
@@ -166,50 +158,6 @@ public class ContentsLab {
         mTimeTableWeeks.get(4).setChildObjectList(friday);
         mTimeTableWeeks.get(5).setChildObjectList(saterday);
         mTimeTableWeeks.get(6).setChildObjectList(sunday);
-    }
-
-    /**
-     * this method is to create instances of lecturer
-     * needs to be updated
-     */
-    private void createFakeLecturers() {
-        Lecturer a = new Lecturer();
-        a.setId("001");
-        a.setTitle("Jeongkyun");
-        a.setDepartment("Computer Science");
-        a.setDescription("Building 100");
-        Lecturer b = new Lecturer();
-        b.setId("002");
-        b.setTitle("Nikllas");
-        b.setDepartment("Artificial Intelligence");
-        b.setDescription("Building 101");
-        Lecturer c = new Lecturer();
-        c.setId("003");
-        c.setTitle("Elias");
-        c.setDepartment("Physics");
-        c.setDescription("Building 102");
-        Lecturer d = new Lecturer();
-        d.setId("004");
-        d.setTitle("Bob");
-        d.setDepartment("Law");
-        d.setDescription("Building 103");
-        mLecturers.add(a);
-        mLecturers.add(b);
-        mLecturers.add(c);
-        mLecturers.add(d);
-    }
-
-    public void updateAnnouncements(List<Announcement> announcements) {
-        mAnnouncements = (ArrayList<Announcement>) announcements;
-    }
-
-    public void updateGeneralInfos(List<GeneralInfo> generalInfos) {
-        mGeneralInfos = (ArrayList<GeneralInfo>) generalInfos;
-    }
-
-    public void updateTimeTables(List<TimeTable> timeTables) {
-        mTimeTables = (ArrayList<TimeTable>) timeTables;
-        createTimeTableWeek();;
     }
 
 }

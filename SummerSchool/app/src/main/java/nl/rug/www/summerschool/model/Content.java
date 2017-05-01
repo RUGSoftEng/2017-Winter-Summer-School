@@ -1,7 +1,4 @@
-package nl.rug.www.summerschool;
-
-import java.util.Date;
-import java.util.UUID;
+package nl.rug.www.summerschool.model;
 
 /**
  * Content is a class of model that contains minimum attributes of a content

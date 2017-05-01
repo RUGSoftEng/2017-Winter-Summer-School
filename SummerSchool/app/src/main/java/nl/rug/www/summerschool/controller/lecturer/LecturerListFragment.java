@@ -1,4 +1,4 @@
-package nl.rug.www.summerschool;
+package nl.rug.www.summerschool.controller.lecturer;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -6,15 +6,20 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import nl.rug.www.summerschool.controller.ContentsLab;
+import nl.rug.www.summerschool.networking.NetworkingService;
+import nl.rug.www.summerschool.R;
+import nl.rug.www.summerschool.model.Lecturer;
 
 /**
  * This class is a fragment on main pager activity.
@@ -25,8 +30,6 @@ import java.util.List;
  */
 public class LecturerListFragment extends Fragment {
 
-    private static final String TAG = "LecturerListFragment";
-
     private RecyclerView mLecturerRecyclerView;
     private List<Lecturer> mItems = new ArrayList<>();
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -35,9 +38,7 @@ public class LecturerListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        mItems = ContentsLab.get(getActivity()).getLecturers();
-        //TODO : fetch lecturer data from database
-//        new FetchLecturersTask().execute();
+        new FetchLecturersTask().execute();
     }
 
     @Override
@@ -46,6 +47,14 @@ public class LecturerListFragment extends Fragment {
 
         TextView section = (TextView)v.findViewById(R.id.section_name);
         section.setText(R.string.lecturer_info);
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout)v.findViewById(R.id.refresh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new FetchLecturersTask().execute();
+            }
+        });
 
         mLecturerRecyclerView = (RecyclerView)v.findViewById(R.id.recycler_view);
         mLecturerRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
@@ -66,17 +75,20 @@ public class LecturerListFragment extends Fragment {
 
         private Lecturer mLecturer;
         private TextView mTitleTextView;
+        private ImageView mLecturerImageView;
 
-        public LecturerHolder(LayoutInflater inflater, ViewGroup parent) {
+        private LecturerHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_lecturer, parent, false));
 
             mTitleTextView = (TextView)itemView.findViewById(R.id.lecturer_item_name_text_view);
+            mLecturerImageView = (ImageView)itemView.findViewById(R.id.lecturer_image_view);
             itemView.setOnClickListener(this);
         }
 
-        public void bind(Lecturer lecturer){
+        private void bind(Lecturer lecturer){
             mLecturer = lecturer;
             mTitleTextView.setText(mLecturer.getTitle());
+            mLecturerImageView.setImageDrawable(mLecturer.getProfilePicture());
         }
 
         @Override
@@ -90,7 +102,7 @@ public class LecturerListFragment extends Fragment {
 
         private List<Lecturer> mLecturers;
 
-        public LecturerAdapter(List<Lecturer> lecturers) {
+        private LecturerAdapter(List<Lecturer> lecturers) {
             mLecturers = lecturers;
         }
 
@@ -113,18 +125,21 @@ public class LecturerListFragment extends Fragment {
         }
     }
 
-//    private class FetchLecturersTask extends AsyncTask<Void, Void, List<Announcement>> {
-//
-//        @Override
-//        protected List<Lecturer> doInBackground(Void... params) {
-//            return new NetworkingService().fetchLecturers();
-//        }
-//
-//        @Override
-//        protected void onPostExecute(List<Lecturer> lecturers) {
-//            mItems = lecturers;
-//            setupAdatper();
-//            ContentsLab.get(getActivity()).updateAnnouncements(mItems);
-//        }
-//    }
+    private class FetchLecturersTask extends AsyncTask<Void, Void, List<Lecturer>> {
+
+        @Override
+        protected List<Lecturer> doInBackground(Void... params) {
+            return new NetworkingService().fetchLecturers();
+        }
+
+        @Override
+        protected void onPostExecute(List<Lecturer> lecturers) {
+            mItems = lecturers;
+            setupAdatper();
+            ContentsLab.get().updateLecturers(mItems);
+            if (mSwipeRefreshLayout.isRefreshing()) {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        }
+    }
 }

@@ -1,4 +1,4 @@
-package nl.rug.www.summerschool;
+package nl.rug.www.summerschool.controller.forum;
 
 import android.support.v4.app.Fragment;
 

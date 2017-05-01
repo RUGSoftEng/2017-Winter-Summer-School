@@ -1,9 +1,8 @@
-package nl.rug.www.summerschool;
+package nl.rug.www.summerschool.controller.timetable;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.bignerdranch.expandablerecyclerview.Adapter.ExpandableRecyclerAdapter;
@@ -21,6 +19,12 @@ import com.bignerdranch.expandablerecyclerview.ViewHolder.ParentViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import nl.rug.www.summerschool.controller.ContentsLab;
+import nl.rug.www.summerschool.R;
+import nl.rug.www.summerschool.model.TimeTable;
+import nl.rug.www.summerschool.model.TimeTableWeek;
+import nl.rug.www.summerschool.networking.NetworkingService;
 
 /**
  * This class is time table fragment on main pager activity.
@@ -49,7 +53,7 @@ public class TimeTableFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
 
         TextView section = (TextView)view.findViewById(R.id.section_name);
-        section.setText("Time Table");
+        section.setText(R.string.time_table);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.refresh_layout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -87,13 +91,11 @@ public class TimeTableFragment extends Fragment {
     private class TimeTableParentViewHolder extends ParentViewHolder {
 
         private TextView mTimeTableTitleTextView;
-        private ImageButton mParentDropDownArrow;
 
-        public TimeTableParentViewHolder(View itemView) {
+        private TimeTableParentViewHolder(View itemView) {
             super(itemView);
 
             mTimeTableTitleTextView = (TextView) itemView.findViewById(R.id.parent_list_item_timetable_text_view);
-            mParentDropDownArrow = (ImageButton) itemView.findViewById(R.id.parent_list_item_expand_arrow);
         }
     }
 
@@ -102,7 +104,7 @@ public class TimeTableFragment extends Fragment {
         private TextView mTimeTextView;
         private TextView mSubjectTextView;
 
-        public TimeTableChildViewHolder(View itemView) {
+        private TimeTableChildViewHolder(View itemView) {
             super(itemView);
 
             mTimeTextView = (TextView) itemView.findViewById(R.id.time_text_view);
@@ -114,7 +116,7 @@ public class TimeTableFragment extends Fragment {
 
         private LayoutInflater mInflater;
 
-        public TimeTableExpandableAdapter(Context context, List<ParentObject> parentItemList) {
+        private TimeTableExpandableAdapter(Context context, List<ParentObject> parentItemList) {
             super(context, parentItemList);
             mInflater = LayoutInflater.from(context);
         }
@@ -151,7 +153,7 @@ public class TimeTableFragment extends Fragment {
     }
 
     private ArrayList<ParentObject> generateTimeTableWeek() {
-        ContentsLab contentsLab = ContentsLab.get(getActivity());
+        ContentsLab contentsLab = ContentsLab.get();
         ArrayList<ParentObject> parentObjects = new ArrayList<>();
         List<TimeTableWeek> timeTableWeeks = contentsLab.getTimeTableWeeks();
         for (TimeTableWeek t : timeTableWeeks) {
@@ -172,7 +174,7 @@ public class TimeTableFragment extends Fragment {
         @Override
         protected void onPostExecute(List<TimeTable> timeTables) {
             mItems = timeTables;
-            ContentsLab.get(getActivity()).updateTimeTables(mItems);
+            ContentsLab.get().updateTimeTables(mItems);
             updateUI();
             if (mSwipeRefreshLayout.isRefreshing()) {
                 mSwipeRefreshLayout.setRefreshing(false);
