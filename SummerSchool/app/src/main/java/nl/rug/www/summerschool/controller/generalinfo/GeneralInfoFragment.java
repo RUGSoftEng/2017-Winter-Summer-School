@@ -1,5 +1,6 @@
 package nl.rug.www.summerschool.controller.generalinfo;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
@@ -25,8 +26,6 @@ public class GeneralInfoFragment extends Fragment {
     private static final String ARG_GENERAL_INFO_ID = "generalinfo_id";
 
     private GeneralInfo mGeneralInfo;
-    private TextView mTitle;
-    private TextView mDescription;
 
     public static GeneralInfoFragment newInstance(String generalinfoId) {
         Bundle args = new Bundle();
@@ -41,17 +40,21 @@ public class GeneralInfoFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String generalInfoId = getArguments().getString(ARG_GENERAL_INFO_ID);
-        mGeneralInfo = ContentsLab.get(getActivity()).getGeneralInfo(generalInfoId);
+        mGeneralInfo = ContentsLab.get().getGeneralInfo(generalInfoId);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_generalinfo, container, false);
 
-        mTitle = (TextView)view.findViewById(R.id.generalinfo_title);
+        TextView mTitle = (TextView)view.findViewById(R.id.generalinfo_title);
         mTitle.setText(mGeneralInfo.getTitle());
-        mDescription = (TextView)view.findViewById(R.id.generalinfo_detail);
-        mDescription.setText(Html.fromHtml(mGeneralInfo.getDescription()));
+        TextView mDescription = (TextView)view.findViewById(R.id.generalinfo_detail);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            mDescription.setText(Html.fromHtml(mGeneralInfo.getDescription(), Html.FROM_HTML_MODE_COMPACT));
+        } else {
+            mDescription.setText(Html.fromHtml(mGeneralInfo.getDescription()));
+        }
 
         return view;
     }

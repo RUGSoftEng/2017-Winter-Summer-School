@@ -1,7 +1,5 @@
 package nl.rug.www.summerschool.model;
 
-import nl.rug.www.summerschool.model.Content;
-
 /**
  * This class is a model of time table.
  *
@@ -10,8 +8,7 @@ import nl.rug.www.summerschool.model.Content;
  */
 
 public class TimeTable extends Content {
-    private String mDate;
-    private String mLocation;
+
     private String mStartDate;
     private String mEndDate;
 
@@ -29,21 +26,5 @@ public class TimeTable extends Content {
 
     public void setEndDate(String endDate) {
         mEndDate = endDate;
-    }
-
-    public String getDate() {
-        return mDate;
-    }
-
-    public void setDate(String date) {
-        mDate = date;
-    }
-
-    public String getLocation() {
-        return mLocation;
-    }
-
-    public void setLocation(String location) {
-        mLocation = location;
     }
 }

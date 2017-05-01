@@ -44,10 +44,10 @@ public class NetworkingService {
 
     private static final String URL_DATABASE = "summer-schools.herokuapp.com";
 
-    public static final int ANNOUNCEMENT = 0;
-    public static final int GENERAL_INFO = 1;
-    public static final int LECTURER = 2;
-    public static final int TIMETABLE = 3;
+    private static final int ANNOUNCEMENT = 0;
+    private static final int GENERAL_INFO = 1;
+    private static final int LECTURER = 2;
+    private static final int TIMETABLE = 3;
 
     private byte[] getUrlBytes(String urlSpec) throws IOException {
         URL url = new URL(urlSpec);
@@ -60,7 +60,7 @@ public class NetworkingService {
                         ": with " +
                         urlSpec);
             }
-            int bytesRead = 0;
+            int bytesRead;
             byte[] buffer = new byte[1024];
             while ((bytesRead = in.read(buffer)) > 0) {
                 out.write(buffer, 0, bytesRead);
@@ -91,11 +91,10 @@ public class NetworkingService {
                 c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
 
                 DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                String startDate = "", endDate = "";
 
-                startDate = df.format(c.getTime());
+                String startDate = df.format(c.getTime());
                 c.add(Calendar.DATE, 7);
-                endDate = df.format(c.getTime());
+                String endDate = df.format(c.getTime());
 
                 builder.appendPath("calendar").appendPath("event")
                         .appendQueryParameter("startDate", startDate + "T00:00:00.000Z")
@@ -106,13 +105,11 @@ public class NetworkingService {
                         .appendPath("item");
                 break;
         }
-        String jsonString = "";
+        String jsonString;
         try {
             jsonString = getUrlString(builder.toString());
             return new JSONArray(jsonString);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
         return null;
@@ -122,9 +119,7 @@ public class NetworkingService {
         List<Announcement> announcements = new ArrayList<>();
         try {
             parseAnnouncements(announcements, buildJSONArray(ANNOUNCEMENT));
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
 
@@ -227,8 +222,6 @@ public class NetworkingService {
             timeTable.setId(contentJsonObject.getString("id"));
             timeTable.setTitle(contentJsonObject.getString("summary"));
             timeTable.setDescription(contentJsonObject.getString("description"));
-            timeTable.setLocation(contentJsonObject.getString("location"));
-            timeTable.setDate(contentJsonObject.getString("updated"));
             JSONObject startDate = contentJsonObject.getJSONObject("start");
             timeTable.setStartDate(startDate.getString("dateTime"));
             JSONObject endDate = contentJsonObject.getJSONObject("end");

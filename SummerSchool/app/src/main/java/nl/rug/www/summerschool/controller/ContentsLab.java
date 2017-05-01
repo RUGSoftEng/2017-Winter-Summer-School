@@ -1,6 +1,5 @@
 package nl.rug.www.summerschool.controller;
 
-import android.content.Context;
 import android.util.Log;
 
 import java.text.ParseException;
@@ -8,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import nl.rug.www.summerschool.model.Announcement;
 import nl.rug.www.summerschool.model.GeneralInfo;
@@ -33,17 +33,15 @@ public class ContentsLab {
     private ArrayList<TimeTable> mTimeTables;
     private ArrayList<TimeTableWeek> mTimeTableWeeks;
     private ArrayList<Lecturer> mLecturers;
-    private ArrayList<String> mLogInData;
 
-    public static ContentsLab get(Context context) {
+    public static ContentsLab get() {
         if (sContentsLab == null) {
-            sContentsLab = new ContentsLab(context);
+            sContentsLab = new ContentsLab();
         }
         return sContentsLab;
     }
 
-    private ContentsLab(Context context) {
-        mLogInData = new ArrayList<>();
+    private ContentsLab() {
         mAnnouncements = new ArrayList<>();
         mGeneralInfos = new ArrayList<>();
         mTimeTables = new ArrayList<>();
@@ -56,14 +54,6 @@ public class ContentsLab {
         mTimeTableWeeks.add(new TimeTableWeek("Saterday"));
         mTimeTableWeeks.add(new TimeTableWeek("Sunday"));
         mLecturers = new ArrayList<>();
-    }
-
-    public ArrayList<String> getLogInData() {
-        return mLogInData;
-    }
-
-    public void setLogInData(ArrayList<String> logInData) {
-        mLogInData = (ArrayList<String>)logInData.clone();
     }
 
     public List<GeneralInfo> getGeneralInfos() { return mGeneralInfos; }
@@ -84,23 +74,7 @@ public class ContentsLab {
         return null;
     }
 
-    public List<TimeTable> getTimeTables() { return mTimeTables; }
-
-    public TimeTable getTimeTable(String id) {
-        for (TimeTable c : mTimeTables) {
-            if (c.getId().equals(id)) return c;
-        }
-        return null;
-    }
-
     public List<TimeTableWeek> getTimeTableWeeks() { return mTimeTableWeeks; }
-
-    public TimeTableWeek getTimeTableWeek(String dayOfWeek) {
-        for (TimeTableWeek c : mTimeTableWeeks) {
-            if (c.getDayOfWeek().equals(dayOfWeek)) return c;
-        }
-        return null;
-    }
 
     public List<Lecturer> getLecturers() { return mLecturers; }
 
@@ -128,7 +102,7 @@ public class ContentsLab {
         mLecturers = (ArrayList<Lecturer>) lecturers;
     }
 
-    public void createTimeTableWeek() {
+    private void createTimeTableWeek() {
         List<Object> monday = new ArrayList<>();
         List<Object> tuesday = new ArrayList<>();
         List<Object> wednesday = new ArrayList<>();
@@ -139,8 +113,8 @@ public class ContentsLab {
 
         for (TimeTable t : mTimeTables) {
             String[] parts = t.getStartDate().split("T");
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            SimpleDateFormat dayOfWeek = new SimpleDateFormat("EEEE");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            SimpleDateFormat dayOfWeek = new SimpleDateFormat("EEEE", Locale.getDefault());
             try {
                 Date date = format.parse(parts[0]);
                 Log.d("ContentsLab", "Received date : " + date.toString());

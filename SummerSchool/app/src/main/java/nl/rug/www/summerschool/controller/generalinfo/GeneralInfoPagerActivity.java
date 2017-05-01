@@ -27,7 +27,6 @@ public class GeneralInfoPagerActivity extends AppCompatActivity {
     private static final String EXTRA_GENERAL_INFO_ID =
             "nl.rug.www.summerschool.generalinfo_id";
 
-    private ViewPager mViewPager;
     private List<GeneralInfo> mGeneralInfos;
 
     public static Intent newIntent(Context packageContext, String content) {
@@ -43,9 +42,9 @@ public class GeneralInfoPagerActivity extends AppCompatActivity {
 
         String generalInfoId = (String) getIntent().getSerializableExtra(EXTRA_GENERAL_INFO_ID);
 
-        mViewPager = (ViewPager) findViewById(R.id.content_view_pager);
+        ViewPager mViewPager = (ViewPager) findViewById(R.id.content_view_pager);
 
-        mGeneralInfos = ContentsLab.get(this).getGeneralInfos();
+        mGeneralInfos = ContentsLab.get().getGeneralInfos();
         FragmentManager fragmentManager = getSupportFragmentManager();
         mViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
             @Override

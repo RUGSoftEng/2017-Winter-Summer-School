@@ -78,14 +78,14 @@ public class GeneralInfoListFragment extends Fragment {
         private GeneralInfo mGeneralInfo;
         private TextView mTitleTextView;
 
-        public GeneralInfoHolder(LayoutInflater inflater, ViewGroup parent) {
+        private GeneralInfoHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_content, parent, false));
 
             mTitleTextView = (TextView)itemView.findViewById(R.id.content_title);
             itemView.setOnClickListener(this);
         }
 
-        public void bind(GeneralInfo generalInfo){
+        private void bind(GeneralInfo generalInfo){
             mGeneralInfo = generalInfo;
             mTitleTextView.setText(mGeneralInfo.getTitle());
         }
@@ -101,7 +101,7 @@ public class GeneralInfoListFragment extends Fragment {
 
         private List<GeneralInfo> mGeneralInfos;
 
-        public GeneralInfoAdapter(List<GeneralInfo> generalInfos) {
+        private GeneralInfoAdapter(List<GeneralInfo> generalInfos) {
             mGeneralInfos = generalInfos;
         }
 
@@ -136,7 +136,7 @@ public class GeneralInfoListFragment extends Fragment {
         protected void onPostExecute(List<GeneralInfo> generalInfos) {
             mItems = generalInfos;
             setupAdatper();
-            ContentsLab.get(getActivity()).updateGeneralInfos(mItems);
+            ContentsLab.get().updateGeneralInfos(mItems);
             if (mSwipeRefreshLayout.isRefreshing()) {
                 mSwipeRefreshLayout.setRefreshing(false);
             }

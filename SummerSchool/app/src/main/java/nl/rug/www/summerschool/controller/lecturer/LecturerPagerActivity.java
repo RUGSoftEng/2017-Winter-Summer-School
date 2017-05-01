@@ -27,7 +27,6 @@ public class LecturerPagerActivity extends AppCompatActivity {
     private static final String EXTRA_LECTURER_ID =
             "nl.rug.www.summerschool.lecturer_id";
 
-    private ViewPager mViewPager;
     private List<Lecturer> mLecturers;
 
     public static Intent newIntent(Context packageContext, String content) {
@@ -43,9 +42,9 @@ public class LecturerPagerActivity extends AppCompatActivity {
 
         String lecturerId = (String) getIntent().getSerializableExtra(EXTRA_LECTURER_ID);
 
-        mViewPager = (ViewPager) findViewById(R.id.content_view_pager);
+        ViewPager mViewPager = (ViewPager) findViewById(R.id.content_view_pager);
 
-        mLecturers = ContentsLab.get(this).getLecturers();
+        mLecturers = ContentsLab.get().getLecturers();
         FragmentManager fragmentManager = getSupportFragmentManager();
         mViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
             @Override

@@ -82,14 +82,14 @@ public class AnnouncementListFragment extends Fragment {
         private Announcement mAnnouncement;
         private TextView mTitleTextView;
 
-        public AnnouncementHolder(LayoutInflater inflater, ViewGroup parent) {
+        private AnnouncementHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_content, parent, false));
 
             mTitleTextView = (TextView)itemView.findViewById(R.id.content_title);
             itemView.setOnClickListener(this);
         }
 
-        public void bind(Announcement announcement){
+        private void bind(Announcement announcement){
             mAnnouncement = announcement;
             mTitleTextView.setText(mAnnouncement.getTitle());
         }
@@ -105,7 +105,7 @@ public class AnnouncementListFragment extends Fragment {
 
         private List<Announcement> mAnnouncements;
 
-        public AnnouncementAdapter(List<Announcement> announcements) {
+        private AnnouncementAdapter(List<Announcement> announcements) {
             mAnnouncements = announcements;
         }
 
@@ -139,7 +139,7 @@ public class AnnouncementListFragment extends Fragment {
         protected void onPostExecute(List<Announcement> announcements) {
             mItems = announcements;
             setupAdatper();
-            ContentsLab.get(getActivity()).updateAnnouncements(mItems);
+            ContentsLab.get().updateAnnouncements(mItems);
             if (mSwipeRefreshLayout.isRefreshing()) {
                 mSwipeRefreshLayout.setRefreshing(false);
             }

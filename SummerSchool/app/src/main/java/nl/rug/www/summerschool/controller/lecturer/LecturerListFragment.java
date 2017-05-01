@@ -30,8 +30,6 @@ import nl.rug.www.summerschool.model.Lecturer;
  */
 public class LecturerListFragment extends Fragment {
 
-    private static final String TAG = "LecturerListFragment";
-
     private RecyclerView mLecturerRecyclerView;
     private List<Lecturer> mItems = new ArrayList<>();
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -79,7 +77,7 @@ public class LecturerListFragment extends Fragment {
         private TextView mTitleTextView;
         private ImageView mLecturerImageView;
 
-        public LecturerHolder(LayoutInflater inflater, ViewGroup parent) {
+        private LecturerHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_lecturer, parent, false));
 
             mTitleTextView = (TextView)itemView.findViewById(R.id.lecturer_item_name_text_view);
@@ -87,7 +85,7 @@ public class LecturerListFragment extends Fragment {
             itemView.setOnClickListener(this);
         }
 
-        public void bind(Lecturer lecturer){
+        private void bind(Lecturer lecturer){
             mLecturer = lecturer;
             mTitleTextView.setText(mLecturer.getTitle());
             mLecturerImageView.setImageDrawable(mLecturer.getProfilePicture());
@@ -104,7 +102,7 @@ public class LecturerListFragment extends Fragment {
 
         private List<Lecturer> mLecturers;
 
-        public LecturerAdapter(List<Lecturer> lecturers) {
+        private LecturerAdapter(List<Lecturer> lecturers) {
             mLecturers = lecturers;
         }
 
@@ -138,7 +136,7 @@ public class LecturerListFragment extends Fragment {
         protected void onPostExecute(List<Lecturer> lecturers) {
             mItems = lecturers;
             setupAdatper();
-            ContentsLab.get(getActivity()).updateLecturers(mItems);
+            ContentsLab.get().updateLecturers(mItems);
             if (mSwipeRefreshLayout.isRefreshing()) {
                 mSwipeRefreshLayout.setRefreshing(false);
             }

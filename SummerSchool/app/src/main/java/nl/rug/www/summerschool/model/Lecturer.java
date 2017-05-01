@@ -2,8 +2,6 @@ package nl.rug.www.summerschool.model;
 
 import android.graphics.drawable.Drawable;
 
-import nl.rug.www.summerschool.model.Content;
-
 /**
  * This class is a model of lecturer information that contains
  *
@@ -14,24 +12,6 @@ import nl.rug.www.summerschool.model.Content;
 public class Lecturer extends Content {
 
     private Drawable mProfilePicture;
-    private String mDepartment;
-    private String mImagePath;
-
-    public String getDepartment() {
-        return mDepartment;
-    }
-
-    public void setDepartment(String department) {
-        mDepartment = department;
-    }
-
-    public String getImagePath() {
-        return mImagePath;
-    }
-
-    public void setImagePath(String imagePath) {
-        mImagePath = imagePath;
-    }
 
     public Drawable getProfilePicture() {
         return mProfilePicture;

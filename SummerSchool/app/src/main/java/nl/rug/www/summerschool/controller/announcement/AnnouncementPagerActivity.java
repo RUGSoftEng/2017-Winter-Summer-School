@@ -27,7 +27,6 @@ public class AnnouncementPagerActivity extends AppCompatActivity {
     private static final String EXTRA_ANNOUNCEMENT_ID =
             "nl.rug.www.summerschool.announcement_id";
 
-    private ViewPager mViewPager;
     private List<Announcement> mAnnouncements;
 
     public static Intent newIntent(Context packageContext, String content) {
@@ -43,9 +42,9 @@ public class AnnouncementPagerActivity extends AppCompatActivity {
 
         String announcementId = (String) getIntent().getSerializableExtra(EXTRA_ANNOUNCEMENT_ID);
 
-        mViewPager = (ViewPager) findViewById(R.id.content_view_pager);
+        ViewPager mViewPager = (ViewPager) findViewById(R.id.content_view_pager);
 
-        mAnnouncements = ContentsLab.get(this).getAnnouncements();
+        mAnnouncements = ContentsLab.get().getAnnouncements();
         FragmentManager fragmentManager = getSupportFragmentManager();
         mViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
             @Override
