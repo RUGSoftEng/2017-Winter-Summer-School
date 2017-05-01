@@ -1,18 +1,19 @@
-package nl.rug.www.summerschool;
+package nl.rug.www.summerschool.controller;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.util.Log;
 
-import java.sql.Time;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.xml.datatype.DatatypeFactory;
+import nl.rug.www.summerschool.model.Announcement;
+import nl.rug.www.summerschool.model.GeneralInfo;
+import nl.rug.www.summerschool.model.Lecturer;
+import nl.rug.www.summerschool.model.TimeTable;
+import nl.rug.www.summerschool.model.TimeTableWeek;
 
 /**
  * ContentsLab stores data that fetched from the database.

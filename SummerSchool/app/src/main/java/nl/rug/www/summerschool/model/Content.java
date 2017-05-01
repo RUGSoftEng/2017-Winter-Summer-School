@@ -1,4 +1,4 @@
-package nl.rug.www.summerschool;
+package nl.rug.www.summerschool.model;
 
 import java.util.Date;
 import java.util.UUID;

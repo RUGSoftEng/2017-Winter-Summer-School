@@ -1,4 +1,4 @@
-package nl.rug.www.summerschool;
+package nl.rug.www.summerschool.controller.forum;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

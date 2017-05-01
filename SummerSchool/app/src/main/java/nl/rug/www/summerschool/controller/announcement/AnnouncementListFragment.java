@@ -1,14 +1,12 @@
-package nl.rug.www.summerschool;
+package nl.rug.www.summerschool.controller.announcement;
 
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +14,11 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import nl.rug.www.summerschool.controller.ContentsLab;
+import nl.rug.www.summerschool.networking.NetworkingService;
+import nl.rug.www.summerschool.R;
+import nl.rug.www.summerschool.model.Announcement;
 
 /**
  * This class is a fragment on main pager activity.
@@ -57,6 +60,8 @@ public class AnnouncementListFragment extends Fragment {
                 new FetchAnnouncementsTask().execute();
             }
         });
+        if (mItems == null)
+            mSwipeRefreshLayout.setRefreshing(true);
 
         mAnnouncementRecyclerView = (RecyclerView)v.findViewById(R.id.recycler_view);
         mAnnouncementRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

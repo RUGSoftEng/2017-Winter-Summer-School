@@ -1,4 +1,4 @@
-package nl.rug.www.summerschool;
+package nl.rug.www.summerschool.controller.generalinfo;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,6 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import nl.rug.www.summerschool.controller.ContentsLab;
+import nl.rug.www.summerschool.R;
+import nl.rug.www.summerschool.model.GeneralInfo;
 
 /**
  * This class is to show the details of general information

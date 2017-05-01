@@ -1,4 +1,4 @@
-package nl.rug.www.summerschool;
+package nl.rug.www.summerschool.model;
 
 import com.bignerdranch.expandablerecyclerview.Model.ParentObject;
 

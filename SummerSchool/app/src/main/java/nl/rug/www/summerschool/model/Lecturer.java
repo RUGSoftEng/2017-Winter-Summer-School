@@ -1,7 +1,8 @@
-package nl.rug.www.summerschool;
+package nl.rug.www.summerschool.model;
 
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+
+import nl.rug.www.summerschool.model.Content;
 
 /**
  * This class is a model of lecturer information that contains

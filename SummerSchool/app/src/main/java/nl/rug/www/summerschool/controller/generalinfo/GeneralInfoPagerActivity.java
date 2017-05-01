@@ -1,4 +1,4 @@
-package nl.rug.www.summerschool;
+package nl.rug.www.summerschool.controller.generalinfo;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,24 +11,28 @@ import android.support.v7.app.AppCompatActivity;
 
 import java.util.List;
 
+import nl.rug.www.summerschool.controller.ContentsLab;
+import nl.rug.www.summerschool.R;
+import nl.rug.www.summerschool.model.GeneralInfo;
+
 /**
- * This class is an acitivty that allows the lecturer fragments on this to be slided by.
+ * This class is an acitivty that allows the general information fragments on this to be slided by.
  *
  * @since 13/04/2017
  * @author Jeongkyun Oh
  */
 
-public class LecturerPagerActivity extends AppCompatActivity {
+public class GeneralInfoPagerActivity extends AppCompatActivity {
 
-    private static final String EXTRA_LECTURER_ID =
-            "nl.rug.www.summerschool.lecturer_id";
+    private static final String EXTRA_GENERAL_INFO_ID =
+            "nl.rug.www.summerschool.generalinfo_id";
 
     private ViewPager mViewPager;
-    private List<Lecturer> mLecturers;
+    private List<GeneralInfo> mGeneralInfos;
 
     public static Intent newIntent(Context packageContext, String content) {
-        Intent intent = new Intent(packageContext, LecturerPagerActivity.class);
-        intent.putExtra(EXTRA_LECTURER_ID, content);
+        Intent intent = new Intent(packageContext, GeneralInfoPagerActivity.class);
+        intent.putExtra(EXTRA_GENERAL_INFO_ID, content);
         return intent;
     }
 
@@ -37,27 +41,27 @@ public class LecturerPagerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_content_pager);
 
-        String lecturerId = (String) getIntent().getSerializableExtra(EXTRA_LECTURER_ID);
+        String generalInfoId = (String) getIntent().getSerializableExtra(EXTRA_GENERAL_INFO_ID);
 
         mViewPager = (ViewPager) findViewById(R.id.content_view_pager);
 
-        mLecturers = ContentsLab.get(this).getLecturers();
+        mGeneralInfos = ContentsLab.get(this).getGeneralInfos();
         FragmentManager fragmentManager = getSupportFragmentManager();
         mViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
             @Override
             public Fragment getItem(int position) {
-                Lecturer lecturer = mLecturers.get(position);
-                return LecturerFragment.newInstance(lecturer.getId());
+                GeneralInfo generalInfo = mGeneralInfos.get(position);
+                return GeneralInfoFragment.newInstance(generalInfo.getId());
             }
 
             @Override
             public int getCount() {
-                return mLecturers.size();
+                return mGeneralInfos.size();
             }
         });
 
-        for (int i = 0; i < mLecturers.size(); i++) {
-            if (mLecturers.get(i).getId().equals(lecturerId)) {
+        for (int i = 0; i < mGeneralInfos.size(); i++) {
+            if (mGeneralInfos.get(i).getId().equals(generalInfoId)) {
                 mViewPager.setCurrentItem(i);
                 break;
             }

@@ -1,9 +1,8 @@
-package nl.rug.www.summerschool;
+package nl.rug.www.summerschool.controller.timetable;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,6 +20,12 @@ import com.bignerdranch.expandablerecyclerview.ViewHolder.ParentViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import nl.rug.www.summerschool.controller.ContentsLab;
+import nl.rug.www.summerschool.R;
+import nl.rug.www.summerschool.model.TimeTable;
+import nl.rug.www.summerschool.model.TimeTableWeek;
+import nl.rug.www.summerschool.networking.NetworkingService;
 
 /**
  * This class is time table fragment on main pager activity.

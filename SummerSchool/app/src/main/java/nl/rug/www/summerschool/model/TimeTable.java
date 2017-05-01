@@ -1,4 +1,6 @@
-package nl.rug.www.summerschool;
+package nl.rug.www.summerschool.model;
+
+import nl.rug.www.summerschool.model.Content;
 
 /**
  * This class is a model of time table.

@@ -1,16 +1,21 @@
-package nl.rug.www.summerschool;
+package nl.rug.www.summerschool.controller;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
+
+import nl.rug.www.summerschool.R;
+import nl.rug.www.summerschool.controller.announcement.AnnouncementListFragment;
+import nl.rug.www.summerschool.controller.forum.ForumFragment;
+import nl.rug.www.summerschool.controller.generalinfo.GeneralInfoListFragment;
+import nl.rug.www.summerschool.controller.lecturer.LecturerListFragment;
+import nl.rug.www.summerschool.controller.myprofile.RootFragment;
+import nl.rug.www.summerschool.controller.timetable.TimeTableFragment;
 
 /**
  * This class is main activity that contains basic layout of the app.
