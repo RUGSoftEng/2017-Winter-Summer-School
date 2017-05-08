@@ -22,17 +22,17 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity">
+        <activity android:name=".controller.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".AnnouncementPagerActivity"></activity>
-        <activity android:name=".GeneralInfoPagerActivity"></activity>
-        <activity android:name=".LecturerPagerActivity"></activity>
-        <activity android:name=".MainPagerActivity"></activity>
+        <activity android:name=".controller.announcement.AnnouncementPagerActivity"></activity>
+        <activity android:name=".controller.generalinfo.GeneralInfoPagerActivity"></activity>
+        <activity android:name=".controller.lecturer.LecturerPagerActivity"></activity>
+        <activity android:name=".controller.MainPagerActivity"></activity>
     </application>
 
 </manifest>

@@ -1,14 +1,12 @@
-package nl.rug.www.summerschool;
+package nl.rug.www.summerschool.controller.announcement;
 
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +14,11 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import nl.rug.www.summerschool.controller.ContentsLab;
+import nl.rug.www.summerschool.networking.NetworkingService;
+import nl.rug.www.summerschool.R;
+import nl.rug.www.summerschool.model.Announcement;
 
 /**
  * This class is a fragment on main pager activity.
@@ -57,6 +60,8 @@ public class AnnouncementListFragment extends Fragment {
                 new FetchAnnouncementsTask().execute();
             }
         });
+        if (mItems == null)
+            mSwipeRefreshLayout.setRefreshing(true);
 
         mAnnouncementRecyclerView = (RecyclerView)v.findViewById(R.id.recycler_view);
         mAnnouncementRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -77,14 +82,14 @@ public class AnnouncementListFragment extends Fragment {
         private Announcement mAnnouncement;
         private TextView mTitleTextView;
 
-        public AnnouncementHolder(LayoutInflater inflater, ViewGroup parent) {
+        private AnnouncementHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_content, parent, false));
 
             mTitleTextView = (TextView)itemView.findViewById(R.id.content_title);
             itemView.setOnClickListener(this);
         }
 
-        public void bind(Announcement announcement){
+        private void bind(Announcement announcement){
             mAnnouncement = announcement;
             mTitleTextView.setText(mAnnouncement.getTitle());
         }
@@ -100,7 +105,7 @@ public class AnnouncementListFragment extends Fragment {
 
         private List<Announcement> mAnnouncements;
 
-        public AnnouncementAdapter(List<Announcement> announcements) {
+        private AnnouncementAdapter(List<Announcement> announcements) {
             mAnnouncements = announcements;
         }
 
@@ -134,7 +139,7 @@ public class AnnouncementListFragment extends Fragment {
         protected void onPostExecute(List<Announcement> announcements) {
             mItems = announcements;
             setupAdatper();
-            ContentsLab.get(getActivity()).updateAnnouncements(mItems);
+            ContentsLab.get().updateAnnouncements(mItems);
             if (mSwipeRefreshLayout.isRefreshing()) {
                 mSwipeRefreshLayout.setRefreshing(false);
             }

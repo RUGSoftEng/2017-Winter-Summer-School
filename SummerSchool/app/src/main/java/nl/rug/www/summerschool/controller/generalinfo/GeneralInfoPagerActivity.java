@@ -1,8 +1,7 @@
-package nl.rug.www.summerschool;
+package nl.rug.www.summerschool.controller.generalinfo;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,6 +10,10 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
 import java.util.List;
+
+import nl.rug.www.summerschool.controller.ContentsLab;
+import nl.rug.www.summerschool.R;
+import nl.rug.www.summerschool.model.GeneralInfo;
 
 /**
  * This class is an acitivty that allows the general information fragments on this to be slided by.
@@ -24,7 +27,6 @@ public class GeneralInfoPagerActivity extends AppCompatActivity {
     private static final String EXTRA_GENERAL_INFO_ID =
             "nl.rug.www.summerschool.generalinfo_id";
 
-    private ViewPager mViewPager;
     private List<GeneralInfo> mGeneralInfos;
 
     public static Intent newIntent(Context packageContext, String content) {
@@ -40,9 +42,9 @@ public class GeneralInfoPagerActivity extends AppCompatActivity {
 
         String generalInfoId = (String) getIntent().getSerializableExtra(EXTRA_GENERAL_INFO_ID);
 
-        mViewPager = (ViewPager) findViewById(R.id.content_view_pager);
+        ViewPager mViewPager = (ViewPager) findViewById(R.id.content_view_pager);
 
-        mGeneralInfos = ContentsLab.get(this).getGeneralInfos();
+        mGeneralInfos = ContentsLab.get().getGeneralInfos();
         FragmentManager fragmentManager = getSupportFragmentManager();
         mViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
             @Override

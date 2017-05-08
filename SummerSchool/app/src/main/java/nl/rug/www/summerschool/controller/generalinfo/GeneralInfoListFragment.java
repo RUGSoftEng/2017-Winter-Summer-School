@@ -1,9 +1,8 @@
-package nl.rug.www.summerschool;
+package nl.rug.www.summerschool.controller.generalinfo;
 
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +14,11 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import nl.rug.www.summerschool.controller.ContentsLab;
+import nl.rug.www.summerschool.networking.NetworkingService;
+import nl.rug.www.summerschool.R;
+import nl.rug.www.summerschool.model.GeneralInfo;
 
 /**
  * This class is a fragment on main pager activity.
@@ -52,6 +56,9 @@ public class GeneralInfoListFragment extends Fragment {
             }
         });
 
+        if (mItems == null)
+            mSwipeRefreshLayout.setRefreshing(true);
+
         mGeneralInfoRecyclerView = (RecyclerView)v.findViewById(R.id.recycler_view);
         mGeneralInfoRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -71,14 +78,14 @@ public class GeneralInfoListFragment extends Fragment {
         private GeneralInfo mGeneralInfo;
         private TextView mTitleTextView;
 
-        public GeneralInfoHolder(LayoutInflater inflater, ViewGroup parent) {
+        private GeneralInfoHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_content, parent, false));
 
             mTitleTextView = (TextView)itemView.findViewById(R.id.content_title);
             itemView.setOnClickListener(this);
         }
 
-        public void bind(GeneralInfo generalInfo){
+        private void bind(GeneralInfo generalInfo){
             mGeneralInfo = generalInfo;
             mTitleTextView.setText(mGeneralInfo.getTitle());
         }
@@ -94,7 +101,7 @@ public class GeneralInfoListFragment extends Fragment {
 
         private List<GeneralInfo> mGeneralInfos;
 
-        public GeneralInfoAdapter(List<GeneralInfo> generalInfos) {
+        private GeneralInfoAdapter(List<GeneralInfo> generalInfos) {
             mGeneralInfos = generalInfos;
         }
 
@@ -129,7 +136,7 @@ public class GeneralInfoListFragment extends Fragment {
         protected void onPostExecute(List<GeneralInfo> generalInfos) {
             mItems = generalInfos;
             setupAdatper();
-            ContentsLab.get(getActivity()).updateGeneralInfos(mItems);
+            ContentsLab.get().updateGeneralInfos(mItems);
             if (mSwipeRefreshLayout.isRefreshing()) {
                 mSwipeRefreshLayout.setRefreshing(false);
             }

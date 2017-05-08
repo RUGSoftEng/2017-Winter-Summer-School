@@ -1,4 +1,4 @@
-package nl.rug.www.summerschool;
+package nl.rug.www.summerschool.controller.lecturer;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +10,10 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
 import java.util.List;
+
+import nl.rug.www.summerschool.controller.ContentsLab;
+import nl.rug.www.summerschool.R;
+import nl.rug.www.summerschool.model.Lecturer;
 
 /**
  * This class is an acitivty that allows the lecturer fragments on this to be slided by.
@@ -23,7 +27,6 @@ public class LecturerPagerActivity extends AppCompatActivity {
     private static final String EXTRA_LECTURER_ID =
             "nl.rug.www.summerschool.lecturer_id";
 
-    private ViewPager mViewPager;
     private List<Lecturer> mLecturers;
 
     public static Intent newIntent(Context packageContext, String content) {
@@ -39,9 +42,9 @@ public class LecturerPagerActivity extends AppCompatActivity {
 
         String lecturerId = (String) getIntent().getSerializableExtra(EXTRA_LECTURER_ID);
 
-        mViewPager = (ViewPager) findViewById(R.id.content_view_pager);
+        ViewPager mViewPager = (ViewPager) findViewById(R.id.content_view_pager);
 
-        mLecturers = ContentsLab.get(this).getLecturers();
+        mLecturers = ContentsLab.get().getLecturers();
         FragmentManager fragmentManager = getSupportFragmentManager();
         mViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
             @Override

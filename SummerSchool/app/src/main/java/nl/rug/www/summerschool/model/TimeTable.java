@@ -1,4 +1,4 @@
-package nl.rug.www.summerschool;
+package nl.rug.www.summerschool.model;
 
 /**
  * This class is a model of time table.
@@ -8,8 +8,7 @@ package nl.rug.www.summerschool;
  */
 
 public class TimeTable extends Content {
-    private String mDate;
-    private String mLocation;
+
     private String mStartDate;
     private String mEndDate;
 
@@ -27,21 +26,5 @@ public class TimeTable extends Content {
 
     public void setEndDate(String endDate) {
         mEndDate = endDate;
-    }
-
-    public String getDate() {
-        return mDate;
-    }
-
-    public void setDate(String date) {
-        mDate = date;
-    }
-
-    public String getLocation() {
-        return mLocation;
-    }
-
-    public void setLocation(String location) {
-        mLocation = location;
     }
 }

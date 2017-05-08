@@ -1,4 +1,4 @@
-package nl.rug.www.summerschool;
+package nl.rug.www.summerschool.model;
 
 /**
  * Announcement class is a model of contents that contains author and date that is posted.

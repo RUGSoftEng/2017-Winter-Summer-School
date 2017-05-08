@@ -11,11 +11,13 @@
         android:layout_height="wrap_content">
 
         <ImageView
+            android:id="@+id/lecturer_image_view"
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_margin="4dp"
             android:src="@drawable/profile"
             android:background="#ffffff"
+            android:scaleType="centerCrop"
             android:contentDescription="@string/lecturer_picture"/>
 
         <LinearLayout
