@@ -7,10 +7,10 @@
               android:gravity="center">
 
     <com.facebook.login.widget.LoginButton
-        android:id="@+id/facebook_invisible_log_in_button"
+        android:id= "@+id/invisibleFB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"/>
+        android:visibility="invisible" />
 
     <Button
         android:id="@+id/facebook_login_button"
