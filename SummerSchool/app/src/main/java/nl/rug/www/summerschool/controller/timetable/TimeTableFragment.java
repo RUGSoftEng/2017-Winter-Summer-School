@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.bignerdranch.expandablerecyclerview.Adapter.ExpandableRecyclerAdapter;
@@ -22,8 +23,8 @@ import java.util.List;
 
 import nl.rug.www.summerschool.controller.ContentsLab;
 import nl.rug.www.summerschool.R;
-import nl.rug.www.summerschool.model.TimeTable;
-import nl.rug.www.summerschool.model.TimeTableWeek;
+import nl.rug.www.summerschool.model.Event;
+import nl.rug.www.summerschool.model.EventsPerDay;
 import nl.rug.www.summerschool.networking.NetworkingService;
 
 /**
@@ -40,6 +41,7 @@ public class TimeTableFragment extends Fragment {
     private RecyclerView mTimeTableRecyclerView;
     private TimeTableExpandableAdapter mTimeTableExpandableAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private int mWeek = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,7 +52,7 @@ public class TimeTableFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_timetable, container, false);
 
         TextView section = (TextView)view.findViewById(R.id.section_name);
         section.setText(R.string.time_table);
@@ -63,29 +65,39 @@ public class TimeTableFragment extends Fragment {
             }
         });
 
+        Button previousWeekButton = (Button)view.findViewById(R.id.previous_week_button);
+        previousWeekButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mWeek--;
+                new FetchTimeTablesTask().execute();
+            }
+        });
+
+        Button nextWeekButton = (Button)view.findViewById(R.id.next_week_button);
+        nextWeekButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mWeek++;
+                new FetchTimeTablesTask().execute();
+            }
+        });
+
         mTimeTableRecyclerView = (RecyclerView)view.findViewById(R.id.recycler_view);
         mTimeTableRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        setupAdapter();
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        updateUI();
-    }
-
-    private void updateUI() {
-        if (mTimeTableExpandableAdapter == null) {
+    private void setupAdapter() {
+        if (isAdded()) {
             mTimeTableExpandableAdapter = new TimeTableExpandableAdapter(getActivity(), generateTimeTableWeek());
             mTimeTableExpandableAdapter.setCustomParentAnimationViewId(R.id.parent_list_item_expand_arrow);
             mTimeTableExpandableAdapter.setParentClickableViewAnimationDuration(ExpandableRecyclerAdapter.DEFAULT_ROTATE_DURATION_MS);
             mTimeTableExpandableAdapter.setParentAndIconExpandOnClick(true);
-        } else {
-            mTimeTableExpandableAdapter.notifyDataSetChanged();
+            mTimeTableRecyclerView.setAdapter(mTimeTableExpandableAdapter);
         }
-
-        mTimeTableRecyclerView.setAdapter(mTimeTableExpandableAdapter);
     }
 
     private class TimeTableParentViewHolder extends ParentViewHolder {
@@ -135,17 +147,17 @@ public class TimeTableFragment extends Fragment {
 
         @Override
         public void onBindParentViewHolder(TimeTableParentViewHolder timeTableParentViewHolder, int i, Object o) {
-            TimeTableWeek timeTableWeek = (TimeTableWeek)o;
-            timeTableParentViewHolder.mTimeTableTitleTextView.setText(timeTableWeek.getDayOfWeek());
+            EventsPerDay eventsPerDay = (EventsPerDay)o;
+            timeTableParentViewHolder.mTimeTableTitleTextView.setText(eventsPerDay.getDayOfWeek());
         }
 
         @Override
         public void onBindChildViewHolder(TimeTableChildViewHolder timeTableChildViewHolder, int i, Object o) {
-            TimeTable timeTable = (TimeTable)o;
-            timeTableChildViewHolder.mSubjectTextView.setText(timeTable.getTitle());
-            String[] startParts = timeTable.getStartDate().split("T");
+            Event event = (Event)o;
+            timeTableChildViewHolder.mSubjectTextView.setText(event.getTitle());
+            String[] startParts = event.getStartDate().split("T");
             String[] startParts2 = startParts[1].split(":");
-            String[] endParts = timeTable.getEndDate().split("T");
+            String[] endParts = event.getEndDate().split("T");
             String[] endParts2 = endParts[1].split(":");
             timeTableChildViewHolder.mTimeTextView.
                     setText(startParts2[0]+":"+startParts2[1]+" - "+endParts2[0]+":"+endParts2[1]);
@@ -155,27 +167,27 @@ public class TimeTableFragment extends Fragment {
     private ArrayList<ParentObject> generateTimeTableWeek() {
         ContentsLab contentsLab = ContentsLab.get();
         ArrayList<ParentObject> parentObjects = new ArrayList<>();
-        List<TimeTableWeek> timeTableWeeks = contentsLab.getTimeTableWeeks();
-        for (TimeTableWeek t : timeTableWeeks) {
+        List<EventsPerDay> eventsPerDays = contentsLab.getEventsPerDays();
+        for (EventsPerDay t : eventsPerDays) {
             parentObjects.add(t);
         }
         return parentObjects;
     }
 
-    private class FetchTimeTablesTask extends AsyncTask<Void, Void, List<TimeTable>> {
+    private class FetchTimeTablesTask extends AsyncTask<Void, Void, List<EventsPerDay>> {
 
-        List<TimeTable> mItems;
+        List<EventsPerDay> mItems;
 
         @Override
-        protected List<TimeTable> doInBackground(Void... params) {
-            return new NetworkingService().fetchTimeTables();
+        protected List<EventsPerDay> doInBackground(Void... params) {
+            return new NetworkingService().fetchTimeTables(mWeek);
         }
 
         @Override
-        protected void onPostExecute(List<TimeTable> timeTables) {
+        protected void onPostExecute(List<EventsPerDay> timeTables) {
             mItems = timeTables;
-            ContentsLab.get().updateTimeTables(mItems);
-            updateUI();
+            ContentsLab.get().updateTimeTableWeeks(mItems);
+            setupAdapter();
             if (mSwipeRefreshLayout.isRefreshing()) {
                 mSwipeRefreshLayout.setRefreshing(false);
             }

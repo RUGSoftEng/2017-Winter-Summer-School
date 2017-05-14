@@ -51,4 +51,6 @@
     <string name="log_out_button">Log out</string>
     <string name="university_of_groningen_summer_2017">University of Groningen - Summer 2017</string>
     <string name="header_cover_image">Header cover image</string>
+    <string name="previous"><![CDATA[< Previous]]></string>
+    <string name="next"><![CDATA[Next >]]></string>
 </resources>

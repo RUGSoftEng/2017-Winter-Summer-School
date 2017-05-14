@@ -7,7 +7,7 @@ package nl.rug.www.summerschool.model;
  * @author Jeongkyun Oh
  */
 
-public class TimeTable extends Content {
+public class Event extends Content {
 
     private String mStartDate;
     private String mEndDate;

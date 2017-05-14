@@ -13,18 +13,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import nl.rug.www.summerschool.model.Announcement;
 import nl.rug.www.summerschool.model.GeneralInfo;
 import nl.rug.www.summerschool.model.Lecturer;
-import nl.rug.www.summerschool.model.TimeTable;
+import nl.rug.www.summerschool.model.Event;
+import nl.rug.www.summerschool.model.EventsPerDay;
 
 /**
  * This class is to deal with all process for fetching data from online.
@@ -85,21 +85,6 @@ public class NetworkingService {
             case GENERAL_INFO :
                 builder.appendPath("generalinfo").appendPath("item");
                 break;
-            case TIMETABLE :
-                Calendar c = GregorianCalendar.getInstance();
-
-                c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-
-                DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-
-                String startDate = df.format(c.getTime());
-                c.add(Calendar.DATE, 7);
-                String endDate = df.format(c.getTime());
-
-                builder.appendPath("calendar").appendPath("event")
-                        .appendQueryParameter("startDate", startDate + "T00:00:00.000Z")
-                        .appendQueryParameter("endDate", endDate + "T00:00:00.000Z");
-                break;
             case LECTURER :
                 builder.appendPath("lecturer")
                         .appendPath("item");
@@ -110,6 +95,21 @@ public class NetworkingService {
             jsonString = getUrlString(builder.toString());
             return new JSONArray(jsonString);
         } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private JSONObject buildJSONObject(int week) {
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme("http").encodedAuthority(URL_DATABASE).appendPath("calendar").appendPath("event")
+                .appendQueryParameter("week", week + "");
+        try {
+            String jsonString = getUrlString(builder.toString());
+            return new JSONObject(jsonString);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
@@ -141,16 +141,16 @@ public class NetworkingService {
         return generalInfos;
     }
 
-    public List<TimeTable> fetchTimeTables() {
+    public List<EventsPerDay> fetchTimeTables(int week) {
 
-        List<TimeTable> timeTables = new ArrayList<>();
+        List<EventsPerDay> timeTables = new ArrayList<>();
 
         try {
-            parseTimeTables(timeTables, buildJSONArray(TIMETABLE));
+            parseTimeTables(timeTables, buildJSONObject(week));
         } catch (IOException ioe) {
             Log.e(TAG, "Failed to fetch TimeTables", ioe);
         } catch (JSONException je) {
-            Log.e(TAG, "Failed to parse TimeTable JSON", je);
+            Log.e(TAG, "Failed to parse Event JSON", je);
         }
 
         return timeTables;
@@ -163,9 +163,9 @@ public class NetworkingService {
         try {
             parseLecturers(lecturers, buildJSONArray(LECTURER));
         } catch (IOException ioe) {
-            Log.e(TAG, "Failed to fetch TimeTables", ioe);
+            Log.e(TAG, "Failed to fetch Lecturers", ioe);
         } catch (JSONException je) {
-            Log.e(TAG, "Failed to parse TimeTable JSON", je);
+            Log.e(TAG, "Failed to parse Lecturers JSON", je);
         }
 
         return lecturers;
@@ -211,23 +211,44 @@ public class NetworkingService {
         }
     }
 
-    private void parseTimeTables(List<TimeTable> items, JSONArray jsonBody)
+    private void parseTimeTables(List<EventsPerDay> items, JSONObject jsonBody)
             throws IOException, JSONException {
         if (jsonBody == null) return;
 
-        for (int i = 0; i < jsonBody.length(); i++) {
-            JSONObject contentJsonObject = jsonBody.getJSONObject(i);
+        String data = jsonBody.getString("data");
+        JSONArray array = new JSONArray(data);
+        Log.d(TAG, array.toString());
+        for (int i = 0; i < array.length(); ++i) {
+            JSONArray dataArray = array.getJSONArray(i);
+            String[] parts = dataArray.getString(0).split("T");
+            JSONArray eventsArray = dataArray.getJSONArray(1);
+            EventsPerDay timeTablePerDay = new EventsPerDay(parts[0]);
+            try {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                SimpleDateFormat format2 = new SimpleDateFormat(" (MMM-dd)", Locale.getDefault());
+                SimpleDateFormat dayOfWeek = new SimpleDateFormat("EEEE", Locale.getDefault());
+                Date date = format.parse(parts[0]);
+                String title = dayOfWeek.format(date) + format2.format(date);
+                timeTablePerDay = new EventsPerDay(title);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Log.d(TAG, parts[0]);
+            List<Object> childTimeTables = new ArrayList<>();
 
-            TimeTable timeTable = new TimeTable();
-            timeTable.setId(contentJsonObject.getString("id"));
-            timeTable.setTitle(contentJsonObject.getString("summary"));
-            timeTable.setDescription(contentJsonObject.getString("description"));
-            JSONObject startDate = contentJsonObject.getJSONObject("start");
-            timeTable.setStartDate(startDate.getString("dateTime"));
-            JSONObject endDate = contentJsonObject.getJSONObject("end");
-            timeTable.setEndDate(endDate.getString("dateTime"));
-
-            items.add(timeTable);
+            for (int j = 0; j < eventsArray.length(); ++j) {
+                Event event = new Event();
+                JSONObject object = new JSONObject(eventsArray.getString(j));
+                event.setId(object.getString("id"));
+                event.setTitle(object.getString("summary"));
+                JSONObject startDate = object.getJSONObject("start");
+                JSONObject endDate = object.getJSONObject("end");
+                event.setStartDate(startDate.getString("dateTime"));
+                event.setEndDate(endDate.getString("dateTime"));
+                childTimeTables.add(event);
+            }
+            timeTablePerDay.setChildObjectList(childTimeTables);
+            items.add(timeTablePerDay);
         }
     }
 
