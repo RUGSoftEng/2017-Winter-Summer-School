@@ -33,6 +33,7 @@ public class ContentsLab {
     private ArrayList<TimeTable> mTimeTables;
     private ArrayList<TimeTableWeek> mTimeTableWeeks;
     private ArrayList<Lecturer> mLecturers;
+    private ArrayList<String> mLogInData;
 
     public static ContentsLab get() {
         if (sContentsLab == null) {
@@ -41,10 +42,19 @@ public class ContentsLab {
         return sContentsLab;
     }
 
+    public ArrayList<String> getmLogInData() {
+        return mLogInData;
+    }
+
+    public void setmLogInData(ArrayList<String> mLogInData) {
+        this.mLogInData = mLogInData;
+    }
+
     private ContentsLab() {
         mAnnouncements = new ArrayList<>();
         mGeneralInfos = new ArrayList<>();
         mTimeTables = new ArrayList<>();
+
         mTimeTableWeeks = new ArrayList<>();
         mTimeTableWeeks.add(new TimeTableWeek("Monday"));
         mTimeTableWeeks.add(new TimeTableWeek("Tuesday"));

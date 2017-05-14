@@ -133,11 +133,12 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener{
                 });
     }
 
-    // end of google methods
     @Override
     public void onDestroy() {
         super.onDestroy();
-        SIM.getmGoogleApiClient().stopAutoManage(getActivity());
-        SIM.getmGoogleApiClient().disconnect();
+        if(SIM.getmGoogleApiClient().isConnected()) {
+            SIM.getmGoogleApiClient().stopAutoManage(getActivity());
+            SIM.getmGoogleApiClient().disconnect();
+        }
     }
 }
