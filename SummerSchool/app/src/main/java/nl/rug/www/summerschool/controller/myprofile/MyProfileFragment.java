@@ -27,7 +27,9 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import nl.rug.www.summerschool.R;
+import nl.rug.www.summerschool.controller.ContentsLab;
 import nl.rug.www.summerschool.controller.myprofile.SignInManager;
+import nl.rug.www.summerschool.model.Content;
 
 /**
  * This class is to show the data fetched from facebook or google+.
@@ -52,27 +54,17 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener{
 
     private static SignInManager SIM;
 
-    //creation of bundle, put arguments in it and set it when creating fragment for return.
-    public static MyProfileFragment newInstance(ArrayList<String> details) {
-        Bundle args = new Bundle();
-        args.putStringArrayList(ARG_CONTENT_ID, details);
-
-        MyProfileFragment fragment = new MyProfileFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //retrieve data from bundle
-        mLogInData = getArguments().getStringArrayList(ARG_CONTENT_ID);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_my_profile, container, false);
+
+        mLogInData = ContentsLab.get().getmLogInData();
 
         String displayName = mLogInData.get(1);
         String email = mLogInData.get(2);

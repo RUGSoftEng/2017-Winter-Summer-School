@@ -150,11 +150,10 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
         mlogInData.add(user.getDisplayName());
         mlogInData.add(user.getEmail());
 
-        mContents = ContentsLab.get();
-        mContents.setmLogInData(mlogInData);
+        ContentsLab.get().setmLogInData(mlogInData);
 
         FragmentManager fm = mActivity.getSupportFragmentManager();
-        fm.beginTransaction().replace(R.id.fragment_container, MyProfileFragment.newInstance(mlogInData)).commit();
+        fm.beginTransaction().replace(R.id.fragment_container, new MyProfileFragment()).commit();
     }
     //INIT FIREBASE SERVICE
     private void initFirebaseService(){
