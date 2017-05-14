@@ -1,19 +1,14 @@
 package nl.rug.www.summerschool.controller;
 
-import android.util.Log;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import nl.rug.www.summerschool.model.Announcement;
+import nl.rug.www.summerschool.model.ForumComment;
+import nl.rug.www.summerschool.model.ForumThread;
 import nl.rug.www.summerschool.model.GeneralInfo;
 import nl.rug.www.summerschool.model.Lecturer;
-import nl.rug.www.summerschool.model.TimeTable;
-import nl.rug.www.summerschool.model.TimeTableWeek;
+import nl.rug.www.summerschool.model.EventsPerDay;
 
 /**
  * ContentsLab stores data that fetched from the database.
@@ -30,9 +25,9 @@ public class ContentsLab {
 
     private ArrayList<Announcement> mAnnouncements;
     private ArrayList<GeneralInfo> mGeneralInfos;
-    private ArrayList<TimeTable> mTimeTables;
-    private ArrayList<TimeTableWeek> mTimeTableWeeks;
+    private ArrayList<EventsPerDay> mEventsPerDays;
     private ArrayList<Lecturer> mLecturers;
+    private ArrayList<ForumThread> mForumThreads;
     private ArrayList<String> mLogInData;
 
     public static ContentsLab get() {
@@ -53,17 +48,10 @@ public class ContentsLab {
     private ContentsLab() {
         mAnnouncements = new ArrayList<>();
         mGeneralInfos = new ArrayList<>();
-        mTimeTables = new ArrayList<>();
-
-        mTimeTableWeeks = new ArrayList<>();
-        mTimeTableWeeks.add(new TimeTableWeek("Monday"));
-        mTimeTableWeeks.add(new TimeTableWeek("Tuesday"));
-        mTimeTableWeeks.add(new TimeTableWeek("Wednesday"));
-        mTimeTableWeeks.add(new TimeTableWeek("Thursday"));
-        mTimeTableWeeks.add(new TimeTableWeek("Friday"));
-        mTimeTableWeeks.add(new TimeTableWeek("Saterday"));
-        mTimeTableWeeks.add(new TimeTableWeek("Sunday"));
+        mEventsPerDays = new ArrayList<>();
         mLecturers = new ArrayList<>();
+        mForumThreads = new ArrayList<>();
+        createFakeData();
     }
 
     public List<GeneralInfo> getGeneralInfos() { return mGeneralInfos; }
@@ -84,7 +72,7 @@ public class ContentsLab {
         return null;
     }
 
-    public List<TimeTableWeek> getTimeTableWeeks() { return mTimeTableWeeks; }
+    public List<EventsPerDay> getEventsPerDays() { return mEventsPerDays; }
 
     public List<Lecturer> getLecturers() { return mLecturers; }
 
@@ -95,6 +83,10 @@ public class ContentsLab {
         return null;
     }
 
+    public List<ForumThread> getForumThreads() {
+        return mForumThreads;
+    }
+
     public void updateAnnouncements(List<Announcement> announcements) {
         mAnnouncements = (ArrayList<Announcement>) announcements;
     }
@@ -103,71 +95,47 @@ public class ContentsLab {
         mGeneralInfos = (ArrayList<GeneralInfo>) generalInfos;
     }
 
-    public void updateTimeTables(List<TimeTable> timeTables) {
-        mTimeTables = (ArrayList<TimeTable>) timeTables;
-        createTimeTableWeek();
-    }
-
     public void updateLecturers(List<Lecturer> lecturers) {
         mLecturers = (ArrayList<Lecturer>) lecturers;
     }
 
-    private void createTimeTableWeek() {
-        List<Object> monday = new ArrayList<>();
-        List<Object> tuesday = new ArrayList<>();
-        List<Object> wednesday = new ArrayList<>();
-        List<Object> thursday = new ArrayList<>();
-        List<Object> friday = new ArrayList<>();
-        List<Object> saterday = new ArrayList<>();
-        List<Object> sunday = new ArrayList<>();
-
-        for (TimeTable t : mTimeTables) {
-            String[] parts = t.getStartDate().split("T");
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-            SimpleDateFormat dayOfWeek = new SimpleDateFormat("EEEE", Locale.getDefault());
-            try {
-                Date date = format.parse(parts[0]);
-                Log.d("ContentsLab", "Received date : " + date.toString());
-                Log.d("ContentsLab", "day of week : " + dayOfWeek.format(date));
-
-                switch (dayOfWeek.format(date)) {
-                    case "Monday" :
-                        monday.add(t);
-                        break;
-                    case "Tuesday" :
-                        tuesday.add(t);
-                        break;
-                    case "Wednesday" :
-                        wednesday.add(t);
-                        break;
-                    case "Thursday" :
-                        thursday.add(t);
-                        break;
-                    case "Friday" :
-                        friday.add(t);
-                        break;
-                    case "Saturday" :
-                        saterday.add(t);
-                        break;
-                    case "Sunday" :
-                        sunday.add(t);
-                        break;
-                    default:
-                        Log.d("ContentsLab", "Not found day of week" + dayOfWeek.format(date));
-                }
-
-            } catch (ParseException e) {
-                Log.e("ContentsLab", "Failed to parse date");
-            }
-        }
-
-        mTimeTableWeeks.get(0).setChildObjectList(monday);
-        mTimeTableWeeks.get(1).setChildObjectList(tuesday);
-        mTimeTableWeeks.get(2).setChildObjectList(wednesday);
-        mTimeTableWeeks.get(3).setChildObjectList(thursday);
-        mTimeTableWeeks.get(4).setChildObjectList(friday);
-        mTimeTableWeeks.get(5).setChildObjectList(saterday);
-        mTimeTableWeeks.get(6).setChildObjectList(sunday);
+    public void updateTimeTableWeeks(List<EventsPerDay> eventsPerDays) {
+        mEventsPerDays = (ArrayList<EventsPerDay>) eventsPerDays;
     }
 
+    private void createFakeData() {
+        ForumThread f1 = new ForumThread();
+        f1.setTitle("Cousin Tribulation's Story");
+        f1.setDate("2017-05-14");
+        f1.setPoster("Louisa May Alcott");
+        f1.setDescription("Dear Merrys:--As a subject appropriate to the season, I want to tell you about a New Year's breakfast which I had when I was a little girl. What do you think it was? A slice of dry bread and an apple. This is how it happened, and it is a true story, every word.");
+        ForumComment f11 = new ForumComment();
+        f11.setPoster("Jeongkyun Oh");
+        f11.setDate("2017-05-15");
+        f11.setText("It is hella fun");
+        ForumComment f12 = new ForumComment();
+        f12.setPoster("Nick");
+        f12.setDate("2017-05-20");
+        f12.setText("No, it is not fun");
+        List<ForumComment> forumComments = new ArrayList<>();
+        forumComments.add(f11);
+        forumComments.add(f12);
+        f1.setForumCommentList(forumComments);
+
+        ForumThread f2 = new ForumThread();
+        f2.setTitle("The Story of An Hour");
+        f2.setDate("2017-05-14");
+        f2.setPoster("Kate Chopin");
+        f2.setDescription("It was her sister Josephine who told her, in broken sentences; veiled hints that revealed in half concealing. Her husband's friend Richards was there, too, near her. It was he who had been in the newspaper office when intelligence of the railroad disaster was received, with Brently Mallard's name leading the list of \"killed.\" He had only taken the time to assure himself of its truth by a second telegram, and had hastened to forestall any less careful, less tender friend in bearing the sad message.");
+
+        ForumThread f3 = new ForumThread();
+        f3.setTitle("The Hanging Stranger");
+        f3.setDescription("2017-05-20");
+        f3.setPoster("Philip K. Dick");
+        f3.setDescription("It was getting dark. The setting sun cast long rays over the scurrying commuters, tired and grim-faced, women loaded down with bundles and packages, students, swarming home from the university, mixing with clerks and businessmen and drab secretaries. He stopped his Packard for a red light and then started it up again. The store had been open without him; he'd arrive just in time to spell the help for dinner, go over the records of the day, maybe even close a couple of sales himself. He drove slowly past the small square of green in the center of the street, the town park. There were no parking places in front of LOYCE TV SALES AND SERVICE. He cursed under his breath and swung the car in a U-turn. Again he passed the little square of green with its lonely drinking fountain and bench and single lamppost.");
+
+        mForumThreads.add(f1);
+        mForumThreads.add(f2);
+        mForumThreads.add(f3);
+    }
 }

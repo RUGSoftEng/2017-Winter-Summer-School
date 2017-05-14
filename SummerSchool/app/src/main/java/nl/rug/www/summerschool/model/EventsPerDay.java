@@ -12,12 +12,12 @@ import java.util.List;
  * @author Jeongkyun Oh
  */
 
-public class TimeTableWeek implements ParentObject {
+public class EventsPerDay implements ParentObject {
 
     private String mDayOfWeek;
     private List<Object> mChildrenList;
 
-    public TimeTableWeek(String dayOfWeek) {
+    public EventsPerDay(String dayOfWeek) {
         mDayOfWeek = dayOfWeek;
         mChildrenList = new ArrayList<>();
     }

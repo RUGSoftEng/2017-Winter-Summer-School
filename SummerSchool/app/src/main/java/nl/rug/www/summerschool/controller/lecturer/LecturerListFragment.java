@@ -1,9 +1,11 @@
 package nl.rug.www.summerschool.controller.lecturer;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -88,7 +90,11 @@ public class LecturerListFragment extends Fragment {
         private void bind(Lecturer lecturer){
             mLecturer = lecturer;
             mTitleTextView.setText(mLecturer.getTitle());
-            mLecturerImageView.setImageDrawable(mLecturer.getProfilePicture());
+            Drawable drawable = mLecturer.getProfilePicture();
+            if (drawable != null)
+                mLecturerImageView.setImageDrawable(drawable);
+            else
+                mLecturerImageView.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.profile));
         }
 
         @Override
