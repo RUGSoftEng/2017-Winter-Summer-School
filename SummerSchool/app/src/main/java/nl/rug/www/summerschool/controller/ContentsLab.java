@@ -28,12 +28,21 @@ public class ContentsLab {
     private ArrayList<EventsPerDay> mEventsPerDays;
     private ArrayList<Lecturer> mLecturers;
     private ArrayList<ForumThread> mForumThreads;
+    private ArrayList<String> mLogInData;
 
     public static ContentsLab get() {
         if (sContentsLab == null) {
             sContentsLab = new ContentsLab();
         }
         return sContentsLab;
+    }
+
+    public ArrayList<String> getmLogInData() {
+        return mLogInData;
+    }
+
+    public void setmLogInData(ArrayList<String> mLogInData) {
+        this.mLogInData = mLogInData;
     }
 
     private ContentsLab() {
