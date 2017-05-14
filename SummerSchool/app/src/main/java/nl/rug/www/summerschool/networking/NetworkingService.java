@@ -2,6 +2,7 @@ package nl.rug.www.summerschool.networking;
 
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -9,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -20,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import nl.rug.www.summerschool.R;
 import nl.rug.www.summerschool.model.Announcement;
 import nl.rug.www.summerschool.model.GeneralInfo;
 import nl.rug.www.summerschool.model.Lecturer;
@@ -269,9 +272,14 @@ public class NetworkingService {
                     .appendPath(contentJsonObject.getString("imagepath"));
             Log.d(TAG, "URL string :" + builder.toString());
             URL url = new URL(builder.toString());
-            InputStream content = (InputStream)url.getContent();
-            Drawable picture = Drawable.createFromStream(content, "src");
-            lecturer.setProfilePicture(picture);
+            InputStream content;
+            try {
+                content = (InputStream) url.getContent();
+                Drawable picture = Drawable.createFromStream(content, "src");
+                lecturer.setProfilePicture(picture);
+            } catch (FileNotFoundException e) {
+
+            }
 
             items.add(lecturer);
         }

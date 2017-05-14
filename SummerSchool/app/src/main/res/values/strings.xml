@@ -53,4 +53,5 @@
     <string name="header_cover_image">Header cover image</string>
     <string name="previous"><![CDATA[< Previous]]></string>
     <string name="next"><![CDATA[Next >]]></string>
+    <string name="comments">COMMENTS</string>
 </resources>
