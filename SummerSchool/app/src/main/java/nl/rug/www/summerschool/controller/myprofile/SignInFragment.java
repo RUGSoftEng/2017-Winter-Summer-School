@@ -47,6 +47,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import nl.rug.www.summerschool.R;
+import nl.rug.www.summerschool.controller.ContentsLab;
 import nl.rug.www.summerschool.controller.myprofile.SignInManager;
 
 /**
@@ -61,7 +62,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
     private static final String TAG = "LoginFragment";
 
     private ArrayList<String> mlogInData;
-
+    ContentsLab mContents;
     //FireBase Variables
     private FirebaseAuth mAuth;
     //googlesignin variables
@@ -117,7 +118,13 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
             setMlogInData(currentUser);
         }
     }
-
+    public void onDestroy() {
+        super.onDestroy();
+        if(SIM.getmGoogleApiClient().isConnected()) {
+            SIM.getmGoogleApiClient().stopAutoManage(getActivity());
+            SIM.getmGoogleApiClient().disconnect();
+        }
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -143,14 +150,10 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
         mlogInData.add(user.getDisplayName());
         mlogInData.add(user.getEmail());
 
-        for (UserInfo userInfo: FirebaseAuth.getInstance().getCurrentUser().getProviderData()) {
-            if(userInfo.getProviderId().equals("google.com")){
-
-            }
-        }
+        ContentsLab.get().setmLogInData(mlogInData);
 
         FragmentManager fm = mActivity.getSupportFragmentManager();
-        fm.beginTransaction().replace(R.id.fragment_container, MyProfileFragment.newInstance(mlogInData)).commit();
+        fm.beginTransaction().replace(R.id.fragment_container, new MyProfileFragment()).commit();
     }
     //INIT FIREBASE SERVICE
     private void initFirebaseService(){
