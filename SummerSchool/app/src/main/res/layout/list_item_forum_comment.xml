@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_marginTop="4dp"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/comment_image_view"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="4dp"
+        android:src="@drawable/profile"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/comment_poster_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:text="Jeongkyun Oh"/>
+
+        <TextView
+            android:id="@+id/comment_contents_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="#000000"
+            android:text="This is comment, can be long enough.\n Groningen univeristy, \na b c d e f g h i j k aoisdjfoaisjojfdioasojdfoasijfdoasjodfijaosijfdoaijsodifjoasijodfijaosijdofijasoidf"/>
+
+    </LinearLayout>
+
+</LinearLayout>
