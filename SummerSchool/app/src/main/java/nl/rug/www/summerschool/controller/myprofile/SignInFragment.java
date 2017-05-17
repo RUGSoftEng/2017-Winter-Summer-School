@@ -244,19 +244,19 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
             public void onSuccess(LoginResult loginResult) {
                 Log.d(TAG, "facebook:onSuccess:" + loginResult);
                 handleFacebookAccessToken(loginResult.getAccessToken());
-                facebookBtnClicked = true;
+                facebookBtnClicked = false;
             }
 
             @Override
             public void onCancel() {
                 Log.d(TAG, "facebook:onCancel");
-                facebookBtnClicked = true;
+                facebookBtnClicked = false;
             }
 
             @Override
             public void onError(FacebookException error) {
                 Log.d(TAG, "facebook:onError", error);
-                facebookBtnClicked = true;
+                facebookBtnClicked = false;
             }
         });
     }
