@@ -1,4 +1,5 @@
 package nl.rug.www.summerschool.controller.myprofile;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -35,11 +36,11 @@ import nl.rug.www.summerschool.model.Content;
  * This class is to show the data fetched from facebook or google+.
  * By using the data from this, the user can access to the forum in the app.
  *
- * @since 13/04/2017
  * @author Jeongkyun Oh
+ * @since 13/04/2017
  */
 
-public class MyProfileFragment extends Fragment implements View.OnClickListener{
+public class MyProfileFragment extends Fragment implements View.OnClickListener {
 
     private static final String ARG_CONTENT_ID = "log_in_data";
     private static final String TAG = "MyProfileFragment";
@@ -96,23 +97,30 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener{
     }
 
     private void signOut() {
-        Log.w(TAG,"" + "User Sign out!");
         //if facebook login is permitted
-        for (UserInfo user: FirebaseAuth.getInstance().getCurrentUser().getProviderData()) {
-            if(user.getProviderId().equals("facebook.com")){
+        for (UserInfo user : FirebaseAuth.getInstance().getCurrentUser().getProviderData()) {
+            if (user.getProviderId().equals("facebook.com")) {
                 LoginManager.getInstance().logOut();
             }
-        }
+            if (user.getProviderId().equals("google.com")) {
+                Log.w(TAG, "" + "User Sign out!");
 
+                Auth.GoogleSignInApi.signOut(SIM.getmGoogleApiClient()).setResultCallback(
+                        new ResultCallback<Status>() {
+                            @Override
+                            public void onResult(Status status) {
+                                // ...
+                            }
+                        });
+                revokeAccess();
+            }
+        }
+        if (SIM.getmGoogleApiClient().isConnected()) {
+            SIM.getmGoogleApiClient().stopAutoManage(getActivity());
+            SIM.getmGoogleApiClient().disconnect();
+            SIM.setmGoogleApiClient(null);
+        }
         FirebaseAuth.getInstance().signOut();
-        Auth.GoogleSignInApi.signOut(SIM.getmGoogleApiClient()).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        // ...
-                    }
-                });
-        revokeAccess();
     }
 
     private void revokeAccess() {
@@ -125,12 +133,4 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener{
                 });
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if(SIM.getmGoogleApiClient().isConnected()) {
-            SIM.getmGoogleApiClient().stopAutoManage(getActivity());
-            SIM.getmGoogleApiClient().disconnect();
-        }
-    }
 }

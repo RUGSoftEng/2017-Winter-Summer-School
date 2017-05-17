@@ -54,11 +54,11 @@ import nl.rug.www.summerschool.controller.myprofile.SignInManager;
  * This class is to sign in via Google or Facebook accounts.
  * Currently, Google account does not work.
  *
- * @since 13/04/2017
  * @author Jeongkyun Oh
+ * @since 13/04/2017
  */
 
-public class SignInFragment extends Fragment implements View.OnClickListener{
+public class SignInFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "LoginFragment";
 
     private ArrayList<String> mlogInData;
@@ -113,18 +113,16 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
         super.onStart();
         //onstart check if google account has already been signed in before
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null) {
+        if (currentUser != null) {
             Log.w(TAG, "On Start of this fragment was called ");
             setMlogInData(currentUser);
         }
     }
+
     public void onDestroy() {
         super.onDestroy();
-        if(SIM.getmGoogleApiClient().isConnected()) {
-            SIM.getmGoogleApiClient().stopAutoManage(getActivity());
-            SIM.getmGoogleApiClient().disconnect();
-        }
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -155,20 +153,24 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
         FragmentManager fm = mActivity.getSupportFragmentManager();
         fm.beginTransaction().replace(R.id.fragment_container, new MyProfileFragment()).commit();
     }
+
     //INIT FIREBASE SERVICE
-    private void initFirebaseService(){
+    private void initFirebaseService() {
         mAuth = FirebaseAuth.getInstance();
         //set statelistener to check if an account already exists
     }
+
     //INIT GOOGLE SERVICES
     private void initGoogleLogInService() {
         SIM = SignInManager.get(mActivity);
-        SIM.setmGoogleApiClient(new GoogleApiClient.Builder(getActivity()).enableAutoManage(getActivity(), new GoogleApiClient.OnConnectionFailedListener() {
-            @Override
-            public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        if (SIM.getmGoogleApiClient() == null) {
+            SIM.setmGoogleApiClient(new GoogleApiClient.Builder(getActivity()).enableAutoManage(getActivity(), new GoogleApiClient.OnConnectionFailedListener() {
+                @Override
+                public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
-            }
-        }).addApi(Auth.GOOGLE_SIGN_IN_API, SIM.getGso()).build());
+                }
+            }).addApi(Auth.GOOGLE_SIGN_IN_API, SIM.getGso()).build());
+        }
     }
 
     //create intent to start Google API authentication, Result will be returned in onActivityResult.
