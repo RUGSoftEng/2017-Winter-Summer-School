@@ -66,16 +66,19 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     //FireBase Variables
     private FirebaseAuth mAuth;
     //googlesignin variables
+    Intent signInIntent;
     private Button mgoogleLoginButton;
     private SignInManager SIM;
     //facebooksignin variables
     private LoginButton invisibleFbButton;
     private Button mfacebookLoginButton;
     private CallbackManager mCallbackManager;
+    private boolean facebookBtnClicked = false;
 
     protected AppCompatActivity mActivity;
 
     private static final int GOOGLE_SIGN_IN = 9099;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -127,10 +130,15 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.google_login_button:
-                signInGoogle();
+                if(signInIntent == null) {
+                    signInGoogle();
+                }
                 break;
             case R.id.facebook_login_button:
-                invisibleFbButton.performClick();
+                if(!facebookBtnClicked) {
+                    invisibleFbButton.performClick();
+                    facebookBtnClicked = true;
+                }
                 break;
         }
     }
@@ -175,8 +183,9 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
 
     //create intent to start Google API authentication, Result will be returned in onActivityResult.
     private void signInGoogle() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(SIM.getmGoogleApiClient());
+        signInIntent = Auth.GoogleSignInApi.getSignInIntent(SIM.getmGoogleApiClient());
         startActivityForResult(signInIntent, GOOGLE_SIGN_IN);
+        signInIntent = null;
     }
 
 
@@ -235,16 +244,19 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
             public void onSuccess(LoginResult loginResult) {
                 Log.d(TAG, "facebook:onSuccess:" + loginResult);
                 handleFacebookAccessToken(loginResult.getAccessToken());
+                facebookBtnClicked = true;
             }
 
             @Override
             public void onCancel() {
                 Log.d(TAG, "facebook:onCancel");
+                facebookBtnClicked = true;
             }
 
             @Override
             public void onError(FacebookException error) {
                 Log.d(TAG, "facebook:onError", error);
+                facebookBtnClicked = true;
             }
         });
     }
