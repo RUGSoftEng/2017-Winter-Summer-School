@@ -30,4 +30,11 @@
         android:text="@string/login_with_google"
         android:textColor="#ffffff"/>
 
+    <ProgressBar
+        android:id="@+id/load_spinner"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true" />
+
 </LinearLayout>
