@@ -1,7 +1,9 @@
 package nl.rug.www.summerschool.controller.lecturer;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +53,11 @@ public class LecturerFragment extends Fragment {
         TextView mDescription = (TextView)view.findViewById(R.id.lecturer_decription_text_view);
         mDescription.setText(mLecturer.getDescription());
         ImageView mLecturerImageView = (ImageView)view.findViewById(R.id.lecturer_image_view);
-        mLecturerImageView.setImageDrawable(mLecturer.getProfilePicture());
+        Drawable drawable = mLecturer.getProfilePicture();
+        if (drawable != null)
+            mLecturerImageView.setImageDrawable(drawable);
+        else
+            mLecturerImageView.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.profile));
 
         return view;
     }
