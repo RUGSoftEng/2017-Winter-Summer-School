@@ -54,11 +54,11 @@ import nl.rug.www.summerschool.controller.myprofile.SignInManager;
  * This class is to sign in via Google or Facebook accounts.
  * Currently, Google account does not work.
  *
- * @since 13/04/2017
  * @author Jeongkyun Oh
+ * @since 13/04/2017
  */
 
-public class SignInFragment extends Fragment implements View.OnClickListener{
+public class SignInFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "LoginFragment";
 
     private ArrayList<String> mlogInData;
@@ -66,16 +66,19 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
     //FireBase Variables
     private FirebaseAuth mAuth;
     //googlesignin variables
+    Intent signInIntent;
     private Button mgoogleLoginButton;
     private SignInManager SIM;
     //facebooksignin variables
     private LoginButton invisibleFbButton;
     private Button mfacebookLoginButton;
     private CallbackManager mCallbackManager;
+    private boolean facebookBtnClicked = false;
 
     protected AppCompatActivity mActivity;
 
     private static final int GOOGLE_SIGN_IN = 9099;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -113,26 +116,29 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
         super.onStart();
         //onstart check if google account has already been signed in before
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null) {
+        if (currentUser != null) {
             Log.w(TAG, "On Start of this fragment was called ");
             setMlogInData(currentUser);
         }
     }
+
     public void onDestroy() {
         super.onDestroy();
-        if(SIM.getmGoogleApiClient().isConnected()) {
-            SIM.getmGoogleApiClient().stopAutoManage(getActivity());
-            SIM.getmGoogleApiClient().disconnect();
-        }
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.google_login_button:
-                signInGoogle();
+                if(signInIntent == null) {
+                    signInGoogle();
+                }
                 break;
             case R.id.facebook_login_button:
-                invisibleFbButton.performClick();
+                if(!facebookBtnClicked) {
+                    invisibleFbButton.performClick();
+                    facebookBtnClicked = true;
+                }
                 break;
         }
     }
@@ -155,26 +161,31 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
         FragmentManager fm = mActivity.getSupportFragmentManager();
         fm.beginTransaction().replace(R.id.fragment_container, new MyProfileFragment()).commit();
     }
+
     //INIT FIREBASE SERVICE
-    private void initFirebaseService(){
+    private void initFirebaseService() {
         mAuth = FirebaseAuth.getInstance();
         //set statelistener to check if an account already exists
     }
+
     //INIT GOOGLE SERVICES
     private void initGoogleLogInService() {
         SIM = SignInManager.get(mActivity);
-        SIM.setmGoogleApiClient(new GoogleApiClient.Builder(getActivity()).enableAutoManage(getActivity(), new GoogleApiClient.OnConnectionFailedListener() {
-            @Override
-            public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        if (SIM.getmGoogleApiClient() == null) {
+            SIM.setmGoogleApiClient(new GoogleApiClient.Builder(getActivity()).enableAutoManage(getActivity(), new GoogleApiClient.OnConnectionFailedListener() {
+                @Override
+                public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
-            }
-        }).addApi(Auth.GOOGLE_SIGN_IN_API, SIM.getGso()).build());
+                }
+            }).addApi(Auth.GOOGLE_SIGN_IN_API, SIM.getGso()).build());
+        }
     }
 
     //create intent to start Google API authentication, Result will be returned in onActivityResult.
     private void signInGoogle() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(SIM.getmGoogleApiClient());
+        signInIntent = Auth.GoogleSignInApi.getSignInIntent(SIM.getmGoogleApiClient());
         startActivityForResult(signInIntent, GOOGLE_SIGN_IN);
+        signInIntent = null;
     }
 
 
@@ -233,16 +244,19 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
             public void onSuccess(LoginResult loginResult) {
                 Log.d(TAG, "facebook:onSuccess:" + loginResult);
                 handleFacebookAccessToken(loginResult.getAccessToken());
+                facebookBtnClicked = false;
             }
 
             @Override
             public void onCancel() {
                 Log.d(TAG, "facebook:onCancel");
+                facebookBtnClicked = false;
             }
 
             @Override
             public void onError(FacebookException error) {
                 Log.d(TAG, "facebook:onError", error);
+                facebookBtnClicked = false;
             }
         });
     }
