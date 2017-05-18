@@ -1,5 +1,7 @@
 package nl.rug.www.summerschool.controller;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +31,7 @@ public class ContentsLab {
     private ArrayList<Lecturer> mLecturers;
     private ArrayList<ForumThread> mForumThreads;
     private ArrayList<String> mLogInData;
+    private ArrayList<String> mFakeUsers;
 
     public static ContentsLab get() {
         if (sContentsLab == null) {
@@ -37,20 +40,15 @@ public class ContentsLab {
         return sContentsLab;
     }
 
-    public ArrayList<String> getmLogInData() {
-        return mLogInData;
-    }
-
-    public void setmLogInData(ArrayList<String> mLogInData) {
-        this.mLogInData = mLogInData;
-    }
-
     private ContentsLab() {
         mAnnouncements = new ArrayList<>();
         mGeneralInfos = new ArrayList<>();
         mEventsPerDays = new ArrayList<>();
         mLecturers = new ArrayList<>();
         mForumThreads = new ArrayList<>();
+        mFakeUsers = new ArrayList<>();
+        createFakeUsers();
+
         createFakeData();
     }
 
@@ -101,6 +99,40 @@ public class ContentsLab {
 
     public void updateTimeTableWeeks(List<EventsPerDay> eventsPerDays) {
         mEventsPerDays = (ArrayList<EventsPerDay>) eventsPerDays;
+    }
+
+
+    public ArrayList<String> getmLogInData() {
+        return mLogInData;
+    }
+
+    public void setmLogInData(ArrayList<String> mLogInData) {
+        this.mLogInData = mLogInData;
+    }
+
+    public boolean userExist(String UID) {
+        for(int i = 0; i < mFakeUsers.size(); i++){
+            if(UID.equals(mFakeUsers.get(i))) return true;
+        }
+        return false;
+    }
+
+    public void addFakeData(String data){
+        mLogInData.add(data);
+    }
+
+    public void addFakeUsers(String UID) {
+        mFakeUsers.add(UID);
+    }
+
+    private void createFakeUsers(){
+        mFakeUsers.add("jKFo90UCv3W6ICTiVSTiStiulpY2");
+    }
+
+    public void printUsers(){
+        for(int i = 0; i < mFakeUsers.size(); i++){
+            Log.i("USER STRING", mFakeUsers.get(i));
+        }
     }
 
     private void createFakeData() {
