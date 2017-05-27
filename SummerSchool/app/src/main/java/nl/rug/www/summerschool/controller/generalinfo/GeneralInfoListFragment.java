@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -38,7 +39,6 @@ public class GeneralInfoListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        new FetchGeneralInfosTask().execute();
     }
 
     @Override
@@ -63,7 +63,7 @@ public class GeneralInfoListFragment extends Fragment {
         mGeneralInfoRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         setupAdatper();
-
+        new FetchGeneralInfosTask().execute();
         return v;
     }
 
@@ -126,6 +126,12 @@ public class GeneralInfoListFragment extends Fragment {
 
 
     private class FetchGeneralInfosTask extends AsyncTask<Void, Void, List<GeneralInfo>> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mSwipeRefreshLayout.setRefreshing(true);
+        }
 
         @Override
         protected List<GeneralInfo> doInBackground(Void... params) {

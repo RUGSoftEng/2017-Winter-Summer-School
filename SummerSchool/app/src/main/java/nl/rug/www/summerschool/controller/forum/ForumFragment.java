@@ -1,38 +1,88 @@
 package nl.rug.www.summerschool.controller.forum;
 
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import nl.rug.www.summerschool.R;
 import nl.rug.www.summerschool.controller.ContentsLab;
+import nl.rug.www.summerschool.model.Announcement;
 import nl.rug.www.summerschool.model.ForumComment;
 import nl.rug.www.summerschool.model.ForumThread;
+import nl.rug.www.summerschool.networking.NetworkingService;
 
 public class ForumFragment extends Fragment {
 
     private RecyclerView mForumRecyclerView;
 
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
+    private List<ForumThread> mItems = new ArrayList<>();
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        new FetchThreadsTask().execute();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_forum, container, false);
         TextView section = (TextView)view.findViewById(R.id.section_name);
         section.setText(R.string.forum);
 
+        mSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.refresh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new FetchThreadsTask().execute();
+            }
+        });
+        if (mItems == null)
+            mSwipeRefreshLayout.setRefreshing(true);
+
         mForumRecyclerView = (RecyclerView)view.findViewById(R.id.recycler_view);
         mForumRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mForumRecyclerView.setAdapter(new ForumAdapter(ContentsLab.get().getForumThreads()));
+        setupAdatper();
+        view.findViewById(R.id.forum_add_floating_action_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), AddThreadActivity.class);
+                startActivity(intent);
+            }
+        });
 
         return view;
     }
+
+    private void setupAdatper() {
+        if (isAdded()) {
+            mForumRecyclerView.setAdapter(new ForumAdapter(mItems));
+        }
+    }
+
 
     private class ForumHolder extends RecyclerView.ViewHolder {
 
@@ -61,6 +111,7 @@ public class ForumFragment extends Fragment {
             mPostedTimeTextView.setText(mForumThread.getDate());
             mTitleTextView.setText(mForumThread.getTitle());
             mDescriptionTextView.setText(mForumThread.getDescription());
+            Log.d("ForumFragment", mForumThread.getDescription());
             List<ForumComment> comments = mForumThread.getForumCommentList();
             if (comments != null)
                 mCommentsRecyclerView.setAdapter(new CommentAdapter(comments));
@@ -137,6 +188,30 @@ public class ForumFragment extends Fragment {
         @Override
         public int getItemCount() {
             return mForumThreads.size();
+        }
+    }
+
+    private class FetchThreadsTask extends AsyncTask<Void, Void, List<ForumThread>> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mSwipeRefreshLayout.setRefreshing(true);
+        }
+
+        @Override
+        protected List<ForumThread> doInBackground(Void... params) {
+            return new NetworkingService().fetchForumThreads();
+        }
+
+        @Override
+        protected void onPostExecute(List<ForumThread> announcements) {
+            mItems = announcements;
+            setupAdatper();
+            ContentsLab.get().updateForumThreads(mItems);
+            if (mSwipeRefreshLayout.isRefreshing()) {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
         }
     }
 }

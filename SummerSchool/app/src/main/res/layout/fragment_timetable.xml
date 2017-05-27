@@ -22,23 +22,24 @@
 
         <Button
             android:id="@+id/previous_week_button"
-            android:background="@color/colorPrimaryDark"
+            android:background="@android:color/transparent"
             android:layout_alignParentStart="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
+            android:layout_marginStart="4dp"
             android:text="@string/previous"
-            android:textColor="#ffffff"/>
+            android:textColor="@android:color/black"/>
 
         <Button
             android:id="@+id/next_week_button"
-            android:background="@color/colorPrimaryDark"
+            android:background="@android:color/transparent"
             android:layout_alignParentEnd="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
+            android:layout_marginEnd="4dp"
             android:text="@string/next"
-            android:textColor="#ffffff"/>
+            android:textColor="@android:color/black"/>
+
 
     </RelativeLayout>
     

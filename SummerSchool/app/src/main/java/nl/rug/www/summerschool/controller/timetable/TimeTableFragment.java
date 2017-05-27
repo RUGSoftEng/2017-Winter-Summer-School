@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bignerdranch.expandablerecyclerview.Adapter.ExpandableRecyclerAdapter;
@@ -47,7 +48,6 @@ public class TimeTableFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        new FetchTimeTablesTask().execute();
     }
 
     @Override
@@ -87,6 +87,7 @@ public class TimeTableFragment extends Fragment {
         mTimeTableRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         setupAdapter();
+        new FetchTimeTablesTask().execute();
         return view;
     }
 
