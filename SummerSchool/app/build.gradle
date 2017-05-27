@@ -38,6 +38,7 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.facebook.android:facebook-android-sdk:4.22.0'
     compile 'com.android.volley:volley:1.0.0'
+    compile 'com.bignerdranch.android:simple-item-decoration:1.0.0'
     testCompile 'junit:junit:4.12'
 }
 apply plugin: 'com.google.gms.google-services'

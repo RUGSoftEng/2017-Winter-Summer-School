@@ -60,7 +60,7 @@ public class AddThreadActivity extends AppCompatActivity {
             RequestQueue queue = Volley.newRequestQueue(this);
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("title", title);
-            jsonBody.put("description", "THIS WAY WORKS");
+            jsonBody.put("description", description);
             jsonBody.put("author", "JK");
             jsonBody.put("posterID", "s2128812");
             final String requestBody = jsonBody.toString();

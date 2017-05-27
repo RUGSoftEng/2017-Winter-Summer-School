@@ -2,47 +2,17 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
               android:id="@+id/fragment_generalinfo"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
-    android:layout_margin="16dp">
+              android:layout_height="match_parent">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <TextView
+        android:id="@+id/generalinfo_detail"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            style="?android:listSeparatorTextViewStyle"
-            android:background="@color/colorPrimary"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="4dp"
-            android:text="@string/content_title_label"
-            android:textColor="#ffffff"/>
-
-        <TextView
-            android:id="@+id/generalinfo_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="24sp"
-            android:layout_margin="4dp"
-            android:text="@string/title_is_here"/>
-
-        <TextView
-            style="?android:listSeparatorTextViewStyle"
-            android:background="@color/colorPrimary"
-            android:padding="4dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/content_detail_label"
-            android:textColor="#ffffff"/>
-
-        <TextView
-            android:id="@+id/generalinfo_detail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:text="@string/detail_is_here"/>
-
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:textColor="@color/colorTitle"
+        android:textSize="16dp"
+        android:text="@string/detail_is_here"/>
 
 </ScrollView>

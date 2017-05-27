@@ -1,9 +1,12 @@
 package nl.rug.www.summerschool.controller.announcement;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.dgreenhalgh.android.simpleitemdecoration.linear.DividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +70,8 @@ public class AnnouncementListFragment extends Fragment {
 
         mAnnouncementRecyclerView = (RecyclerView)v.findViewById(R.id.recycler_view);
         mAnnouncementRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mAnnouncementRecyclerView.addItemDecoration(new DividerItemDecoration(
+                ContextCompat.getDrawable(getActivity(), R.drawable.horizontaldivider)));
 
         setupAdatper();
 
@@ -81,18 +88,42 @@ public class AnnouncementListFragment extends Fragment {
     private class AnnouncementHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private Announcement mAnnouncement;
+        private TextView mInitialView;
         private TextView mTitleTextView;
+        private TextView mAuthorTextView;
+        private TextView mDateTextView;
+        private TextView mTimeTextView;
 
         private AnnouncementHolder(LayoutInflater inflater, ViewGroup parent) {
-            super(inflater.inflate(R.layout.list_item_content, parent, false));
+            super(inflater.inflate(R.layout.list_item_announcement, parent, false));
 
+            mInitialView = (TextView)itemView.findViewById(R.id.initial_text_view);
             mTitleTextView = (TextView)itemView.findViewById(R.id.content_title);
+            mAuthorTextView = (TextView)itemView.findViewById(R.id.author_text_view);
+            mDateTextView = (TextView)itemView.findViewById(R.id.date);
+            mTimeTextView = (TextView)itemView.findViewById(R.id.time);
             itemView.setOnClickListener(this);
+        }
+
+        private int generateColor(String name) {
+            int hash = name.hashCode();
+            int r = (hash & 0xFF0000) >> 16;
+            int g = (hash & 0x00FF00) >> 8;
+            int b = hash & 0x0000FF;
+            return Color.rgb(r, g, b);
         }
 
         private void bind(Announcement announcement){
             mAnnouncement = announcement;
             mTitleTextView.setText(mAnnouncement.getTitle());
+            String poster = mAnnouncement.getPoster();
+            mInitialView.setText(poster.toUpperCase().charAt(0) + "");
+            GradientDrawable circle = (GradientDrawable)mInitialView.getBackground();
+            circle.setColor(generateColor(poster));
+            mAuthorTextView.setText("By " + poster);
+            String[] parts = mAnnouncement.getDate().split("T");
+            mDateTextView.setText(parts[0]);
+            mTimeTextView.setText(parts[1]);
         }
 
         @Override

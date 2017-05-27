@@ -4,17 +4,22 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import nl.rug.www.summerschool.controller.ContentsLab;
 import nl.rug.www.summerschool.networking.NetworkingService;
@@ -60,7 +65,7 @@ public class GeneralInfoListFragment extends Fragment {
             mSwipeRefreshLayout.setRefreshing(true);
 
         mGeneralInfoRecyclerView = (RecyclerView)v.findViewById(R.id.recycler_view);
-        mGeneralInfoRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mGeneralInfoRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 
         setupAdatper();
         new FetchGeneralInfosTask().execute();
@@ -77,17 +82,56 @@ public class GeneralInfoListFragment extends Fragment {
 
         private GeneralInfo mGeneralInfo;
         private TextView mTitleTextView;
+        private ImageView mImageView;
 
         private GeneralInfoHolder(LayoutInflater inflater, ViewGroup parent) {
-            super(inflater.inflate(R.layout.list_item_content, parent, false));
+            super(inflater.inflate(R.layout.list_item_generalinfo, parent, false));
 
             mTitleTextView = (TextView)itemView.findViewById(R.id.content_title);
+            mImageView = (ImageView)itemView.findViewById(R.id.icon_image_view);
             itemView.setOnClickListener(this);
         }
 
         private void bind(GeneralInfo generalInfo){
             mGeneralInfo = generalInfo;
             mTitleTextView.setText(mGeneralInfo.getTitle());
+            mImageView.setImageResource(selectPicture(mGeneralInfo.getTitle().toLowerCase()));
+        }
+
+        private int selectPicture(String title) {
+            String[] strings = {"weather", "visa", "housing", "departure", "insurance", "financial", "do", "welcome"};
+            if (title.contains(strings[0])) {
+                return R.mipmap.icon_cloud;
+            } else if (title.contains(strings[1])) {
+                return R.mipmap.icon_creditcard;
+            } else if (title.contains(strings[2])) {
+                return R.mipmap.icon_building;
+            } else if (title.contains(strings[3])) {
+                return R.mipmap.icon_flight;
+            } else if (title.contains(strings[4])) {
+                return R.mipmap.icon_hospital;
+            } else if (title.contains(strings[5])) {
+                return R.mipmap.icon_money;
+            } else if (title.contains(strings[6])) {
+                return R.mipmap.icon_list;
+            } else if (title.contains(strings[7])) {
+                return R.mipmap.icon_home;
+            } else {
+                int idx = Math.abs(title.hashCode() % 4);
+
+                Log.d("Generalinfo", idx + "is it possible");
+                switch (idx) {
+                    case 0 :
+                        return R.mipmap.ic_smile;
+                    case 1 :
+                        return R.mipmap.ic_smile;
+                    case 2 :
+                        return R.mipmap.ic_star;
+                    case 3 :
+                        return R.mipmap.ic_arrowup;
+                }
+            }
+            return 0;
         }
 
         @Override
