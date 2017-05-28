@@ -76,6 +76,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener, Sp
         fragment.setArguments(args);
         return fragment;
     }
+
     //if app crashes or user quits
     @Override
     public void onDestroy() {
@@ -128,22 +129,28 @@ public class SignUpFragment extends Fragment implements View.OnClickListener, Sp
         switch (v.getId()) {
             case R.id.signup_continue:
                 //validate details
-                DOB = day.getText().toString() + "/" + mm + "/" + year.getText().toString();
-                if (!validateDOB(DOB)) {
+                if (day.getText().toString().matches("") || year.getText().toString().matches("")) {
                     Toast.makeText
-                            (getActivity().getApplicationContext(),"Enter Valid Date", Toast.LENGTH_SHORT)
+                            (getActivity().getApplicationContext(), "Enter Valid Date", Toast.LENGTH_SHORT)
                             .show();
-
                 } else {
-                    //add to database
-                    DOB = day.getText().toString() + " " + month + " " + year.getText().toString();
-                    ContentsLab.get().addFakeData(DOB);
-                    ContentsLab.get().addFakeData(FOS);
-                    Log.d(TAG, DOB);
-                    ContentsLab.get().addFakeUsers(mUID);
-                    changeFragment();
+                    DOB = day.getText().toString() + "/" + mm + "/" + year.getText().toString();
+                    if (!validateDOB(DOB)) {
+                        Toast.makeText
+                                (getActivity().getApplicationContext(), "Enter Valid Date", Toast.LENGTH_SHORT)
+                                .show();
+
+                    } else {
+                        //add to database
+                        DOB = day.getText().toString() + " " + month + " " + year.getText().toString();
+                        ContentsLab.get().addFakeData(DOB);
+                        ContentsLab.get().addFakeData(FOS);
+                        Log.d(TAG, DOB);
+                        ContentsLab.get().addFakeUsers(mUID);
+                        changeFragment();
+                    }
+                    break;
                 }
-                break;
         }
     }
 
@@ -176,7 +183,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener, Sp
 
         int yyyy = Calendar.getInstance().get(Calendar.YEAR);
         int yyyy2 = Integer.parseInt(year.getText().toString());
-        if((yyyy - yyyy2) < 0 || (yyyy - yyyy2) < 16) return false;
+        if ((yyyy - yyyy2) < 0 || (yyyy - yyyy2) < 16) return false;
 
         if (matcher.matches()) {
 
@@ -218,7 +225,6 @@ public class SignUpFragment extends Fragment implements View.OnClickListener, Sp
             return false;
         }
     }
-
 
 
 }
