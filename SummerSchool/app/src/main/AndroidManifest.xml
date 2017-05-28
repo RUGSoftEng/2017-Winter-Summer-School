@@ -29,10 +29,11 @@
         <activity
             android:name=".controller.LoginActivity"
             android:theme="@style/RugTheme.NoActionBar">
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
@@ -44,7 +45,8 @@
         <activity
             android:name=".controller.lecturer.LecturerPagerActivity"
             android:parentActivityName=".controller.MainPagerActivity"/>
-        <activity android:name=".controller.MainPagerActivity"/>
+        <activity android:name=".controller.MainPagerActivity"
+                  android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".controller.forum.AddThreadActivity"
             android:parentActivityName=".controller.MainPagerActivity">
         </activity>
