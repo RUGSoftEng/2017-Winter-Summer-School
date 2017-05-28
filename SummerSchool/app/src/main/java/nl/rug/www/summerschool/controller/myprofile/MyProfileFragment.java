@@ -48,6 +48,8 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
     private TextView displayNameTV;
     private TextView nameTV;
     private TextView emailTV;
+    private TextView fosTV;
+    private TextView dobTV;
     private ImageView profilePictureIV;
 
     private ArrayList<String> mLogInData;
@@ -66,9 +68,22 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
         View view = inflater.inflate(R.layout.fragment_my_profile, container, false);
 
         mLogInData = ContentsLab.get().getmLogInData();
-
+        //test data, should retreive from database
         String displayName = mLogInData.get(1);
         String email = mLogInData.get(2);
+
+        String DOB;
+        String FOS;
+        //test DATA
+        if(!(mLogInData.size() < 4)) {
+            DOB = mLogInData.get(3);
+            FOS = mLogInData.get(4);
+        }else{
+            DOB = "19 October 1993";
+            FOS = "Computer Science";
+        }
+
+
 
         logout = (Button) view.findViewById(R.id.log_out_button);
         logout.setOnClickListener(this);
@@ -84,6 +99,12 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
 
         emailTV = (TextView) view.findViewById(R.id.user_email);
         emailTV.setText(email);
+
+        dobTV = (TextView) view.findViewById(R.id.user_dob);
+        dobTV.setText(DOB);
+
+        fosTV = (TextView) view.findViewById(R.id.user_fos);
+        fosTV.setText(FOS);
 
         SIM = SignInManager.get(getActivity());
         return view;

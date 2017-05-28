@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -52,9 +53,10 @@ import nl.rug.www.summerschool.controller.myprofile.SignInManager;
 
 /**
  * This class is to sign in via Google or Facebook accounts.
- * Currently, Google account does not work.
+ *
  *
  * @author Jeongkyun Oh
+ * @author Chin Tian Boon
  * @since 13/04/2017
  */
 
@@ -63,6 +65,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
 
     private ArrayList<String> mlogInData;
     ContentsLab mContents;
+    private ProgressBar spinner;
     //FireBase Variables
     private FirebaseAuth mAuth;
     //googlesignin variables
@@ -92,6 +95,8 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_sign_in, container, false); // inflate new layout for fragment
 
         //initialise
+        spinner = (ProgressBar) view.findViewById(R.id.load_spinner);
+        spinner.setVisibility(View.GONE);
         invisibleFbButton = (LoginButton) view.findViewById(R.id.invisibleFB);
         mfacebookLoginButton = (Button) view.findViewById(R.id.facebook_login_button);
         mfacebookLoginButton.setOnClickListener(this);
@@ -143,7 +148,18 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    public void changeFragment(String UID){
+        FragmentManager fm = mActivity.getSupportFragmentManager();
+        if(ContentsLab.get().userExist(UID)) {
+            Log.d(TAG, "Existing User Sign in!");
+            fm.beginTransaction().replace(R.id.fragment_container, new MyProfileFragment()).commit();
+        }else{
+            Log.d(TAG, "New User Sign in!");
+            fm.beginTransaction().replace(R.id.fragment_container, SignUpFragment.newInstance(UID)).commit();
+        }
 
+    }
+    //0 - photourl 1-displayname 2-email 3-birthday 4-fos
     //retrieve data from account
     public void setMlogInData(FirebaseUser user) {
         Log.i(TAG, "--------------------------------");
@@ -151,15 +167,16 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         Log.i(TAG, "Email: " + user.getEmail());
         Log.i(TAG, "PhotoURL: " + user.getPhotoUrl());
         Log.i(TAG, "UniqueID: " + user.getUid());
+        ContentsLab.get().printUsers();
 
         mlogInData.add(user.getPhotoUrl().toString());
         mlogInData.add(user.getDisplayName());
         mlogInData.add(user.getEmail());
 
         ContentsLab.get().setmLogInData(mlogInData);
-
-        FragmentManager fm = mActivity.getSupportFragmentManager();
-        fm.beginTransaction().replace(R.id.fragment_container, new MyProfileFragment()).commit();
+        String UID = user.getUid();
+        changeFragment(UID);
+        spinner.setVisibility(View.GONE);
     }
 
     //INIT FIREBASE SERVICE
@@ -191,8 +208,8 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        spinner.setVisibility(View.VISIBLE);
         super.onActivityResult(requestCode, resultCode, data);
-
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == GOOGLE_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
@@ -203,6 +220,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
             } else {
                 // Google Sign In failed, update UI appropriately
                 // ...
+                spinner.setVisibility(View.GONE);
             }
         }
         //for facebook
@@ -225,6 +243,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                             setMlogInData(user);
                         } else {
                             // If sign in fails, display a message to the user.
+                            spinner.setVisibility(View.GONE);
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(mActivity, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
@@ -245,18 +264,21 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                 Log.d(TAG, "facebook:onSuccess:" + loginResult);
                 handleFacebookAccessToken(loginResult.getAccessToken());
                 facebookBtnClicked = false;
+                spinner.setVisibility(View.GONE);
             }
 
             @Override
             public void onCancel() {
                 Log.d(TAG, "facebook:onCancel");
                 facebookBtnClicked = false;
+                spinner.setVisibility(View.GONE);
             }
 
             @Override
             public void onError(FacebookException error) {
                 Log.d(TAG, "facebook:onError", error);
                 facebookBtnClicked = false;
+                spinner.setVisibility(View.GONE);
             }
         });
     }

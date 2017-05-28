@@ -8,7 +8,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import nl.rug.www.summerschool.R;
 
 /**
- * Created by RavenSP on 7/5/2017.
+ * This class is a singleton class to ensure only one googleSignInManager exist throughout life of the app.
+ * Created by Chin Tian Boon on 7/5/2017.
  */
 
 public class SignInManager {

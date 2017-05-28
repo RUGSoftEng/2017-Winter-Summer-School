@@ -81,7 +81,7 @@
                 tools:text="name" />
 
             <TextView
-                android:id="@+id/user_gender"
+                android:id="@+id/user_dob"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
@@ -93,7 +93,7 @@
                 tools:text="Gender" />
 
             <TextView
-                android:id="@+id/user_birthday"
+                android:id="@+id/user_email"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
@@ -103,7 +103,7 @@
                 tools:text="Birthday" />
 
             <TextView
-                android:id="@+id/user_email"
+                android:id="@+id/user_fos"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
