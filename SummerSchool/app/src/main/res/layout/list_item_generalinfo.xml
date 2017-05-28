@@ -23,16 +23,17 @@
             android:src="@mipmap/icon_building"/>
 
         <TextView
-            style="?android:listSeparatorTextViewStyle"
             android:id="@+id/content_title"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:text="@string/content_title_label"
+            tools:text="@string/content_title_label"
+            android:textStyle="bold"
             android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
             android:textSize="16sp"
             android:textColor="@android:color/white"
-            android:maxLines="1"/>
+            android:maxLines="2"/>
 
     </LinearLayout>
 

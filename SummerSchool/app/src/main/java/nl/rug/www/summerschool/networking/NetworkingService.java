@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
+import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -251,20 +252,15 @@ public class NetworkingService {
         Log.d(TAG, array.toString());
         for (int i = 0; i < array.length(); ++i) {
             JSONArray dataArray = array.getJSONArray(i);
-            String[] parts = dataArray.getString(0).split("T");
+            Date date = new DateTime(dataArray.getString(0)).toDate();
+            SimpleDateFormat parseDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             JSONArray eventsArray = dataArray.getJSONArray(1);
-            EventsPerDay timeTablePerDay = new EventsPerDay(parts[0]);
-            try {
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                SimpleDateFormat format2 = new SimpleDateFormat(" (MMM-dd)", Locale.getDefault());
-                SimpleDateFormat dayOfWeek = new SimpleDateFormat("EEEE", Locale.getDefault());
-                Date date = format.parse(parts[0]);
-                String title = dayOfWeek.format(date) + format2.format(date);
-                timeTablePerDay = new EventsPerDay(title);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            Log.d(TAG, parts[0]);
+            EventsPerDay timeTablePerDay = new EventsPerDay(parseDate.format(date));
+            SimpleDateFormat format2 = new SimpleDateFormat(" (MMM-dd)", Locale.getDefault());
+            SimpleDateFormat dayOfWeek = new SimpleDateFormat("EEEE", Locale.getDefault());
+            String title = dayOfWeek.format(date) + format2.format(date);
+            timeTablePerDay = new EventsPerDay(title);
+            Log.d(TAG, date.toString());
             List<Object> childTimeTables = new ArrayList<>();
 
             for (int j = 0; j < eventsArray.length(); ++j) {
@@ -275,7 +271,9 @@ public class NetworkingService {
                 JSONObject startDate = object.getJSONObject("start");
                 JSONObject endDate = object.getJSONObject("end");
                 event.setStartDate(startDate.getString("dateTime"));
+                Log.d(TAG, "startdate"+event.getStartDate());
                 event.setEndDate(endDate.getString("dateTime"));
+                Log.d(TAG, "enddate"+event.getEndDate());
                 childTimeTables.add(event);
             }
             timeTablePerDay.setChildObjectList(childTimeTables);
@@ -294,6 +292,7 @@ public class NetworkingService {
             lecturer.setId(contentJsonObject.getString("_id"));
             lecturer.setTitle(contentJsonObject.getString("name"));
             lecturer.setDescription(contentJsonObject.getString("description"));
+            lecturer.setWebsite(contentJsonObject.getString("website"));
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("http")
                     .encodedAuthority(URL_DATABASE)

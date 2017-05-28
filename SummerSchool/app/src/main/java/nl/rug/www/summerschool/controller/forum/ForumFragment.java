@@ -17,8 +17,13 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import org.joda.time.DateTime;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import nl.rug.www.summerschool.R;
 import nl.rug.www.summerschool.controller.ContentsLab;
@@ -26,6 +31,8 @@ import nl.rug.www.summerschool.model.Announcement;
 import nl.rug.www.summerschool.model.ForumComment;
 import nl.rug.www.summerschool.model.ForumThread;
 import nl.rug.www.summerschool.networking.NetworkingService;
+
+import static org.joda.time.DateTimeConstants.MILLIS_PER_DAY;
 
 public class ForumFragment extends Fragment {
 
@@ -89,16 +96,20 @@ public class ForumFragment extends Fragment {
         private ForumThread mForumThread;
         private ImageView mPosterImageView;
         private TextView mPosterTextView;
+        private TextView mPostedDateTextView;
         private TextView mPostedTimeTextView;
         private TextView mTitleTextView;
         private TextView mDescriptionTextView;
+        private TextView mNewTextView;
         private RecyclerView mCommentsRecyclerView;
 
         public ForumHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_forum_thread, parent, false));
 
             mPosterTextView = (TextView)itemView.findViewById(R.id.forum_poster_text_view);
-            mPostedTimeTextView = (TextView)itemView.findViewById(R.id.forum_posted_time_text_view);
+            mPostedDateTextView = (TextView)itemView.findViewById(R.id.date);
+            mPostedTimeTextView = (TextView)itemView.findViewById(R.id.time);
+            mNewTextView = (TextView)itemView.findViewById(R.id.new_image_view);
             mTitleTextView = (TextView)itemView.findViewById(R.id.forum_thread_title_text_view);
             mDescriptionTextView = (TextView)itemView.findViewById(R.id.forum_thread_description_text_view);
             mCommentsRecyclerView = (RecyclerView)itemView.findViewById(R.id.forum_comments_recycler_view);
@@ -108,13 +119,23 @@ public class ForumFragment extends Fragment {
         private void bind(ForumThread forumThread) {
             mForumThread = forumThread;
             mPosterTextView.setText(mForumThread.getPoster());
-            mPostedTimeTextView.setText(mForumThread.getDate());
+            Date date = new DateTime(mForumThread.getDate()).toDate();
+            SimpleDateFormat parseDate = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
+            SimpleDateFormat parseTime = new SimpleDateFormat("HH:mm a", Locale.getDefault());
+            mPostedDateTextView.setText(parseDate.format(date));
+            mPostedTimeTextView.setText(parseTime.format(date));
             mTitleTextView.setText(mForumThread.getTitle());
             mDescriptionTextView.setText(mForumThread.getDescription());
-            Log.d("ForumFragment", mForumThread.getDescription());
             List<ForumComment> comments = mForumThread.getForumCommentList();
             if (comments != null)
                 mCommentsRecyclerView.setAdapter(new CommentAdapter(comments));
+
+            Date today = new Date();
+            if (today.getTime() - date.getTime() < MILLIS_PER_DAY) {
+                mNewTextView.setVisibility(View.VISIBLE);
+            } else {
+                mNewTextView.setVisibility(View.GONE);
+            }
         }
 
         private class CommentHolder extends RecyclerView.ViewHolder {

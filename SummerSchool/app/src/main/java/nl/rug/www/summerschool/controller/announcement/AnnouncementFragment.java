@@ -10,6 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.joda.time.DateTime;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import nl.rug.www.summerschool.controller.ContentsLab;
 import nl.rug.www.summerschool.R;
 import nl.rug.www.summerschool.model.Announcement;
@@ -61,10 +67,11 @@ public class AnnouncementFragment extends Fragment {
         circle.setColor(generateColor(poster));
         TextView mDate = (TextView)view.findViewById(R.id.date_text_view);
         TextView mTime = (TextView)view.findViewById(R.id.time_text_view);
-        /* fetched date is ISO string. Spliting by "T", the date can be gotten */
-        String[] part = mAnnouncement.getDate().split("T");
-        mDate.setText(part[0]);
-        mTime.setText(part[1]);
+        Date date = new DateTime(mAnnouncement.getDate()).toDate();
+        SimpleDateFormat parseDate = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
+        SimpleDateFormat parseTime = new SimpleDateFormat("hh:mm a", Locale.getDefault());
+        mDate.setText(parseDate.format(date));
+        mTime.setText(parseTime.format(date));
 
         return view;
     }

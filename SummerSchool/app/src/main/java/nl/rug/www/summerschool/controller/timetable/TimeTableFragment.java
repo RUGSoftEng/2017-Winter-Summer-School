@@ -19,8 +19,15 @@ import com.bignerdranch.expandablerecyclerview.Model.ParentObject;
 import com.bignerdranch.expandablerecyclerview.ViewHolder.ChildViewHolder;
 import com.bignerdranch.expandablerecyclerview.ViewHolder.ParentViewHolder;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import nl.rug.www.summerschool.controller.ContentsLab;
 import nl.rug.www.summerschool.R;
@@ -156,12 +163,12 @@ public class TimeTableFragment extends Fragment {
         public void onBindChildViewHolder(TimeTableChildViewHolder timeTableChildViewHolder, int i, Object o) {
             Event event = (Event)o;
             timeTableChildViewHolder.mSubjectTextView.setText(event.getTitle());
-            String[] startParts = event.getStartDate().split("T");
-            String[] startParts2 = startParts[1].split(":");
-            String[] endParts = event.getEndDate().split("T");
-            String[] endParts2 = endParts[1].split(":");
+            Date start = new DateTime(event.getStartDate(), DateTimeZone.forID("Europe/Amsterdam")).toDate();
+            Date end = new DateTime(event.getEndDate(), DateTimeZone.forID("Europe/Amsterdam")).toDate();
+            SimpleDateFormat time = new SimpleDateFormat("hh:mm", Locale.getDefault());
+
             timeTableChildViewHolder.mTimeTextView.
-                    setText(startParts2[0]+":"+startParts2[1]+" - "+endParts2[0]+":"+endParts2[1]);
+                    setText(time.format(start)+" - "+time.format(end));
         }
     }
 

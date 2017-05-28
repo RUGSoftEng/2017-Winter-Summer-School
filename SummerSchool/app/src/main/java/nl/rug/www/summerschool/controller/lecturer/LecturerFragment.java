@@ -1,6 +1,8 @@
 package nl.rug.www.summerschool.controller.lecturer;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -52,6 +54,16 @@ public class LecturerFragment extends Fragment {
         mTitle.setText(mLecturer.getTitle());
         TextView mDescription = (TextView)view.findViewById(R.id.lecturer_decription_text_view);
         mDescription.setText(mLecturer.getDescription());
+        TextView mWebSiteTextView = (TextView)view.findViewById(R.id.lecturer_website_text_view);
+        mWebSiteTextView.setText(mLecturer.getWebsite());
+        mWebSiteTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri earthquakeUri = Uri.parse(mLecturer.getWebsite());
+                Intent websiteIntent = new Intent(Intent.ACTION_VIEW, earthquakeUri);
+                startActivity(websiteIntent);
+            }
+        });
         ImageView mLecturerImageView = (ImageView)view.findViewById(R.id.lecturer_image_view);
         Drawable drawable = mLecturer.getProfilePicture();
         if (drawable != null)

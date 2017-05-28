@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -39,10 +40,21 @@ public class GeneralInfoListFragment extends Fragment {
     private RecyclerView mGeneralInfoRecyclerView;
     private List<GeneralInfo> mItems = new ArrayList<>();
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private HashMap<String, Integer> mPicHashMap;
+    private String[] mStrings = {"weather", "visa", "housing", "departure", "insurance", "financial", "do", "welcome"};
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mPicHashMap = new HashMap<>();
+        mPicHashMap.put(mStrings[0], R.mipmap.icon_cloud);
+        mPicHashMap.put(mStrings[1], R.mipmap.icon_creditcard);
+        mPicHashMap.put(mStrings[2], R.mipmap.icon_building);
+        mPicHashMap.put(mStrings[3], R.mipmap.icon_flight);
+        mPicHashMap.put(mStrings[4], R.mipmap.icon_hospital);
+        mPicHashMap.put(mStrings[5], R.mipmap.icon_money);
+        mPicHashMap.put(mStrings[6], R.mipmap.icon_list);
+        mPicHashMap.put(mStrings[7], R.mipmap.icon_home);
         setRetainInstance(true);
     }
 
@@ -99,37 +111,22 @@ public class GeneralInfoListFragment extends Fragment {
         }
 
         private int selectPicture(String title) {
-            String[] strings = {"weather", "visa", "housing", "departure", "insurance", "financial", "do", "welcome"};
-            if (title.contains(strings[0])) {
-                return R.mipmap.icon_cloud;
-            } else if (title.contains(strings[1])) {
-                return R.mipmap.icon_creditcard;
-            } else if (title.contains(strings[2])) {
-                return R.mipmap.icon_building;
-            } else if (title.contains(strings[3])) {
-                return R.mipmap.icon_flight;
-            } else if (title.contains(strings[4])) {
-                return R.mipmap.icon_hospital;
-            } else if (title.contains(strings[5])) {
-                return R.mipmap.icon_money;
-            } else if (title.contains(strings[6])) {
-                return R.mipmap.icon_list;
-            } else if (title.contains(strings[7])) {
-                return R.mipmap.icon_home;
-            } else {
-                int idx = Math.abs(title.hashCode() % 4);
+            for (int i = 0; i < mStrings.length; ++i) {
+                if (title.contains(mStrings[i]))
+                    return mPicHashMap.get(mStrings[i]);
+            }
 
-                Log.d("Generalinfo", idx + "is it possible");
-                switch (idx) {
-                    case 0 :
-                        return R.mipmap.ic_smile;
-                    case 1 :
-                        return R.mipmap.ic_smile;
-                    case 2 :
-                        return R.mipmap.ic_star;
-                    case 3 :
-                        return R.mipmap.ic_arrowup;
-                }
+            int idx = Math.abs(title.hashCode() % 4);
+
+            switch (idx) {
+                case 0:
+                    return R.mipmap.ic_smile;
+                case 1:
+                    return R.mipmap.ic_smile;
+                case 2:
+                    return R.mipmap.ic_star;
+                case 3:
+                    return R.mipmap.ic_arrowup;
             }
             return 0;
         }
