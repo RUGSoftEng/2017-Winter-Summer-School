@@ -2,18 +2,25 @@ package nl.rug.www.summerschool.networking;
 
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
+import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -24,6 +31,8 @@ import java.util.Locale;
 
 import nl.rug.www.summerschool.R;
 import nl.rug.www.summerschool.model.Announcement;
+import nl.rug.www.summerschool.model.ForumComment;
+import nl.rug.www.summerschool.model.ForumThread;
 import nl.rug.www.summerschool.model.GeneralInfo;
 import nl.rug.www.summerschool.model.Lecturer;
 import nl.rug.www.summerschool.model.Event;
@@ -51,10 +60,12 @@ public class NetworkingService {
     private static final int GENERAL_INFO = 1;
     private static final int LECTURER = 2;
     private static final int TIMETABLE = 3;
+    private static final int FORUM = 4;
+    private static final int FORUM_POST = 5;
 
     private byte[] getUrlBytes(String urlSpec) throws IOException {
         URL url = new URL(urlSpec);
-        HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         try {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             InputStream in = connection.getInputStream();
@@ -74,6 +85,7 @@ public class NetworkingService {
             connection.disconnect();
         }
     }
+
     private String getUrlString(String urlSpec) throws IOException {
         return new String(getUrlBytes(urlSpec));
     }
@@ -89,8 +101,10 @@ public class NetworkingService {
                 builder.appendPath("generalinfo").appendPath("item");
                 break;
             case LECTURER :
-                builder.appendPath("lecturer")
-                        .appendPath("item");
+                builder.appendPath("lecturer").appendPath("item");
+                break;
+            case FORUM :
+                builder.appendPath("forum").appendPath("item");
                 break;
         }
         String jsonString;
@@ -174,6 +188,21 @@ public class NetworkingService {
         return lecturers;
     }
 
+    public List<ForumThread> fetchForumThreads() {
+
+        List<ForumThread> forumThreads = new ArrayList<>();
+
+        try {
+            parseForumThreads(forumThreads, buildJSONArray(FORUM));
+        } catch (IOException ioe) {
+            Log.e(TAG, "Failed to fetch Lecturers", ioe);
+        } catch (JSONException je) {
+            Log.e(TAG, "Failed to parse Lecturers JSON", je);
+        }
+
+        return forumThreads;
+    }
+
     private void parseAnnouncements(List<Announcement> items, JSONArray jsonBody)
             throws IOException, JSONException {
         if (jsonBody == null) return;
@@ -223,20 +252,15 @@ public class NetworkingService {
         Log.d(TAG, array.toString());
         for (int i = 0; i < array.length(); ++i) {
             JSONArray dataArray = array.getJSONArray(i);
-            String[] parts = dataArray.getString(0).split("T");
+            Date date = new DateTime(dataArray.getString(0)).toDate();
+            SimpleDateFormat parseDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             JSONArray eventsArray = dataArray.getJSONArray(1);
-            EventsPerDay timeTablePerDay = new EventsPerDay(parts[0]);
-            try {
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                SimpleDateFormat format2 = new SimpleDateFormat(" (MMM-dd)", Locale.getDefault());
-                SimpleDateFormat dayOfWeek = new SimpleDateFormat("EEEE", Locale.getDefault());
-                Date date = format.parse(parts[0]);
-                String title = dayOfWeek.format(date) + format2.format(date);
-                timeTablePerDay = new EventsPerDay(title);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            Log.d(TAG, parts[0]);
+            EventsPerDay timeTablePerDay = new EventsPerDay(parseDate.format(date));
+            SimpleDateFormat format2 = new SimpleDateFormat(" (MMM-dd)", Locale.getDefault());
+            SimpleDateFormat dayOfWeek = new SimpleDateFormat("EEEE", Locale.getDefault());
+            String title = dayOfWeek.format(date) + format2.format(date);
+            timeTablePerDay = new EventsPerDay(title);
+            Log.d(TAG, date.toString());
             List<Object> childTimeTables = new ArrayList<>();
 
             for (int j = 0; j < eventsArray.length(); ++j) {
@@ -247,7 +271,9 @@ public class NetworkingService {
                 JSONObject startDate = object.getJSONObject("start");
                 JSONObject endDate = object.getJSONObject("end");
                 event.setStartDate(startDate.getString("dateTime"));
+                Log.d(TAG, "startdate"+event.getStartDate());
                 event.setEndDate(endDate.getString("dateTime"));
+                Log.d(TAG, "enddate"+event.getEndDate());
                 childTimeTables.add(event);
             }
             timeTablePerDay.setChildObjectList(childTimeTables);
@@ -266,6 +292,7 @@ public class NetworkingService {
             lecturer.setId(contentJsonObject.getString("_id"));
             lecturer.setTitle(contentJsonObject.getString("name"));
             lecturer.setDescription(contentJsonObject.getString("description"));
+            lecturer.setWebsite(contentJsonObject.getString("website"));
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("http")
                     .encodedAuthority(URL_DATABASE)
@@ -282,6 +309,37 @@ public class NetworkingService {
             }
 
             items.add(lecturer);
+        }
+    }
+
+    private void parseForumThreads(List<ForumThread> items, JSONArray jsonBody)
+            throws IOException, JSONException {
+        if (jsonBody == null) return;
+
+        for (int i = 0; i < jsonBody.length(); i++) {
+            JSONObject contentJsonObject = jsonBody.getJSONObject(i);
+
+            ForumThread forumThread = new ForumThread();
+            forumThread.setId(contentJsonObject.getString("_id"));
+            forumThread.setTitle(contentJsonObject.getString("title"));
+            forumThread.setDescription(contentJsonObject.getString("description"));
+            forumThread.setPoster(contentJsonObject.getString("author"));
+            forumThread.setDate(contentJsonObject.getString("date"));
+            forumThread.setPosterId(contentJsonObject.getString("posterID"));
+            List<ForumComment> comments = new ArrayList<>();
+            JSONArray jsonComments = contentJsonObject.getJSONArray("comments");
+            for (int j = 0; j < jsonComments.length(); ++j) {
+                ForumComment comment = new ForumComment();
+                JSONObject jsonObject = jsonComments.getJSONObject(j);
+                if (jsonObject == null) break;
+                comment.setPosterId(jsonObject.getString("posterID"));
+                comment.setPoster(jsonObject.getString("author"));
+                comment.setText(jsonObject.getString("text"));
+                comment.setDate(jsonObject.getString("date"));
+                comments.add(comment);
+            }
+            forumThread.setForumCommentList(comments);
+            items.add(forumThread);
         }
     }
 }

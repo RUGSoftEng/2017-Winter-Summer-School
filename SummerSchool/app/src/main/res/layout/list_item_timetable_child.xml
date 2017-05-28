@@ -17,6 +17,7 @@
         android:layout_height="wrap_content"
         android:padding="16dp"
         android:text="@string/content_title_label"
+        android:textColor="@color/colorTitle"
         android:layout_toEndOf="@+id/time_text_view"/>
 
 </RelativeLayout>

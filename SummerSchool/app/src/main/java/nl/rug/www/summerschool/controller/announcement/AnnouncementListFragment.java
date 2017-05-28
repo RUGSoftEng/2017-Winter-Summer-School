@@ -1,9 +1,12 @@
 package nl.rug.www.summerschool.controller.announcement;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,13 +15,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.dgreenhalgh.android.simpleitemdecoration.linear.DividerItemDecoration;
+
+import org.joda.time.DateTime;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import nl.rug.www.summerschool.controller.ContentsLab;
 import nl.rug.www.summerschool.networking.NetworkingService;
 import nl.rug.www.summerschool.R;
 import nl.rug.www.summerschool.model.Announcement;
+
+import static org.joda.time.DateTimeConstants.MILLIS_PER_DAY;
 
 /**
  * This class is a fragment on main pager activity.
@@ -43,7 +55,6 @@ public class AnnouncementListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        new FetchAnnouncementsTask().execute();
     }
 
     @Override
@@ -65,9 +76,12 @@ public class AnnouncementListFragment extends Fragment {
 
         mAnnouncementRecyclerView = (RecyclerView)v.findViewById(R.id.recycler_view);
         mAnnouncementRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mAnnouncementRecyclerView.addItemDecoration(new DividerItemDecoration(
+                ContextCompat.getDrawable(getActivity(), R.drawable.horizontaldivider)));
 
         setupAdatper();
 
+        new FetchAnnouncementsTask().execute();
         return v;
     }
 
@@ -80,18 +94,52 @@ public class AnnouncementListFragment extends Fragment {
     private class AnnouncementHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private Announcement mAnnouncement;
+        private TextView mInitialView;
         private TextView mTitleTextView;
+        private TextView mAuthorTextView;
+        private TextView mDateTextView;
+        private TextView mTimeTextView;
+        private TextView mNewTextView;
 
         private AnnouncementHolder(LayoutInflater inflater, ViewGroup parent) {
-            super(inflater.inflate(R.layout.list_item_content, parent, false));
+            super(inflater.inflate(R.layout.list_item_announcement, parent, false));
 
+            mInitialView = (TextView)itemView.findViewById(R.id.initial_text_view);
             mTitleTextView = (TextView)itemView.findViewById(R.id.content_title);
+            mAuthorTextView = (TextView)itemView.findViewById(R.id.author_text_view);
+            mDateTextView = (TextView)itemView.findViewById(R.id.date);
+            mTimeTextView = (TextView)itemView.findViewById(R.id.time);
+            mNewTextView = (TextView)itemView.findViewById(R.id.new_image_view);
             itemView.setOnClickListener(this);
         }
 
-        private void bind(Announcement announcement){
+        private int generateColor(String name) {
+            int hash = name.hashCode();
+            int r = (hash & 0xFF0000) >> 16;
+            int g = (hash & 0x00FF00) >> 8;
+            int b = hash & 0x0000FF;
+            return Color.rgb(r, g, b);
+        }
+
+        private void bind(Announcement announcement) {
             mAnnouncement = announcement;
             mTitleTextView.setText(mAnnouncement.getTitle());
+            String poster = mAnnouncement.getPoster();
+            mInitialView.setText(poster.toUpperCase().charAt(0) + "");
+            GradientDrawable circle = (GradientDrawable)mInitialView.getBackground();
+            circle.setColor(generateColor(poster));
+            mAuthorTextView.setText("By " + poster);
+            Date date = new DateTime(mAnnouncement.getDate()).toDate();
+            Date today = new Date();
+            if (today.getTime() - date.getTime() < MILLIS_PER_DAY) {
+                mNewTextView.setVisibility(View.VISIBLE);
+            } else {
+                mNewTextView.setVisibility(View.GONE);
+            }
+            SimpleDateFormat parseDate = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
+            SimpleDateFormat parseTime = new SimpleDateFormat("hh:mm a", Locale.getDefault());
+            mDateTextView.setText(parseDate.format(date));
+            mTimeTextView.setText(parseTime.format(date));
         }
 
         @Override
@@ -129,6 +177,12 @@ public class AnnouncementListFragment extends Fragment {
     }
 
     private class FetchAnnouncementsTask extends AsyncTask<Void, Void, List<Announcement>> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mSwipeRefreshLayout.setRefreshing(true);
+        }
 
         @Override
         protected List<Announcement> doInBackground(Void... params) {

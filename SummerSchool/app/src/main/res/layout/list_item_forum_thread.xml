@@ -15,7 +15,8 @@
             android:id="@+id/forum_poster_profile_picture"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:layout_marginEnd="4dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
             android:src="@drawable/profile"/>
 
         <TextView
@@ -30,12 +31,49 @@
             android:text="Jeongkyun Oh"/>
 
         <TextView
-            android:id="@+id/forum_posted_time_text_view"
+            android:id="@+id/new_image_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginEnd="4dp"
-            android:text="a minute ago"/>
+            android:layout_marginStart="16dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:text="new"
+            android:textStyle="bold|italic"
+            android:textColor="@android:color/white"
+            android:background="@drawable/roundnew"
+            android:visibility="gone"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:textColor="@color/colorGray"
+                android:textSize="12sp"
+                tools:text="Mar 6, 2010" />
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:textColor="@color/colorGray"
+                android:textSize="12sp"
+                tools:text="3:00 PM" />
+
+        </LinearLayout>
+
+
 
     </LinearLayout>
 

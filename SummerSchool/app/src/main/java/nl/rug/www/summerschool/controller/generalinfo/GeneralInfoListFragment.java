@@ -4,16 +4,23 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import nl.rug.www.summerschool.controller.ContentsLab;
 import nl.rug.www.summerschool.networking.NetworkingService;
@@ -33,12 +40,22 @@ public class GeneralInfoListFragment extends Fragment {
     private RecyclerView mGeneralInfoRecyclerView;
     private List<GeneralInfo> mItems = new ArrayList<>();
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private HashMap<String, Integer> mPicHashMap;
+    private String[] mStrings = {"weather", "visa", "housing", "departure", "insurance", "financial", "do", "welcome"};
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mPicHashMap = new HashMap<>();
+        mPicHashMap.put(mStrings[0], R.mipmap.icon_cloud);
+        mPicHashMap.put(mStrings[1], R.mipmap.icon_creditcard);
+        mPicHashMap.put(mStrings[2], R.mipmap.icon_building);
+        mPicHashMap.put(mStrings[3], R.mipmap.icon_flight);
+        mPicHashMap.put(mStrings[4], R.mipmap.icon_hospital);
+        mPicHashMap.put(mStrings[5], R.mipmap.icon_money);
+        mPicHashMap.put(mStrings[6], R.mipmap.icon_list);
+        mPicHashMap.put(mStrings[7], R.mipmap.icon_home);
         setRetainInstance(true);
-        new FetchGeneralInfosTask().execute();
     }
 
     @Override
@@ -60,10 +77,10 @@ public class GeneralInfoListFragment extends Fragment {
             mSwipeRefreshLayout.setRefreshing(true);
 
         mGeneralInfoRecyclerView = (RecyclerView)v.findViewById(R.id.recycler_view);
-        mGeneralInfoRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mGeneralInfoRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 
         setupAdatper();
-
+        new FetchGeneralInfosTask().execute();
         return v;
     }
 
@@ -77,17 +94,41 @@ public class GeneralInfoListFragment extends Fragment {
 
         private GeneralInfo mGeneralInfo;
         private TextView mTitleTextView;
+        private ImageView mImageView;
 
         private GeneralInfoHolder(LayoutInflater inflater, ViewGroup parent) {
-            super(inflater.inflate(R.layout.list_item_content, parent, false));
+            super(inflater.inflate(R.layout.list_item_generalinfo, parent, false));
 
             mTitleTextView = (TextView)itemView.findViewById(R.id.content_title);
+            mImageView = (ImageView)itemView.findViewById(R.id.icon_image_view);
             itemView.setOnClickListener(this);
         }
 
         private void bind(GeneralInfo generalInfo){
             mGeneralInfo = generalInfo;
             mTitleTextView.setText(mGeneralInfo.getTitle());
+            mImageView.setImageResource(selectPicture(mGeneralInfo.getTitle().toLowerCase()));
+        }
+
+        private int selectPicture(String title) {
+            for (int i = 0; i < mStrings.length; ++i) {
+                if (title.contains(mStrings[i]))
+                    return mPicHashMap.get(mStrings[i]);
+            }
+
+            int idx = Math.abs(title.hashCode() % 4);
+
+            switch (idx) {
+                case 0:
+                    return R.mipmap.ic_smile;
+                case 1:
+                    return R.mipmap.ic_smile;
+                case 2:
+                    return R.mipmap.ic_star;
+                case 3:
+                    return R.mipmap.ic_arrowup;
+            }
+            return 0;
         }
 
         @Override
@@ -126,6 +167,12 @@ public class GeneralInfoListFragment extends Fragment {
 
 
     private class FetchGeneralInfosTask extends AsyncTask<Void, Void, List<GeneralInfo>> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mSwipeRefreshLayout.setRefreshing(true);
+        }
 
         @Override
         protected List<GeneralInfo> doInBackground(Void... params) {

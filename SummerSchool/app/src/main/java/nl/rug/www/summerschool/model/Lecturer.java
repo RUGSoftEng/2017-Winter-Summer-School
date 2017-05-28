@@ -12,6 +12,15 @@ import android.graphics.drawable.Drawable;
 public class Lecturer extends Content {
 
     private Drawable mProfilePicture;
+    private String website;
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
 
     public Drawable getProfilePicture() {
         return mProfilePicture;

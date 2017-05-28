@@ -47,8 +47,6 @@ public class GeneralInfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_generalinfo, container, false);
 
-        TextView mTitle = (TextView)view.findViewById(R.id.generalinfo_title);
-        mTitle.setText(mGeneralInfo.getTitle());
         TextView mDescription = (TextView)view.findViewById(R.id.generalinfo_detail);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             mDescription.setText(Html.fromHtml(mGeneralInfo.getDescription(), Html.FROM_HTML_MODE_COMPACT));
