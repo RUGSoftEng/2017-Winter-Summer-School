@@ -102,6 +102,8 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         mfacebookLoginButton.setOnClickListener(this);
         mgoogleLoginButton = (Button) view.findViewById(R.id.google_login_button);
         mgoogleLoginButton.setOnClickListener(this);
+
+
         mlogInData = new ArrayList<String>();
         //instantiate SignInManager for GSO and googleAPI
         initFirebaseService();
@@ -188,6 +190,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     //INIT GOOGLE SERVICES
     private void initGoogleLogInService() {
         SIM = SignInManager.get(mActivity);
+
         if (SIM.getmGoogleApiClient() == null) {
             SIM.setmGoogleApiClient(new GoogleApiClient.Builder(getActivity()).enableAutoManage(getActivity(), new GoogleApiClient.OnConnectionFailedListener() {
                 @Override
@@ -230,7 +233,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
-
+        if(acct.getEmail() )
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(mActivity, new OnCompleteListener<AuthResult>() {
@@ -285,8 +288,8 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
 
     private void handleFacebookAccessToken(AccessToken token) {
         Log.d(TAG, "handleFacebookAccessToken:" + token);
-
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        credential.
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(mActivity, new OnCompleteListener<AuthResult>() {
                     @Override
