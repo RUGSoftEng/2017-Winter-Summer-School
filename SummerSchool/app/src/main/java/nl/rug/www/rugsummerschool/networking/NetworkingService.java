@@ -1,8 +1,20 @@
 package nl.rug.www.rugsummerschool.networking;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.Log;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.joda.time.DateTime;
 import org.json.JSONArray;
@@ -13,13 +25,17 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import nl.rug.www.rugsummerschool.model.Announcement;
 import nl.rug.www.rugsummerschool.model.ForumComment;
@@ -331,6 +347,125 @@ public class NetworkingService {
             }
             forumThread.setForumCommentList(comments);
             items.add(forumThread);
+        }
+    }
+
+    public void putRequestForumThread(Context context, String forumPath, Map<String, String> valuePairs) {
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme("http").encodedAuthority(URL_DATABASE);
+        builder.appendPath("forum").appendPath(forumPath).appendPath("item")
+                .appendQueryParameter("threadID", valuePairs.get("threadID"));
+        switch (forumPath) {
+            case "thread" :
+                builder.appendQueryParameter("title", valuePairs.get("title"))
+                        .appendQueryParameter("description", valuePairs.get("description"));
+                break;
+            case "comment" :
+                builder.appendQueryParameter("arrayPos", valuePairs.get("arrayPos"))
+                        .appendQueryParameter("text", valuePairs.get("text"));
+                break;
+        }
+
+        String url = builder.toString();
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+        StringRequest stringRequest = new StringRequest(Request.Method.PUT, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d(TAG, "On response result : " + response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, "Error message : " + error.toString());
+            }
+        });
+
+        queue.add(stringRequest);
+    }
+
+    public void deleteRequestForumThread(Context context, String forumPath, Map<String, String> valuePairs) {
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme("http").encodedAuthority(URL_DATABASE);
+        builder.appendPath("forum").appendPath(forumPath).appendPath("item")
+                .appendQueryParameter("threadID", valuePairs.get("threadID"));
+        if (forumPath.equals("comment")) builder.appendQueryParameter("arrayPos", valuePairs.get("arrayPos"));
+
+        String url = builder.toString();
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+        StringRequest stringRequest = new StringRequest(Request.Method.DELETE, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d(TAG, "On response result : " + response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, "Error message : " + error.toString());
+            }
+        });
+
+        queue.add(stringRequest);
+    }
+
+    public void postRequestForumThread(Context context, String forumPath, Map<String, String> valuePairs) {
+        try {
+            Uri.Builder builder = new Uri.Builder();
+            builder.scheme("http").encodedAuthority(URL_DATABASE);
+            builder.appendPath("forum").appendPath(forumPath).appendPath("item");
+            String url = builder.toString();
+
+            RequestQueue queue = Volley.newRequestQueue(context);
+            JSONObject jsonBody = new JSONObject();
+            Iterator it = valuePairs.keySet().iterator();
+            while(it.hasNext()) {
+                String key = (String)it.next();
+                jsonBody.put(key, valuePairs.get(key));
+                it.remove();
+            }
+
+            final String requestBody = jsonBody.toString();
+
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                    new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.d(TAG, "On response result : " + response);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.d(TAG, "On error response : " + error.toString());
+                }
+            }) {
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
+
+                @Override
+                public byte[] getBody() throws AuthFailureError {
+                    try {
+                        return requestBody == null ? null : requestBody.getBytes("utf-8");
+                    } catch (UnsupportedEncodingException uee) {
+                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                        return null;
+                    }
+                }
+
+                @Override
+                protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                    String responseString = String.valueOf(response.statusCode);
+                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
+                }
+            };
+
+            queue.add(stringRequest);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 }

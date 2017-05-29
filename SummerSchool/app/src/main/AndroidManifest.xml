@@ -47,7 +47,7 @@
             android:parentActivityName="nl.rug.www.rugsummerschool.controller.MainPagerActivity"/>
         <activity android:name="nl.rug.www.rugsummerschool.controller.MainPagerActivity"
                   android:windowSoftInputMode="adjustPan"/>
-        <activity android:name="nl.rug.www.rugsummerschool.controller.forum.AddThreadActivity"
+        <activity android:name="nl.rug.www.rugsummerschool.controller.forum.ThreadActivity"
             android:parentActivityName="nl.rug.www.rugsummerschool.controller.MainPagerActivity">
         </activity>
     </application>

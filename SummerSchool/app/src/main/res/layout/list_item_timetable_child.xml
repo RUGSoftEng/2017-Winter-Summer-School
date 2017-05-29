@@ -8,14 +8,16 @@
         android:id="@+id/time_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         android:text="@string/time_example"/>
 
     <TextView
         android:id="@+id/subject_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         android:text="@string/content_title_label"
         android:textColor="@color/colorTitle"
         android:layout_toEndOf="@+id/time_text_view"/>
