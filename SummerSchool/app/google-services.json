@@ -8,18 +8,26 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:202157512063:android:8bb6159706bdc1b3",
+        "mobilesdk_app_id": "1:202157512063:android:d0f98c5d46fe6d98",
         "android_client_info": {
-          "package_name": "nl.rug.www.summerschool"
+          "package_name": "nl.rug.www.rugsummerschool"
         }
       },
       "oauth_client": [
         {
-          "client_id": "202157512063-pbfpu8f1u9cb8ctaicms5se5dvo8hc5q.apps.googleusercontent.com",
+          "client_id": "202157512063-7jdd5adgmkddr1f00sugvcvfnd0s7dv7.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "nl.rug.www.summerschool",
+            "package_name": "nl.rug.www.rugsummerschool",
             "certificate_hash": "58ca267842ebcdd67d1d1ad970fadde26bd793eb"
+          }
+        },
+        {
+          "client_id": "202157512063-ouo922ft21ksts6gmpms54989nhg7dit.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "nl.rug.www.rugsummerschool",
+            "certificate_hash": "035fc6961f41af56f7020f575ec4f079cc3bc0be"
           }
         },
         {
