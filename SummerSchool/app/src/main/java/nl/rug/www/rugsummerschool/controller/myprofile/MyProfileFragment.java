@@ -100,6 +100,9 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
         fosTV.setText(FOS);
 
         SIM = SignInManager.get(getActivity());
+        if (!SIM.getmGoogleApiClient().isConnected()) {
+            SIM.getmGoogleApiClient().connect();
+        }
         return view;
     }
 
@@ -108,6 +111,11 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
         signOut();
         FragmentManager fm = getActivity().getSupportFragmentManager();
         fm.beginTransaction().replace(R.id.fragment_container, new SignInFragment()).commit();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     private void signOut() {
