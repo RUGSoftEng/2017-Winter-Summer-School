@@ -68,9 +68,9 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
         String DOB;
         String FOS;
         //test DATA
-        if(!(mLogInData.size() < 4)) {
-            DOB = mLogInData.get(3);
-            FOS = mLogInData.get(4);
+        if(!(mLogInData.size() < 5)) {
+            DOB = mLogInData.get(4);
+            FOS = mLogInData.get(5);
         }else{
             DOB = "19 October 1993";
             FOS = "Computer Science";

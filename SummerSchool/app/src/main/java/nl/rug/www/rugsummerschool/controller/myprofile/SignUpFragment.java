@@ -41,7 +41,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener, Sp
     private String DOB;
     private int mm;
     //Widget Variables
-    private Spinner spinner, month_spinner;
+    private Spinner spinner;
     private Button next;
     private EditText day, year;
     //Utility Variables
