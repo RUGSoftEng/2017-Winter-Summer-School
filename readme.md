@@ -6,12 +6,10 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-Android Studio
-Git Bash
+Android Studio | Git Bash
 
 Provided by us:
-Firebase Developer Account
-Facebook Developer Account
+Firebase | Facebook Developer Account
 
 ### Pulling of Project with Git Bash
 ```
