@@ -91,13 +91,13 @@ public class ForumFragment extends Fragment {
                 if (user == null) {
                     // User is signed in
                     FragmentManager fm = mActivity.getSupportFragmentManager();
-                    fm.beginTransaction().replace(R.id.fragment_forum_container, new ForumLoginFragment()).commit();
+                    fm.beginTransaction().replace(R.id.fragment_forum_container, new ForumLoginFragment()).commitAllowingStateLoss();;
                 }
             }
         });
         if (user == null) {
             FragmentManager fm = mActivity.getSupportFragmentManager();
-            fm.beginTransaction().replace(R.id.fragment_forum_container, new ForumLoginFragment()).commit();
+            fm.beginTransaction().replace(R.id.fragment_forum_container, new ForumLoginFragment()).commitAllowingStateLoss();
         }
         //get log in data
         UID = ContentsLab.get().getmLogInData().get(3);
