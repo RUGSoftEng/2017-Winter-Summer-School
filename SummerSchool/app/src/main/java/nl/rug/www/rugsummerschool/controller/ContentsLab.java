@@ -126,7 +126,7 @@ public class ContentsLab {
     }
 
     private void createFakeUsers(){
-        mFakeUsers.add("jKFo90UCv3W6ICTiVSTiStiulpY2");
+        mFakeUsers.add("lPgWPazXwVSq5XYl3FiK6GAmaNE3");
     }
 
     public void printUsers(){
