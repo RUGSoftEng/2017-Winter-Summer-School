@@ -16,6 +16,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.iid.FirebaseInstanceId;
+
 import nl.rug.www.rugsummerschool.R;
 import nl.rug.www.rugsummerschool.controller.announcement.AnnouncementListFragment;
 import nl.rug.www.rugsummerschool.controller.forum.ForumRootFragment;
@@ -65,6 +68,7 @@ public class MainPagerActivity extends AppCompatActivity {
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
         actionBar.setCustomView(R.layout.drawable_actionbar);
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+
 
         mViewPager = (ViewPager)findViewById(R.id.main_view_pager);
         mAnnouncementButton = (ImageButton)findViewById(R.id.announcement_button);
