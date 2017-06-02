@@ -21,6 +21,7 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
@@ -28,6 +29,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -36,6 +39,7 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.UserInfo;
 
 import java.util.ArrayList;
 
@@ -152,7 +156,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         }
 
     }
-    //0 - photourl 1-displayname 2-email 3-birthday 4-fos
+    //0 - photourl 1-displayname 2-email 3-uid 4-birthday 5-fos
     //retrieve data from account
     public void setMlogInData(FirebaseUser user) {
         Log.i(TAG, "--------------------------------");
@@ -165,6 +169,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         mlogInData.add(user.getPhotoUrl().toString());
         mlogInData.add(user.getDisplayName());
         mlogInData.add(user.getEmail());
+        mlogInData.add(user.getUid());
 
         ContentsLab.get().setmLogInData(mlogInData);
         String UID = user.getUid();
@@ -244,8 +249,17 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                             // If sign in fails, display a message to the user.
                             spinner.setVisibility(View.GONE);
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(mActivity, "Authentication failed.",
+                            Toast.makeText(mActivity, "You already have an existing facebook",
                                     Toast.LENGTH_SHORT).show();
+                            Auth.GoogleSignInApi.signOut(SIM.getmGoogleApiClient()).setResultCallback(
+                                    new ResultCallback<Status>() {
+                                        @Override
+                                        public void onResult(Status status) {
+                                            // ...
+                                        }
+                                    });
+                            revokeAccess();
+                            FirebaseAuth.getInstance().signOut();
                         }
                     }
                 });
@@ -297,12 +311,24 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(getActivity(), "Authentication failed.",
+                            Toast.makeText(getActivity(), "You already have an existing google account",
                                     Toast.LENGTH_SHORT).show();
+                            LoginManager.getInstance().logOut();
+                            FirebaseAuth.getInstance().signOut();
                         }
                         // ...
                     }
                 });
     }
     //end of facebook methods
+
+    private void revokeAccess() {
+        Auth.GoogleSignInApi.revokeAccess(SIM.getmGoogleApiClient()).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(Status status) {
+                        // ...
+                    }
+                });
+    }
 }

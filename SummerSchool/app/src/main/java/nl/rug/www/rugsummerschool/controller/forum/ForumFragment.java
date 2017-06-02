@@ -1,15 +1,20 @@
 package nl.rug.www.rugsummerschool.controller.forum;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +25,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dgreenhalgh.android.simpleitemdecoration.linear.DividerItemDecoration;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.joda.time.DateTime;
 
@@ -44,11 +51,15 @@ public class ForumFragment extends Fragment {
     public static final int INT_ADD = 0;
     public static final int INT_EDIT = 1;
 
+    protected AppCompatActivity mActivity;
+
     private RecyclerView mForumRecyclerView;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private List<ForumThread> mItems = new ArrayList<>();
+
+    private String UID;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,8 +74,36 @@ public class ForumFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mActivity = (AppCompatActivity) context;
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_forum, container, false);
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseAuth.getInstance().addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user == null) {
+                    // User is signed in
+                    FragmentManager fm = mActivity.getSupportFragmentManager();
+                    if(!mActivity.isFinishing())
+                    fm.beginTransaction().replace(R.id.fragment_forum_container, new ForumLoginFragment()).commitAllowingStateLoss();
+                }
+            }
+        });
+        if (user == null) {
+            FragmentManager fm = mActivity.getSupportFragmentManager();
+            fm.beginTransaction().replace(R.id.fragment_forum_container, new ForumLoginFragment()).commit();
+        }
+        //get log in data
+        UID = ContentsLab.get().getmLogInData().get(3);
+        Log.d("FORUMFRAG", "" + UID);
+
         TextView section = (TextView)view.findViewById(R.id.section_name);
         section.setText(R.string.forum);
 
@@ -84,7 +123,7 @@ public class ForumFragment extends Fragment {
                 ContextCompat.getDrawable(getActivity(), R.drawable.horizontaldivider)
         ));
 
-        setupAdatper();
+        setupAdapter();
         view.findViewById(R.id.forum_add_floating_action_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,11 +132,10 @@ public class ForumFragment extends Fragment {
                 startActivity(intent);
             }
         });
-
         return view;
     }
 
-    private void setupAdatper() {
+    private void setupAdapter() {
         if (isAdded()) {
             mForumRecyclerView.setAdapter(new ForumAdapter(mItems));
         }
@@ -359,7 +397,7 @@ public class ForumFragment extends Fragment {
         @Override
         protected void onPostExecute(List<ForumThread> announcements) {
             mItems = announcements;
-            setupAdatper();
+            setupAdapter();
             ContentsLab.get().updateForumThreads(mItems);
             if (mSwipeRefreshLayout.isRefreshing()) {
                 mSwipeRefreshLayout.setRefreshing(false);

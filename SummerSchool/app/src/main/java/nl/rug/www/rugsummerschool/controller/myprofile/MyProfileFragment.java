@@ -24,6 +24,7 @@ import java.util.ArrayList;
 
 import nl.rug.www.rugsummerschool.R;
 import nl.rug.www.rugsummerschool.controller.ContentsLab;
+import nl.rug.www.rugsummerschool.networking.NetworkingService;
 
 /**
  * This class is to show the data fetched from facebook or google+.
@@ -64,13 +65,13 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
         //test data, should retreive from database
         String displayName = mLogInData.get(1);
         String email = mLogInData.get(2);
-
+        new NetworkingService().postRequestFCMID(getActivity(), "HIHIHIH");
         String DOB;
         String FOS;
         //test DATA
-        if(!(mLogInData.size() < 4)) {
-            DOB = mLogInData.get(3);
-            FOS = mLogInData.get(4);
+        if(!(mLogInData.size() < 5)) {
+            DOB = mLogInData.get(4);
+            FOS = mLogInData.get(5);
         }else{
             DOB = "19 October 1993";
             FOS = "Computer Science";
@@ -100,6 +101,9 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
         fosTV.setText(FOS);
 
         SIM = SignInManager.get(getActivity());
+        if (!SIM.getmGoogleApiClient().isConnected()) {
+            SIM.getmGoogleApiClient().connect();
+        }
         return view;
     }
 
@@ -108,6 +112,11 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
         signOut();
         FragmentManager fm = getActivity().getSupportFragmentManager();
         fm.beginTransaction().replace(R.id.fragment_container, new SignInFragment()).commit();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     private void signOut() {
