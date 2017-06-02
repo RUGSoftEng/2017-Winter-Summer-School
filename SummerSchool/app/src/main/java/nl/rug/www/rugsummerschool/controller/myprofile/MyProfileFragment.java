@@ -24,6 +24,7 @@ import java.util.ArrayList;
 
 import nl.rug.www.rugsummerschool.R;
 import nl.rug.www.rugsummerschool.controller.ContentsLab;
+import nl.rug.www.rugsummerschool.networking.NetworkingService;
 
 /**
  * This class is to show the data fetched from facebook or google+.
@@ -64,7 +65,7 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
         //test data, should retreive from database
         String displayName = mLogInData.get(1);
         String email = mLogInData.get(2);
-
+        new NetworkingService().postRequestFCMID(getActivity(), "HIHIHIH");
         String DOB;
         String FOS;
         //test DATA

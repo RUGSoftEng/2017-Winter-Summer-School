@@ -91,7 +91,8 @@ public class ForumFragment extends Fragment {
                 if (user == null) {
                     // User is signed in
                     FragmentManager fm = mActivity.getSupportFragmentManager();
-                    fm.beginTransaction().replace(R.id.fragment_forum_container, new ForumLoginFragment()).commit();
+                    if(!mActivity.isFinishing())
+                    fm.beginTransaction().replace(R.id.fragment_forum_container, new ForumLoginFragment()).commitAllowingStateLoss();
                 }
             }
         });

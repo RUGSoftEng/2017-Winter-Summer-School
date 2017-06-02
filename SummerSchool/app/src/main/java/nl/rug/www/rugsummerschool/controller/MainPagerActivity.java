@@ -1,6 +1,7 @@
 package nl.rug.www.rugsummerschool.controller;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.iid.FirebaseInstanceId;
+
 import nl.rug.www.rugsummerschool.R;
 import nl.rug.www.rugsummerschool.controller.announcement.AnnouncementListFragment;
 import nl.rug.www.rugsummerschool.controller.forum.ForumRootFragment;
@@ -23,6 +27,7 @@ import nl.rug.www.rugsummerschool.controller.generalinfo.GeneralInfoListFragment
 import nl.rug.www.rugsummerschool.controller.lecturer.LecturerListFragment;
 import nl.rug.www.rugsummerschool.controller.myprofile.RootFragment;
 import nl.rug.www.rugsummerschool.controller.timetable.TimeTableFragment;
+import nl.rug.www.rugsummerschool.networking.FCMService;
 
 /**
  * This class is main activity that contains basic layout of the app.
@@ -65,6 +70,7 @@ public class MainPagerActivity extends AppCompatActivity {
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
         actionBar.setCustomView(R.layout.drawable_actionbar);
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+
 
         mViewPager = (ViewPager)findViewById(R.id.main_view_pager);
         mAnnouncementButton = (ImageButton)findViewById(R.id.announcement_button);
