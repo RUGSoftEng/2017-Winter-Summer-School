@@ -468,4 +468,33 @@ public class NetworkingService {
             e.printStackTrace();
         }
     }
+
+    public void postRequestFCMID(Context context, String Token){
+        try{
+            Uri.Builder builder = new Uri.Builder();
+            builder.scheme("http").encodedAuthority(URL_DATABASE);
+            builder.appendPath("token").appendQueryParameter("id", Token);
+            String url = builder.toString();
+            Log.d(TAG + "===", url);
+
+            RequestQueue queue = Volley.newRequestQueue(context);
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Log.d(TAG, "On response result : " + response);
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.d(TAG, "Error message : " + error.toString());
+                }
+            });
+
+            queue.add(stringRequest);
+
+        }catch (Exception e){
+
+        }
+    }
 }

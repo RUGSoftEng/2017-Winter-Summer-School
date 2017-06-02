@@ -1,6 +1,7 @@
 package nl.rug.www.rugsummerschool.controller;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.Fragment;
@@ -26,6 +27,7 @@ import nl.rug.www.rugsummerschool.controller.generalinfo.GeneralInfoListFragment
 import nl.rug.www.rugsummerschool.controller.lecturer.LecturerListFragment;
 import nl.rug.www.rugsummerschool.controller.myprofile.RootFragment;
 import nl.rug.www.rugsummerschool.controller.timetable.TimeTableFragment;
+import nl.rug.www.rugsummerschool.networking.FCMService;
 
 /**
  * This class is main activity that contains basic layout of the app.
