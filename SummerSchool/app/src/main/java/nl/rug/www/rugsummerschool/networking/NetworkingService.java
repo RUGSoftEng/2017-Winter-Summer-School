@@ -17,6 +17,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.tz.DateTimeZoneBuilder;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -259,14 +261,12 @@ public class NetworkingService {
         Log.d(TAG, array.toString());
         for (int i = 0; i < array.length(); ++i) {
             JSONArray dataArray = array.getJSONArray(i);
-            Date date = new DateTime(dataArray.getString(0)).toDate();
-            SimpleDateFormat parseDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            Date date = new DateTime(dataArray.getString(0)).minusHours(5).toDate();
             JSONArray eventsArray = dataArray.getJSONArray(1);
-            EventsPerDay timeTablePerDay = new EventsPerDay(parseDate.format(date));
-            SimpleDateFormat format2 = new SimpleDateFormat(" (MMM-dd)", Locale.getDefault());
-            SimpleDateFormat dayOfWeek = new SimpleDateFormat("EEEE", Locale.getDefault());
+            SimpleDateFormat format2 = new SimpleDateFormat(" (MMM-dd)", Locale.UK);
+            SimpleDateFormat dayOfWeek = new SimpleDateFormat("EEEE", Locale.UK);
             String title = dayOfWeek.format(date) + format2.format(date);
-            timeTablePerDay = new EventsPerDay(title);
+            EventsPerDay timeTablePerDay = new EventsPerDay(title);
             Log.d(TAG, date.toString());
             List<Object> childTimeTables = new ArrayList<>();
 
@@ -414,8 +414,8 @@ public class NetworkingService {
     public void postRequestForumThread(Context context, String forumPath, Map<String, String> valuePairs) {
         try {
             Uri.Builder builder = new Uri.Builder();
-            builder.scheme("http").encodedAuthority(URL_DATABASE);
-            builder.appendPath("forum").appendPath(forumPath).appendPath("item");
+            builder.scheme("http").encodedAuthority(URL_DATABASE)
+                    .appendPath("forum").appendPath(forumPath).appendPath("item");
             String url = builder.toString();
 
             RequestQueue queue = Volley.newRequestQueue(context);

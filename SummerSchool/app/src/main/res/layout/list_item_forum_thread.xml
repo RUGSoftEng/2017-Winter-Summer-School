@@ -39,7 +39,7 @@
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:text="new"
-            android:textStyle="bold|italic"
+            android:textStyle="bold"
             android:textColor="@android:color/white"
             android:background="@drawable/roundnew"
             android:visibility="gone"/>

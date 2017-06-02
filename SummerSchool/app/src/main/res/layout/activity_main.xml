@@ -29,7 +29,7 @@
             android:layout_marginRight="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/announcementblack"
+            android:background="@drawable/announcement"
             android:contentDescription="@string/announcement_button"/>
 
         <ImageButton
@@ -40,7 +40,7 @@
             android:layout_marginRight="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/generalinformation"
+            android:background="@drawable/generalinformationblack"
             android:contentDescription="@string/general_information_button"/>
 
         <ImageButton
@@ -51,7 +51,7 @@
             android:layout_marginRight="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/lecturer"
+            android:background="@drawable/lecturerblack"
             android:contentDescription="@string/lecturer_information_button"/>
 
         <ImageButton
@@ -62,7 +62,7 @@
             android:layout_marginRight="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/timetable"
+            android:background="@drawable/timetableblack"
             android:contentDescription="@string/time_table_button"/>
 
         <ImageButton
@@ -73,7 +73,7 @@
             android:layout_marginRight="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/forum"
+            android:background="@drawable/forumblack"
             android:contentDescription="@string/forum_button"/>
 
         <ImageButton
@@ -84,7 +84,7 @@
             android:layout_marginRight="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/my_account"
+            android:background="@drawable/my_accountblack"
             android:contentDescription="@string/my_profile_button"/>
 
     </LinearLayout>
