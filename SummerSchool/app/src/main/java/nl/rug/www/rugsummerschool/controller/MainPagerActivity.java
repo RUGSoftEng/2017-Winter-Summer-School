@@ -1,7 +1,6 @@
 package nl.rug.www.rugsummerschool.controller;
 
 import android.app.ActionBar;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.Fragment;
@@ -18,7 +17,11 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.iid.FirebaseInstanceId;
+
+import java.util.ArrayList;
 
 import nl.rug.www.rugsummerschool.R;
 import nl.rug.www.rugsummerschool.controller.announcement.AnnouncementListFragment;
@@ -27,7 +30,6 @@ import nl.rug.www.rugsummerschool.controller.generalinfo.GeneralInfoListFragment
 import nl.rug.www.rugsummerschool.controller.lecturer.LecturerListFragment;
 import nl.rug.www.rugsummerschool.controller.myprofile.RootFragment;
 import nl.rug.www.rugsummerschool.controller.timetable.TimeTableFragment;
-import nl.rug.www.rugsummerschool.networking.FCMService;
 
 /**
  * This class is main activity that contains basic layout of the app.
@@ -66,6 +68,16 @@ public class MainPagerActivity extends AppCompatActivity {
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
 
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user != null){
+            ArrayList<String> mlogInData = new ArrayList<String>();
+            mlogInData.add(user.getPhotoUrl().toString());
+            mlogInData.add(user.getDisplayName());
+            mlogInData.add(user.getEmail());
+            mlogInData.add(user.getUid());
+            ContentsLab.get().setmLogInData(mlogInData);
+        }
+
         actionBar.setTitle("");
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
         actionBar.setCustomView(R.layout.drawable_actionbar);
@@ -73,6 +85,7 @@ public class MainPagerActivity extends AppCompatActivity {
 
 
         mViewPager = (ViewPager)findViewById(R.id.main_view_pager);
+
         mAnnouncementButton = (ImageButton)findViewById(R.id.announcement_button);
         mAnnouncementButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,6 +159,7 @@ public class MainPagerActivity extends AppCompatActivity {
         };
 
         mViewPager.setAdapter(mAdapter);
+
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

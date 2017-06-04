@@ -11,7 +11,6 @@ import android.widget.Toast;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import nl.rug.www.rugsummerschool.R;
-import nl.rug.www.rugsummerschool.networking.FCMService;
 
 /**
  * This class is an acitivty started when the application is opened.
