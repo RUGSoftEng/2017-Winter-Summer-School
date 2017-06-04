@@ -10,6 +10,15 @@ public class ForumComment {
     private String mPoster;
     private String mDate;
     private String mText;
+    private String mImgUrl;
+
+    public String getImgUrl() {
+        return mImgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        mImgUrl = imgUrl;
+    }
 
     public String getPosterId() {
         return mPosterId;

@@ -72,6 +72,10 @@ public class NetworkingService {
     private static final int FORUM = 4;
     private static final int FORUM_POST = 5;
 
+    public interface VolleyCallback {
+        void onSuccess(String result);
+    }
+
     private byte[] getUrlBytes(String urlSpec) throws IOException {
         URL url = new URL(urlSpec);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -312,7 +316,7 @@ public class NetworkingService {
                 Drawable picture = Drawable.createFromStream(content, "src");
                 lecturer.setProfilePicture(picture);
             } catch (FileNotFoundException e) {
-
+                e.printStackTrace();
             }
 
             items.add(lecturer);
@@ -333,6 +337,7 @@ public class NetworkingService {
             forumThread.setPoster(contentJsonObject.getString("author"));
             forumThread.setDate(contentJsonObject.getString("date"));
             forumThread.setPosterId(contentJsonObject.getString("posterID"));
+            forumThread.setImgUrl(contentJsonObject.getString("imgurl"));
             List<ForumComment> comments = new ArrayList<>();
             JSONArray jsonComments = contentJsonObject.getJSONArray("comments");
             for (int j = 0; j < jsonComments.length(); ++j) {
@@ -343,6 +348,7 @@ public class NetworkingService {
                 comment.setPoster(jsonObject.getString("author"));
                 comment.setText(jsonObject.getString("text"));
                 comment.setDate(jsonObject.getString("date"));
+                comment.setImgUrl(jsonObject.getString("imgurl"));
                 comments.add(comment);
             }
             forumThread.setForumCommentList(comments);
@@ -350,7 +356,7 @@ public class NetworkingService {
         }
     }
 
-    public void putRequestForumThread(Context context, String forumPath, Map<String, String> valuePairs) {
+    public void putRequestForumThread(Context context, final String forumPath, Map<String, String> valuePairs, final VolleyCallback volleyCallback) {
         Uri.Builder builder = new Uri.Builder();
         builder.scheme("http").encodedAuthority(URL_DATABASE);
         builder.appendPath("forum").appendPath(forumPath).appendPath("item")
@@ -374,6 +380,7 @@ public class NetworkingService {
                     @Override
                     public void onResponse(String response) {
                         Log.d(TAG, "On response result : " + response);
+                        volleyCallback.onSuccess(response);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -385,7 +392,7 @@ public class NetworkingService {
         queue.add(stringRequest);
     }
 
-    public void deleteRequestForumThread(Context context, String forumPath, Map<String, String> valuePairs) {
+    public void deleteRequestForumThread(Context context, String forumPath, Map<String, String> valuePairs, final VolleyCallback volleyCallback) {
         Uri.Builder builder = new Uri.Builder();
         builder.scheme("http").encodedAuthority(URL_DATABASE);
         builder.appendPath("forum").appendPath(forumPath).appendPath("item")
@@ -400,6 +407,7 @@ public class NetworkingService {
                     @Override
                     public void onResponse(String response) {
                         Log.d(TAG, "On response result : " + response);
+                        volleyCallback.onSuccess(response);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -411,7 +419,7 @@ public class NetworkingService {
         queue.add(stringRequest);
     }
 
-    public void postRequestForumThread(Context context, String forumPath, Map<String, String> valuePairs) {
+    public void postRequestForumThread(Context context, final String forumPath, Map<String, String> valuePairs, final VolleyCallback volleyCallback) {
         try {
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("http").encodedAuthority(URL_DATABASE)
@@ -434,6 +442,7 @@ public class NetworkingService {
                 @Override
                 public void onResponse(String response) {
                     Log.d(TAG, "On response result : " + response);
+                    volleyCallback.onSuccess(response);
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -494,7 +503,7 @@ public class NetworkingService {
             queue.add(stringRequest);
 
         }catch (Exception e){
-
+            e.printStackTrace();
         }
     }
 }

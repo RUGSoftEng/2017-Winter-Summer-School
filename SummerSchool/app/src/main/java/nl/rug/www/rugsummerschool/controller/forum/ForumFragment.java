@@ -1,7 +1,9 @@
 package nl.rug.www.rugsummerschool.controller.forum;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,12 +26,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.dgreenhalgh.android.simpleitemdecoration.linear.DividerItemDecoration;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import org.joda.time.DateTime;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -92,7 +97,7 @@ public class ForumFragment extends Fragment {
                     // User is signed in
                     FragmentManager fm = mActivity.getSupportFragmentManager();
                     if(!mActivity.isFinishing())
-                    fm.beginTransaction().replace(R.id.fragment_forum_container, new ForumLoginFragment()).commitAllowingStateLoss();
+                        fm.beginTransaction().replace(R.id.fragment_forum_container, new ForumLoginFragment()).commitAllowingStateLoss();
                 }
             }
         });
@@ -129,10 +134,21 @@ public class ForumFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), ThreadActivity.class);
                 intent.putExtra(ThreadActivity.ARG_ADD_OR_EDIT, INT_ADD);
-                startActivity(intent);
+                startActivityForResult(intent, INT_ADD);
             }
         });
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK) return;
+
+        if (requestCode == INT_ADD) {
+            new FetchThreadsTask().execute();
+        } else if (requestCode == INT_EDIT) {
+            new FetchThreadsTask().execute();
+        }
     }
 
     private void setupAdapter() {
@@ -140,7 +156,6 @@ public class ForumFragment extends Fragment {
             mForumRecyclerView.setAdapter(new ForumAdapter(mItems));
         }
     }
-
 
     private class ForumHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener, View.OnClickListener{
 
@@ -157,6 +172,7 @@ public class ForumFragment extends Fragment {
         public ForumHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_forum_thread, parent, false));
 
+            mPosterImageView = (ImageView)itemView.findViewById(R.id.forum_poster_profile_picture);
             mPosterTextView = (TextView)itemView.findViewById(R.id.forum_poster_text_view);
             mPostedDateTextView = (TextView)itemView.findViewById(R.id.date);
             mPostedTimeTextView = (TextView)itemView.findViewById(R.id.time);
@@ -173,6 +189,7 @@ public class ForumFragment extends Fragment {
 
         private void bind(ForumThread forumThread) {
             mForumThread = forumThread;
+            Glide.with(getActivity()).load(mForumThread.getImgUrl()).into(mPosterImageView);
             mPosterTextView.setText(mForumThread.getPoster());
             Date date = new DateTime(mForumThread.getDate()).toDate();
             SimpleDateFormat parseDate = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
@@ -202,14 +219,25 @@ public class ForumFragment extends Fragment {
             sendButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    String imgurl = ContentsLab.get().getmLogInData().get(0);
+                    String name = ContentsLab.get().getmLogInData().get(1);
+                    String uid = ContentsLab.get().getmLogInData().get(3);
                     Map<String, String> map = new HashMap<>();
                     map.put("threadID", mForumThread.getId());
-                    map.put("author", "Jeongkyun Oh");
-                    map.put("posterID", "s1928371");
+                    map.put("author", name);
+                    map.put("posterID", uid);
                     map.put("text", commentEditText.getText().toString());
-                    new NetworkingService().postRequestForumThread(getActivity(), "comment", map);
+                    map.put("imgurl", imgurl);
+                    new NetworkingService().postRequestForumThread(getActivity(), "comment", map, new NetworkingService.VolleyCallback() {
+                        @Override
+                        public void onSuccess(String result) {
+                            if (result.equals("OK"))
+                                new FetchThreadsTask().execute();
+                            else
+                                Log.d("ForumFragment", "Error : deleting");
+                        }
+                    });
                     commentDialog.dismiss();
-                    new FetchThreadsTask().execute();
                 }
             });
             commentDialog.setContentView(view);
@@ -218,7 +246,7 @@ public class ForumFragment extends Fragment {
 
         @Override
         public boolean onLongClick(View v) {
-            String id = "s1928371";
+            String id = ContentsLab.get().getmLogInData().get(3);
             if(mForumThread.getPosterId().equals(id)) {
                 View view = View.inflate(getActivity(), R.layout.alertdialog_edit_delete, null);
                 final BottomSheetDialog editDeleteDialog = new BottomSheetDialog(getActivity());
@@ -231,7 +259,7 @@ public class ForumFragment extends Fragment {
                         String[] data = {mForumThread.getId(), mForumThread.getTitle(), mForumThread.getDescription()};
                         intent.putExtra(ThreadActivity.ARG_ADD_OR_EDIT, INT_EDIT);
                         intent.putExtra(ThreadActivity.ARG_EDITABLE_DATA, data);
-                        startActivity(intent);
+                        startActivityForResult(intent, INT_EDIT);
                         editDeleteDialog.dismiss();
                     }
                 });
@@ -241,12 +269,21 @@ public class ForumFragment extends Fragment {
                     public void onClick(View v) {
                         Map<String, String> map = new HashMap<>();
                         map.put("threadID", mForumThread.getId());
-                        new NetworkingService().deleteRequestForumThread(getActivity(), "thread", map);
+                        new NetworkingService().deleteRequestForumThread(getActivity(), "thread", map, new NetworkingService.VolleyCallback() {
+                            @Override
+                            public void onSuccess(String result) {
+                                if (result.equals("OK"))
+                                    new FetchThreadsTask().execute();
+                                else
+                                    Log.d("ForumFragment", "Error : deleting");
+                            }
+                        });
                         editDeleteDialog.dismiss();
                     }
                 });
                 editDeleteDialog.show();
             } else {
+
                 Toast.makeText(getActivity(), "Not your post", Toast.LENGTH_SHORT).show();
             }
             return true;
@@ -268,12 +305,14 @@ public class ForumFragment extends Fragment {
                 mCommentContentsTextView = (TextView)itemView.findViewById(R.id.comment_contents_text_view);
                 mCommentDateTextView = (TextView)itemView.findViewById(R.id.comment_date_text_view);
                 mCommentNewTextView = (TextView)itemView.findViewById(R.id.new_image_view);
+                mCommentImageView = (ImageView)itemView.findViewById(R.id.comment_image_view);
                 itemView.setOnClickListener(this);
                 itemView.setOnLongClickListener(this);
             }
 
             private void bind(ForumComment forumComment) {
                 mForumComment = forumComment;
+                Glide.with(getActivity()).load(mForumComment.getImgUrl()).into(mCommentImageView);
                 mCommentPosterTextView.setText(mForumComment.getPoster());
                 mCommentContentsTextView.setText(mForumComment.getText());
                 Date date = new DateTime(mForumComment.getDate()).toDate();
@@ -289,7 +328,7 @@ public class ForumFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                String id = "s1928371";
+                String id = ContentsLab.get().getmLogInData().get(3);
                 if (mForumComment.getPosterId().equals(id)) {
                     View view = View.inflate(getActivity(), R.layout.alertdialog_comment, null);
                     Button sendButton = (Button) view.findViewById(R.id.send_button);
@@ -303,7 +342,15 @@ public class ForumFragment extends Fragment {
                             map.put("threadID", mForumThread.getId());
                             map.put("arrayPos", getAdapterPosition() + "");
                             map.put("text", commentEditText.getText().toString());
-                            new NetworkingService().putRequestForumThread(getActivity(), "comment", map);
+                            new NetworkingService().putRequestForumThread(getActivity(), "comment", map, new NetworkingService.VolleyCallback() {
+                                @Override
+                                public void onSuccess(String result) {
+                                    if (result.equals("OK"))
+                                        new FetchThreadsTask().execute();
+                                    else
+                                        Log.d("ForumFragment", "Error : deleting");
+                                }
+                            });
                             commentDialog.dismiss();
                             new FetchThreadsTask().execute();
                         }
@@ -322,7 +369,15 @@ public class ForumFragment extends Fragment {
                 Map<String, String> map = new HashMap<>();
                 map.put("threadID", mForumThread.getId());
                 map.put("arrayPos", getAdapterPosition() + "");
-                new NetworkingService().deleteRequestForumThread(getActivity(), "comment", map);
+                new NetworkingService().deleteRequestForumThread(getActivity(), "comment", map, new NetworkingService.VolleyCallback() {
+                    @Override
+                    public void onSuccess(String result) {
+                        if (result.equals("OK"))
+                            new FetchThreadsTask().execute();
+                        else
+                            Log.d("ForumFragment", "Error : deleting");
+                    }
+                });
                 Toast.makeText(getActivity(), "Remove success", Toast.LENGTH_SHORT).show();
                 return true;
             }

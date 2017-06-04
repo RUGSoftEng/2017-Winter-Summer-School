@@ -1,5 +1,7 @@
 package nl.rug.www.rugsummerschool.controller.forum;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import nl.rug.www.rugsummerschool.R;
+import nl.rug.www.rugsummerschool.controller.ContentsLab;
 import nl.rug.www.rugsummerschool.networking.NetworkingService;
 
 import static nl.rug.www.rugsummerschool.controller.forum.ForumFragment.INT_ADD;
@@ -45,14 +48,25 @@ public class ThreadActivity extends AppCompatActivity {
                         if (title.equals("") || description.equals("")) {
                             Toast.makeText(ThreadActivity.this, "Title or description cannot be empty.", Toast.LENGTH_SHORT).show();
                         } else {
+                            String imgurl = ContentsLab.get().getmLogInData().get(0);
+                            String author = ContentsLab.get().getmLogInData().get(1);
+                            String posterID = ContentsLab.get().getmLogInData().get(3);
                             Map<String, String> map = new HashMap<>();
                             map.put("title", title);
                             map.put("description", description);
-                            map.put("author", "Jeongkyun Oh");
-                            map.put("posterID", "s1928371");
+                            map.put("author", author);
+                            map.put("posterID", posterID);
+                            map.put("imgurl", imgurl);
 
-                            new NetworkingService().postRequestForumThread(ThreadActivity.this, "thread", map);
-                            finish();
+                            new NetworkingService().postRequestForumThread(ThreadActivity.this, "thread", map, new NetworkingService.VolleyCallback() {
+                                @Override
+                                public void onSuccess(String result) {
+                                    if (result.equals("OK")) {
+                                        setResult(Activity.RESULT_OK);
+                                        finish();
+                                    }
+                                }
+                            });
                         }
                     }
                 });
@@ -74,8 +88,15 @@ public class ThreadActivity extends AppCompatActivity {
                             map.put("title", title);
                             map.put("description", description);
 
-                            new NetworkingService().putRequestForumThread(ThreadActivity.this, "thread", map);
-                            finish();
+                            new NetworkingService().putRequestForumThread(ThreadActivity.this, "thread", map, new NetworkingService.VolleyCallback() {
+                                @Override
+                                public void onSuccess(String result) {
+                                    if (result.equals("OK")) {
+                                        setResult(Activity.RESULT_OK);
+                                        finish();
+                                    }
+                                }
+                            });
                         }
                     }
                 });

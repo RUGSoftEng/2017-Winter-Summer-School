@@ -11,7 +11,16 @@ public class ForumThread extends Content {
     private String mDate;
     private String mPosterId;
     private String mPoster;
+    private String mImgUrl;
     private List<ForumComment> mForumCommentList;
+
+    public String getImgUrl() {
+        return mImgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        mImgUrl = imgUrl;
+    }
 
     public String getDate() {
         return mDate;
