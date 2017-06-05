@@ -69,6 +69,7 @@ public class NetworkingService {
     private static final int TIMETABLE = 3;
     private static final int FORUM = 4;
     private static final int FORUM_POST = 5;
+    private static final int LOGIN_CODE = 6;
 
     private byte[] getUrlBytes(String urlSpec) throws IOException {
         URL url = new URL(urlSpec);
@@ -99,7 +100,7 @@ public class NetworkingService {
 
     private JSONArray buildJSONArray(int type) {
         Uri.Builder builder = new Uri.Builder();
-        builder.scheme("http").encodedAuthority(URL_DATABASE);
+        builder.scheme("https").encodedAuthority(URL_DATABASE);
         switch (type) {
             case ANNOUNCEMENT :
                 builder.appendPath("announcement").appendPath("item");
@@ -112,6 +113,9 @@ public class NetworkingService {
                 break;
             case FORUM :
                 builder.appendPath("forum").appendPath("item");
+                break;
+            case LOGIN_CODE :
+                builder.appendPath("loginCode");
                 break;
         }
         String jsonString;
@@ -137,6 +141,17 @@ public class NetworkingService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public List<String> fetchLoginCodes() {
+        List<String> loginCodes = new ArrayList<>();
+        try {
+            parseLoginCodes(loginCodes, buildJSONArray(LOGIN_CODE));
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        }
+
+        return loginCodes;
     }
 
     public List<Announcement> fetchAnnouncements() {
@@ -208,6 +223,16 @@ public class NetworkingService {
         }
 
         return forumThreads;
+    }
+
+    private void parseLoginCodes(List<String> items, JSONArray jsonBody)
+            throws IOException, JSONException {
+        if (jsonBody == null) return;
+
+        for (int i = 0; i < jsonBody.length(); i++) {
+            JSONObject contentJsonObject = jsonBody.getJSONObject(i);
+            items.add(contentJsonObject.getString("code"));
+        }
     }
 
     private void parseAnnouncements(List<Announcement> items, JSONArray jsonBody)
@@ -312,7 +337,7 @@ public class NetworkingService {
                 Drawable picture = Drawable.createFromStream(content, "src");
                 lecturer.setProfilePicture(picture);
             } catch (FileNotFoundException e) {
-
+                e.printStackTrace();
             }
 
             items.add(lecturer);
