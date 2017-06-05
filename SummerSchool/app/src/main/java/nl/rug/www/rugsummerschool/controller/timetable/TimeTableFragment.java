@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import nl.rug.www.rugsummerschool.controller.ContentsLab;
 import nl.rug.www.rugsummerschool.R;
@@ -161,9 +163,11 @@ public class TimeTableFragment extends Fragment {
         public void onBindChildViewHolder(TimeTableChildViewHolder timeTableChildViewHolder, int i, Object o) {
             Event event = (Event)o;
             timeTableChildViewHolder.mSubjectTextView.setText(event.getTitle());
-            Date start = new DateTime(event.getStartDate(), DateTimeZone.forID("Europe/Amsterdam")).toDate();
-            Date end = new DateTime(event.getEndDate(), DateTimeZone.forID("Europe/Amsterdam")).toDate();
-            SimpleDateFormat time = new SimpleDateFormat("hh:mm", Locale.getDefault());
+            Date start = new DateTime(event.getStartDate()).toDate();
+
+            Date end = new DateTime(event.getEndDate()).toDate();
+            SimpleDateFormat time = new SimpleDateFormat("HH:mm", Locale.getDefault());
+            time.setTimeZone(TimeZone.getTimeZone("UTC"));
 
             timeTableChildViewHolder.mTimeTextView.
                     setText(time.format(start)+" - "+time.format(end));

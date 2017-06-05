@@ -17,6 +17,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,6 +39,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import nl.rug.www.rugsummerschool.model.Announcement;
 import nl.rug.www.rugsummerschool.model.ForumComment;
@@ -259,15 +263,16 @@ public class NetworkingService {
         Log.d(TAG, array.toString());
         for (int i = 0; i < array.length(); ++i) {
             JSONArray dataArray = array.getJSONArray(i);
-            Date date = new DateTime(dataArray.getString(0)).toDate();
-            SimpleDateFormat parseDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            Date date = new DateTime(dataArray.getString(0), DateTimeZone.UTC).toDate();
             JSONArray eventsArray = dataArray.getJSONArray(1);
-            EventsPerDay timeTablePerDay = new EventsPerDay(parseDate.format(date));
-            SimpleDateFormat format2 = new SimpleDateFormat(" (MMM-dd)", Locale.getDefault());
+            SimpleDateFormat format2 = new SimpleDateFormat("(MMM-dd)", Locale.getDefault());
+            format2.setTimeZone(TimeZone.getTimeZone("UTC"));
             SimpleDateFormat dayOfWeek = new SimpleDateFormat("EEEE", Locale.getDefault());
+            dayOfWeek.setTimeZone(TimeZone.getTimeZone("UTC"));
             String title = dayOfWeek.format(date) + format2.format(date);
-            timeTablePerDay = new EventsPerDay(title);
+            EventsPerDay timeTablePerDay = new EventsPerDay(title);
             Log.d(TAG, date.toString());
+            Log.d(TAG, new Date().toString());
             List<Object> childTimeTables = new ArrayList<>();
 
             for (int j = 0; j < eventsArray.length(); ++j) {
@@ -278,9 +283,9 @@ public class NetworkingService {
                 JSONObject startDate = object.getJSONObject("start");
                 JSONObject endDate = object.getJSONObject("end");
                 event.setStartDate(startDate.getString("dateTime"));
-                Log.d(TAG, "startdate"+event.getStartDate());
+                Log.d(TAG, "startdate -- "+event.getStartDate());
                 event.setEndDate(endDate.getString("dateTime"));
-                Log.d(TAG, "enddate"+event.getEndDate());
+                Log.d(TAG, "enddate -- "+event.getEndDate());
                 childTimeTables.add(event);
             }
             timeTablePerDay.setChildObjectList(childTimeTables);
