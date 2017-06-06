@@ -65,19 +65,6 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
         //test data, should retreive from database
         String displayName = mLogInData.get(1);
         String email = mLogInData.get(2);
-        new NetworkingService().postRequestFCMID(getActivity(), "HIHIHIH");
-        String DOB;
-        String FOS;
-        //test DATA
-        if(!(mLogInData.size() < 5)) {
-            DOB = mLogInData.get(4);
-            FOS = mLogInData.get(5);
-        }else{
-            DOB = "19 October 1993";
-            FOS = "Computer Science";
-        }
-
-
 
         logout = (Button) view.findViewById(R.id.log_out_button);
         logout.setOnClickListener(this);
@@ -93,12 +80,6 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
 
         emailTV = (TextView) view.findViewById(R.id.user_email);
         emailTV.setText(email);
-
-        dobTV = (TextView) view.findViewById(R.id.user_dob);
-        dobTV.setText(DOB);
-
-        fosTV = (TextView) view.findViewById(R.id.user_fos);
-        fosTV.setText(FOS);
 
         SIM = SignInManager.get(getActivity());
         if (!SIM.getmGoogleApiClient().isConnected()) {
