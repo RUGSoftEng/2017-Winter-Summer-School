@@ -144,16 +144,16 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    public void changeFragment(String UID){
+    public void changeFragment(){
         FragmentManager fm = mActivity.getSupportFragmentManager();
-        if(ContentsLab.get().userExist(UID)) {
-            Log.d(TAG, "Existing User Sign in!");
-            fm.beginTransaction().replace(R.id.fragment_container, new MyProfileFragment()).commit();
-        }else{
-            Log.d(TAG, "New User Sign in!");
-            fm.beginTransaction().replace(R.id.fragment_container, SignUpFragment.newInstance(UID)).commit();
-        }
-
+//        if(ContentsLab.get().userExist(UID)) {
+//            Log.d(TAG, "Existing User Sign in!");
+//            fm.beginTransaction().replace(R.id.fragment_container, new MyProfileFragment()).commit();
+//        }else{
+//            Log.d(TAG, "New User Sign in!");
+//            fm.beginTransaction().replace(R.id.fragment_container, SignUpFragment.newInstance(UID)).commit();
+//        }
+        fm.beginTransaction().replace(R.id.fragment_container, new MyProfileFragment()).commit();
     }
     //0 - photourl 1-displayname 2-email 3-uid 4-birthday 5-fos
     //retrieve data from account
@@ -171,8 +171,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         mlogInData.add(user.getUid());
 
         ContentsLab.get().setmLogInData(mlogInData);
-        String UID = user.getUid();
-        changeFragment(UID);
+        changeFragment();
         spinner.setVisibility(View.GONE);
     }
 
