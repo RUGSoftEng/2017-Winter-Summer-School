@@ -60,12 +60,17 @@ public class LecturerFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String url = mLecturer.getWebsite();
-                if (!url.substring(0, 7).equals("http://") && !url.substring(0, 8).equals("https://"))
-                    url = "http://" + url;
+                try {
+                    if (!url.substring(0, 7).equals("http://") && !url.substring(0, 8).equals("https://"))
+                        url = "http://" + url;
 
-                Uri website = Uri.parse(url);
-                Intent websiteIntent = new Intent(Intent.ACTION_VIEW, website);
-                startActivity(websiteIntent);
+                    Uri website = Uri.parse(url);
+                    Intent websiteIntent = new Intent(Intent.ACTION_VIEW, website);
+                    startActivity(websiteIntent);
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+
             }
         });
         ImageView mLecturerImageView = (ImageView)view.findViewById(R.id.lecturer_image_view);

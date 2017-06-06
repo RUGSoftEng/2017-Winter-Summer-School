@@ -64,7 +64,7 @@ public class NetworkingService {
 
     private static final String TAG = "NetworkingService";
 
-    private static final String URL_DATABASE = "summer-schools.herokuapp.com";
+    private static final String URL_DATABASE = "turing13.housing.rug.nl:8800";
 
     private static final int ANNOUNCEMENT = 0;
     private static final int GENERAL_INFO = 1;
@@ -107,7 +107,7 @@ public class NetworkingService {
 
     private JSONArray buildJSONArray(int type) {
         Uri.Builder builder = new Uri.Builder();
-        builder.scheme("https").encodedAuthority(URL_DATABASE);
+        builder.scheme("http").encodedAuthority(URL_DATABASE);
         switch (type) {
             case ANNOUNCEMENT :
                 builder.appendPath("announcement").appendPath("item");

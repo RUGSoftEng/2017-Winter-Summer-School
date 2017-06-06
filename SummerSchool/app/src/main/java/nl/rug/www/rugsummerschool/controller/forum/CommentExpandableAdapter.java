@@ -122,16 +122,21 @@ public class CommentExpandableAdapter extends ExpandableRecyclerAdapter<ThreadVi
 
             @Override
             public boolean onLongClick(View v) {
-                Map<String, String> map = new HashMap<>();
-                map.put("threadID", mForumThread.getId());
-                map.put("arrayPos", i-1 + "");
-                new NetworkingService().deleteRequestForumThread(mContext, "comment", map, new NetworkingService.VolleyCallback() {
-                    @Override
-                    public void onSuccess(String result) {
-                        mFetchThreadsTask.execute();
-                    }
-                });
-                Toast.makeText(mContext, "Remove success", Toast.LENGTH_SHORT).show();
+                String id = ContentsLab.get().getmLogInData().get(3);
+                if (forumComment.getPosterId().equals(id)) {
+                    Map<String, String> map = new HashMap<>();
+                    map.put("threadID", mForumThread.getId());
+                    map.put("arrayPos", i - 1 + "");
+                    new NetworkingService().deleteRequestForumThread(mContext, "comment", map, new NetworkingService.VolleyCallback() {
+                        @Override
+                        public void onSuccess(String result) {
+                            mFetchThreadsTask.execute();
+                        }
+                    });
+                    Toast.makeText(mContext, "Remove success", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(mContext, "Not your comment", Toast.LENGTH_SHORT).show();
+                }
                 return true;
             }
         });

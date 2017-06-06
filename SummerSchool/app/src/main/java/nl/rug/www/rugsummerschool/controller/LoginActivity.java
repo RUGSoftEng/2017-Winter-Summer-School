@@ -31,7 +31,6 @@ import nl.rug.www.rugsummerschool.networking.NetworkingService;
 public class LoginActivity extends AppCompatActivity {
 
     /** temporary correct code to enter main activity */
-    final static private String CORRECT_CODE = "aaaa";
     private Button mLoginButton;
     private List<String> mLogInCodes;
     private ProgressBar mProgressBar;
