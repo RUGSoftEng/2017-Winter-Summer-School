@@ -229,6 +229,8 @@ public class ForumFragment extends Fragment {
         public void onClick(View v) {
             View view = View.inflate(getActivity(), R.layout.alertdialog_comment, null);
             Button sendButton = (Button) view.findViewById(R.id.send_button);
+            ImageView commenter = (ImageView) view.findViewById(R.id.comment_poster_profile_image_view);
+            Glide.with(getActivity()).load(ContentsLab.get().getmLogInData().get(0)).into(commenter);
             final EditText commentEditText = (EditText) view.findViewById(R.id.comment_edit_text);
             final BottomSheetDialog commentDialog = new BottomSheetDialog(getActivity());
             sendButton.setOnClickListener(new View.OnClickListener() {

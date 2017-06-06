@@ -5,6 +5,7 @@
               android:layout_height="wrap_content">
 
     <ImageView
+        android:id="@+id/comment_poster_profile_image_view"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_margin="4dp"
