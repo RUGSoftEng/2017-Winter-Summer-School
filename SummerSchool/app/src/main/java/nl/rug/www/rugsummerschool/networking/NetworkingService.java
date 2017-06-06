@@ -17,6 +17,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,6 +38,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import nl.rug.www.rugsummerschool.model.Announcement;
 import nl.rug.www.rugsummerschool.model.Event;
@@ -68,6 +72,7 @@ public class NetworkingService {
     private static final int TIMETABLE = 3;
     private static final int FORUM = 4;
     private static final int FORUM_POST = 5;
+    private static final int LOGIN_CODE = 6;
 
     public interface VolleyCallback {
         void onSuccess(String result);
@@ -102,7 +107,7 @@ public class NetworkingService {
 
     private JSONArray buildJSONArray(int type) {
         Uri.Builder builder = new Uri.Builder();
-        builder.scheme("http").encodedAuthority(URL_DATABASE);
+        builder.scheme("https").encodedAuthority(URL_DATABASE);
         switch (type) {
             case ANNOUNCEMENT :
                 builder.appendPath("announcement").appendPath("item");
@@ -115,6 +120,9 @@ public class NetworkingService {
                 break;
             case FORUM :
                 builder.appendPath("forum").appendPath("item");
+                break;
+            case LOGIN_CODE :
+                builder.appendPath("loginCode");
                 break;
         }
         String jsonString;
@@ -140,6 +148,17 @@ public class NetworkingService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public List<String> fetchLoginCodes() {
+        List<String> loginCodes = new ArrayList<>();
+        try {
+            parseLoginCodes(loginCodes, buildJSONArray(LOGIN_CODE));
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        }
+
+        return loginCodes;
     }
 
     public List<Announcement> fetchAnnouncements() {
@@ -213,6 +232,16 @@ public class NetworkingService {
         return forumThreads;
     }
 
+    private void parseLoginCodes(List<String> items, JSONArray jsonBody)
+            throws IOException, JSONException {
+        if (jsonBody == null) return;
+
+        for (int i = 0; i < jsonBody.length(); i++) {
+            JSONObject contentJsonObject = jsonBody.getJSONObject(i);
+            items.add(contentJsonObject.getString("code"));
+        }
+    }
+
     private void parseAnnouncements(List<Announcement> items, JSONArray jsonBody)
             throws IOException, JSONException {
         if (jsonBody == null) return;
@@ -262,13 +291,16 @@ public class NetworkingService {
         Log.d(TAG, array.toString());
         for (int i = 0; i < array.length(); ++i) {
             JSONArray dataArray = array.getJSONArray(i);
-            Date date = new DateTime(dataArray.getString(0)).minusHours(5).toDate();
+            Date date = new DateTime(dataArray.getString(0), DateTimeZone.UTC).toDate();
             JSONArray eventsArray = dataArray.getJSONArray(1);
-            SimpleDateFormat format2 = new SimpleDateFormat(" (MMM-dd)", Locale.UK);
-            SimpleDateFormat dayOfWeek = new SimpleDateFormat("EEEE", Locale.UK);
+            SimpleDateFormat format2 = new SimpleDateFormat("(MMM-dd)", Locale.getDefault());
+            format2.setTimeZone(TimeZone.getTimeZone("UTC"));
+            SimpleDateFormat dayOfWeek = new SimpleDateFormat("EEEE", Locale.getDefault());
+            dayOfWeek.setTimeZone(TimeZone.getTimeZone("UTC"));
             String title = dayOfWeek.format(date) + format2.format(date);
             EventsPerDay timeTablePerDay = new EventsPerDay(title);
             Log.d(TAG, date.toString());
+            Log.d(TAG, new Date().toString());
             List<Object> childTimeTables = new ArrayList<>();
 
             for (int j = 0; j < eventsArray.length(); ++j) {
@@ -279,9 +311,9 @@ public class NetworkingService {
                 JSONObject startDate = object.getJSONObject("start");
                 JSONObject endDate = object.getJSONObject("end");
                 event.setStartDate(startDate.getString("dateTime"));
-                Log.d(TAG, "startdate"+event.getStartDate());
+                Log.d(TAG, "startdate -- "+event.getStartDate());
                 event.setEndDate(endDate.getString("dateTime"));
-                Log.d(TAG, "enddate"+event.getEndDate());
+                Log.d(TAG, "enddate -- "+event.getEndDate());
                 childTimeTables.add(event);
             }
             timeTablePerDay.setChildObjectList(childTimeTables);

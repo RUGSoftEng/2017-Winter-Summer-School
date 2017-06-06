@@ -13,6 +13,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.iid.FirebaseInstanceId;
+
+import java.util.ArrayList;
 import nl.rug.www.rugsummerschool.R;
 import nl.rug.www.rugsummerschool.controller.announcement.AnnouncementListFragment;
 import nl.rug.www.rugsummerschool.controller.forum.ForumRootFragment;
@@ -58,6 +64,16 @@ public class MainPagerActivity extends AppCompatActivity {
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
 
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user != null){
+            ArrayList<String> mlogInData = new ArrayList<String>();
+            mlogInData.add(user.getPhotoUrl().toString());
+            mlogInData.add(user.getDisplayName());
+            mlogInData.add(user.getEmail());
+            mlogInData.add(user.getUid());
+            ContentsLab.get().setmLogInData(mlogInData);
+        }
+
         actionBar.setTitle("");
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
         actionBar.setCustomView(R.layout.drawable_actionbar);
@@ -65,6 +81,7 @@ public class MainPagerActivity extends AppCompatActivity {
 
 
         mViewPager = (ViewPager)findViewById(R.id.main_view_pager);
+
         mAnnouncementButton = (ImageButton)findViewById(R.id.announcement_button);
         mAnnouncementButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,6 +155,7 @@ public class MainPagerActivity extends AppCompatActivity {
         };
 
         mViewPager.setAdapter(mAdapter);
+
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

@@ -31,6 +31,7 @@ public class ContentsLab {
     private ArrayList<ForumThread> mForumThreads;
     private ArrayList<String> mLogInData;
     private ArrayList<String> mFakeUsers;
+    private ArrayList<String> mLogInCodes;
 
     public static ContentsLab get() {
         if (sContentsLab == null) {
@@ -46,6 +47,7 @@ public class ContentsLab {
         mLecturers = new ArrayList<>();
         mForumThreads = new ArrayList<>();
         mFakeUsers = new ArrayList<>();
+        mLogInCodes = new ArrayList<>();
         createFakeUsers();
     }
 
@@ -78,6 +80,14 @@ public class ContentsLab {
         return null;
     }
 
+    public boolean checkLogInCode(String logInCode) {
+        for(int i = 0; i < mLogInCodes.size(); ++i) {
+            if (mLogInCodes.get(i).equals(logInCode)) return true;
+        }
+
+        return false;
+    }
+
     public List<ForumThread> getForumThreads() {
         return mForumThreads;
     }
@@ -100,6 +110,10 @@ public class ContentsLab {
 
     public void updateForumThreads(List<ForumThread> forumThreads) {
         mForumThreads = (ArrayList<ForumThread>) forumThreads;
+    }
+
+    public void updateLogInCodes(List<String> logInCodes) {
+        mLogInCodes = (ArrayList<String>) logInCodes;
     }
 
     public ArrayList<String> getmLogInData() {
