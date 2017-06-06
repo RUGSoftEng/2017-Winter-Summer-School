@@ -1,17 +1,14 @@
 package nl.rug.www.rugsummerschool.controller;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.firebase.iid.FirebaseInstanceId;
-
 import nl.rug.www.rugsummerschool.R;
-import nl.rug.www.rugsummerschool.networking.FCMService;
 
 /**
  * This class is an acitivty started when the application is opened.
@@ -48,5 +45,10 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+
+
+
     }
 }

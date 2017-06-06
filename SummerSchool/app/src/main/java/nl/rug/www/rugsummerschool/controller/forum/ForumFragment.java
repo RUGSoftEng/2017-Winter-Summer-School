@@ -3,7 +3,6 @@ package nl.rug.www.rugsummerschool.controller.forum;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -26,6 +25,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bignerdranch.expandablerecyclerview.Adapter.ExpandableRecyclerAdapter;
+import com.bignerdranch.expandablerecyclerview.Model.ParentObject;
 import com.bumptech.glide.Glide;
 import com.dgreenhalgh.android.simpleitemdecoration.linear.DividerItemDecoration;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,8 +34,6 @@ import com.google.firebase.auth.FirebaseUser;
 
 import org.joda.time.DateTime;
 
-import java.io.InputStream;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -168,6 +167,7 @@ public class ForumFragment extends Fragment {
         private TextView mDescriptionTextView;
         private TextView mNewTextView;
         private RecyclerView mCommentsRecyclerView;
+        private CommentExpandableAdapter mCommentExpandableAdapter;
 
         public ForumHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_forum_thread, parent, false));
@@ -187,6 +187,16 @@ public class ForumFragment extends Fragment {
             itemView.setOnClickListener(this);
         }
 
+        private void setAdapter() {
+            if (isAdded()) {
+                mCommentExpandableAdapter = new CommentExpandableAdapter(getActivity(), generateComments(), mForumThread);
+                mCommentExpandableAdapter.setCustomParentAnimationViewId(R.id.expandable_arrow);
+                mCommentExpandableAdapter.setParentClickableViewAnimationDuration(ExpandableRecyclerAdapter.DEFAULT_ROTATE_DURATION_MS);
+                mCommentExpandableAdapter.setParentAndIconExpandOnClick(true);
+                mCommentsRecyclerView.setAdapter(mCommentExpandableAdapter);
+            }
+        }
+
         private void bind(ForumThread forumThread) {
             mForumThread = forumThread;
             Glide.with(getActivity()).load(mForumThread.getImgUrl()).into(mPosterImageView);
@@ -199,8 +209,7 @@ public class ForumFragment extends Fragment {
             mTitleTextView.setText(mForumThread.getTitle());
             mDescriptionTextView.setText(mForumThread.getDescription());
             List<ForumComment> comments = mForumThread.getForumCommentList();
-            if (comments != null)
-                mCommentsRecyclerView.setAdapter(new CommentAdapter(comments));
+            if (comments != null) setAdapter();
 
             Date today = new Date();
             if (today.getTime() - date.getTime() < MILLIS_PER_DAY) {
@@ -208,6 +217,12 @@ public class ForumFragment extends Fragment {
             } else {
                 mNewTextView.setVisibility(View.GONE);
             }
+        }
+
+        private ArrayList<ParentObject> generateComments() {
+            ArrayList<ParentObject> parentObjects = new ArrayList<>();
+            parentObjects.add(mForumThread);
+            return parentObjects;
         }
 
         @Override
@@ -287,126 +302,6 @@ public class ForumFragment extends Fragment {
                 Toast.makeText(getActivity(), "Not your post", Toast.LENGTH_SHORT).show();
             }
             return true;
-        }
-
-        private class CommentHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
-
-            private ForumComment mForumComment;
-            private ImageView mCommentImageView;
-            private TextView mCommentPosterTextView;
-            private TextView mCommentContentsTextView;
-            private TextView mCommentDateTextView;
-            private TextView mCommentNewTextView;
-
-            public CommentHolder(LayoutInflater inflater, ViewGroup parent) {
-                super(inflater.inflate(R.layout.list_item_forum_comment, parent, false));
-
-                mCommentPosterTextView = (TextView)itemView.findViewById(R.id.comment_poster_text_view);
-                mCommentContentsTextView = (TextView)itemView.findViewById(R.id.comment_contents_text_view);
-                mCommentDateTextView = (TextView)itemView.findViewById(R.id.comment_date_text_view);
-                mCommentNewTextView = (TextView)itemView.findViewById(R.id.new_image_view);
-                mCommentImageView = (ImageView)itemView.findViewById(R.id.comment_image_view);
-                itemView.setOnClickListener(this);
-                itemView.setOnLongClickListener(this);
-            }
-
-            private void bind(ForumComment forumComment) {
-                mForumComment = forumComment;
-                Glide.with(getActivity()).load(mForumComment.getImgUrl()).into(mCommentImageView);
-                mCommentPosterTextView.setText(mForumComment.getPoster());
-                mCommentContentsTextView.setText(mForumComment.getText());
-                Date date = new DateTime(mForumComment.getDate()).toDate();
-                SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy HH:mm a", Locale.getDefault());
-                mCommentDateTextView.setText(sdf.format(date));
-                Date today = new Date();
-                if (today.getTime() - date.getTime() < MILLIS_PER_DAY) {
-                    mCommentNewTextView.setVisibility(View.VISIBLE);
-                } else {
-                    mCommentNewTextView.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onClick(View v) {
-                String id = ContentsLab.get().getmLogInData().get(3);
-                if (mForumComment.getPosterId().equals(id)) {
-                    View view = View.inflate(getActivity(), R.layout.alertdialog_comment, null);
-                    Button sendButton = (Button) view.findViewById(R.id.send_button);
-                    final EditText commentEditText = (EditText) view.findViewById(R.id.comment_edit_text);
-                    commentEditText.setText(mForumComment.getText());
-                    final BottomSheetDialog commentDialog = new BottomSheetDialog(getActivity());
-                    sendButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Map<String, String> map = new HashMap<>();
-                            map.put("threadID", mForumThread.getId());
-                            map.put("arrayPos", getAdapterPosition() + "");
-                            map.put("text", commentEditText.getText().toString());
-                            new NetworkingService().putRequestForumThread(getActivity(), "comment", map, new NetworkingService.VolleyCallback() {
-                                @Override
-                                public void onSuccess(String result) {
-                                    if (result.equals("OK"))
-                                        new FetchThreadsTask().execute();
-                                    else
-                                        Log.d("ForumFragment", "Error : deleting");
-                                }
-                            });
-                            commentDialog.dismiss();
-                            new FetchThreadsTask().execute();
-                        }
-                    });
-                    commentDialog.setContentView(view);
-                    commentDialog.show();
-
-                } else {
-                    Toast.makeText(getActivity(), "Not your comment", Toast.LENGTH_SHORT).show();
-                }
-
-            }
-
-            @Override
-            public boolean onLongClick(View v) {
-                Map<String, String> map = new HashMap<>();
-                map.put("threadID", mForumThread.getId());
-                map.put("arrayPos", getAdapterPosition() + "");
-                new NetworkingService().deleteRequestForumThread(getActivity(), "comment", map, new NetworkingService.VolleyCallback() {
-                    @Override
-                    public void onSuccess(String result) {
-                        if (result.equals("OK"))
-                            new FetchThreadsTask().execute();
-                        else
-                            Log.d("ForumFragment", "Error : deleting");
-                    }
-                });
-                Toast.makeText(getActivity(), "Remove success", Toast.LENGTH_SHORT).show();
-                return true;
-            }
-        }
-
-        private class CommentAdapter extends RecyclerView.Adapter<CommentHolder> {
-
-            private List<ForumComment> mForumComments;
-
-            public CommentAdapter(List<ForumComment> forumComments) {
-                mForumComments = forumComments;
-            }
-
-            @Override
-            public CommentHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-                return new CommentHolder(layoutInflater, parent);
-            }
-
-            @Override
-            public void onBindViewHolder(CommentHolder holder, int position) {
-                ForumComment forumComment = mForumComments.get(position);
-                holder.bind(forumComment);
-            }
-
-            @Override
-            public int getItemCount() {
-                return mForumComments.size();
-            }
         }
     }
 

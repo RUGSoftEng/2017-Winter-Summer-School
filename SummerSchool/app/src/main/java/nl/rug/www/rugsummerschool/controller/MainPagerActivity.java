@@ -1,24 +1,17 @@
 package nl.rug.www.rugsummerschool.controller;
 
 import android.app.ActionBar;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
-
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import nl.rug.www.rugsummerschool.R;
 import nl.rug.www.rugsummerschool.controller.announcement.AnnouncementListFragment;
@@ -27,7 +20,6 @@ import nl.rug.www.rugsummerschool.controller.generalinfo.GeneralInfoListFragment
 import nl.rug.www.rugsummerschool.controller.lecturer.LecturerListFragment;
 import nl.rug.www.rugsummerschool.controller.myprofile.RootFragment;
 import nl.rug.www.rugsummerschool.controller.timetable.TimeTableFragment;
-import nl.rug.www.rugsummerschool.networking.FCMService;
 
 /**
  * This class is main activity that contains basic layout of the app.

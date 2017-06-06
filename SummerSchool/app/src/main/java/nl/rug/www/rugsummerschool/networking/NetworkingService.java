@@ -17,8 +17,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.tz.DateTimeZoneBuilder;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,19 +31,18 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import nl.rug.www.rugsummerschool.model.Announcement;
+import nl.rug.www.rugsummerschool.model.Event;
+import nl.rug.www.rugsummerschool.model.EventsPerDay;
 import nl.rug.www.rugsummerschool.model.ForumComment;
 import nl.rug.www.rugsummerschool.model.ForumThread;
 import nl.rug.www.rugsummerschool.model.GeneralInfo;
 import nl.rug.www.rugsummerschool.model.Lecturer;
-import nl.rug.www.rugsummerschool.model.Event;
-import nl.rug.www.rugsummerschool.model.EventsPerDay;
 
 /**
  * This class is to deal with all process for fetching data from online.

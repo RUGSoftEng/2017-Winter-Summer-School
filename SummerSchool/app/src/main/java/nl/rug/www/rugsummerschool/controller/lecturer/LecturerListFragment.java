@@ -18,10 +18,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import nl.rug.www.rugsummerschool.controller.ContentsLab;
-import nl.rug.www.rugsummerschool.networking.NetworkingService;
 import nl.rug.www.rugsummerschool.R;
+import nl.rug.www.rugsummerschool.controller.ContentsLab;
 import nl.rug.www.rugsummerschool.model.Lecturer;
+import nl.rug.www.rugsummerschool.networking.NetworkingService;
 
 /**
  * This class is a fragment on main pager activity.

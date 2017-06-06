@@ -1,12 +1,15 @@
 package nl.rug.www.rugsummerschool.model;
 
+import com.bignerdranch.expandablerecyclerview.Model.ParentObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by jk on 5/14/17.
  */
 
-public class ForumThread extends Content {
+public class ForumThread extends Content implements ParentObject {
 
     private String mDate;
     private String mPosterId;
@@ -52,5 +55,22 @@ public class ForumThread extends Content {
 
     public void setForumCommentList(List<ForumComment> forumCommentList) {
         mForumCommentList = forumCommentList;
+    }
+
+    private List<Object> commentToObject(List<ForumComment> comments) {
+        List<Object> objects = new ArrayList<>();
+        for (ForumComment fc : comments) {
+            objects.add(fc);
+        }
+        return objects;
+    }
+
+    @Override
+    public List<Object> getChildObjectList() {
+        return commentToObject(mForumCommentList);
+    }
+
+    @Override
+    public void setChildObjectList(List<Object> list) {
     }
 }

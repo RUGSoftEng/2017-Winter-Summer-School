@@ -25,10 +25,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import nl.rug.www.rugsummerschool.controller.ContentsLab;
-import nl.rug.www.rugsummerschool.networking.NetworkingService;
 import nl.rug.www.rugsummerschool.R;
+import nl.rug.www.rugsummerschool.controller.ContentsLab;
 import nl.rug.www.rugsummerschool.model.Announcement;
+import nl.rug.www.rugsummerschool.networking.NetworkingService;
 
 import static org.joda.time.DateTimeConstants.MILLIS_PER_DAY;
 
