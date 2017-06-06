@@ -14,7 +14,10 @@ import android.view.ViewGroup;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.ArrayList;
+
 import nl.rug.www.rugsummerschool.R;
+import nl.rug.www.rugsummerschool.controller.ContentsLab;
 
 /**
  * Created by RavenSP on 30/5/2017.
@@ -40,6 +43,13 @@ public class ForumLoginFragment extends Fragment{
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
+                    ArrayList<String> mlogInData = new ArrayList<String>();
+                    mlogInData.add(user.getPhotoUrl().toString());
+                    mlogInData.add(user.getDisplayName());
+                    mlogInData.add(user.getEmail());
+                    mlogInData.add(user.getUid());
+
+                    ContentsLab.get().setmLogInData(mlogInData);
                     FragmentManager fm = mActivity.getSupportFragmentManager();
                     if(!mActivity.isFinishing())
                     fm.beginTransaction().replace(R.id.fragment_forum_container, new ForumFragment()).commitAllowingStateLoss();
