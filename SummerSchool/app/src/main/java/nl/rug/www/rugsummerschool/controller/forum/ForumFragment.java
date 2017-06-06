@@ -189,7 +189,7 @@ public class ForumFragment extends Fragment {
 
         private void setAdapter() {
             if (isAdded()) {
-                mCommentExpandableAdapter = new CommentExpandableAdapter(getActivity(), generateComments(), mForumThread);
+                mCommentExpandableAdapter = new CommentExpandableAdapter(getActivity(), generateComments(), mForumThread, new FetchThreadsTask());
                 mCommentExpandableAdapter.setCustomParentAnimationViewId(R.id.expandable_arrow);
                 mCommentExpandableAdapter.setParentClickableViewAnimationDuration(ExpandableRecyclerAdapter.DEFAULT_ROTATE_DURATION_MS);
                 mCommentExpandableAdapter.setParentAndIconExpandOnClick(true);
@@ -246,10 +246,7 @@ public class ForumFragment extends Fragment {
                     new NetworkingService().postRequestForumThread(getActivity(), "comment", map, new NetworkingService.VolleyCallback() {
                         @Override
                         public void onSuccess(String result) {
-                            if (result.equals("OK"))
-                                new FetchThreadsTask().execute();
-                            else
-                                Log.d("ForumFragment", "Error : deleting");
+                            new FetchThreadsTask().execute();
                         }
                     });
                     commentDialog.dismiss();
@@ -287,10 +284,7 @@ public class ForumFragment extends Fragment {
                         new NetworkingService().deleteRequestForumThread(getActivity(), "thread", map, new NetworkingService.VolleyCallback() {
                             @Override
                             public void onSuccess(String result) {
-                                if (result.equals("OK"))
-                                    new FetchThreadsTask().execute();
-                                else
-                                    Log.d("ForumFragment", "Error : deleting");
+                                new FetchThreadsTask().execute();
                             }
                         });
                         editDeleteDialog.dismiss();
@@ -331,7 +325,7 @@ public class ForumFragment extends Fragment {
         }
     }
 
-    private class FetchThreadsTask extends AsyncTask<Void, Void, List<ForumThread>> {
+    public class FetchThreadsTask extends AsyncTask<Void, Void, List<ForumThread>> {
 
         @Override
         protected void onPreExecute() {
@@ -345,8 +339,8 @@ public class ForumFragment extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(List<ForumThread> announcements) {
-            mItems = announcements;
+        protected void onPostExecute(List<ForumThread> forumThreads) {
+            mItems = forumThreads;
             setupAdapter();
             ContentsLab.get().updateForumThreads(mItems);
             if (mSwipeRefreshLayout.isRefreshing()) {

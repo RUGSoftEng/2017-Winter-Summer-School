@@ -60,10 +60,10 @@ public class ThreadActivity extends AppCompatActivity {
                             new NetworkingService().postRequestForumThread(ThreadActivity.this, "thread", map, new NetworkingService.VolleyCallback() {
                                 @Override
                                 public void onSuccess(String result) {
-                                    if (result.equals("OK")) {
+//                                    if (result.equals("OK")) {
                                         setResult(Activity.RESULT_OK);
                                         finish();
-                                    }
+//                                    }
                                 }
                             });
                         }
@@ -90,10 +90,10 @@ public class ThreadActivity extends AppCompatActivity {
                             new NetworkingService().putRequestForumThread(ThreadActivity.this, "thread", map, new NetworkingService.VolleyCallback() {
                                 @Override
                                 public void onSuccess(String result) {
-                                    if (result.equals("OK")) {
+//                                    if (result.equals("OK")) {
                                         setResult(Activity.RESULT_OK);
                                         finish();
-                                    }
+//                                    }
                                 }
                             });
                         }

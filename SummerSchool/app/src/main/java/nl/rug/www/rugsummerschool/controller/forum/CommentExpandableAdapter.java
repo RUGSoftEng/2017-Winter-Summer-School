@@ -2,6 +2,7 @@ package nl.rug.www.rugsummerschool.controller.forum;
 
 import android.content.Context;
 import android.support.design.widget.BottomSheetDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,12 +39,14 @@ public class CommentExpandableAdapter extends ExpandableRecyclerAdapter<ThreadVi
     private LayoutInflater mLayoutInflater;
     private Context mContext;
     private ForumThread mForumThread;
+    private ForumFragment.FetchThreadsTask mFetchThreadsTask;
 
-    public CommentExpandableAdapter(Context context, List parentItemList, ForumThread forumThread) {
+    public CommentExpandableAdapter(Context context, List parentItemList, ForumThread forumThread, ForumFragment.FetchThreadsTask fetchThreadsTask) {
         super(context, parentItemList);
         mContext = context;
         mLayoutInflater = LayoutInflater.from(mContext);
         mForumThread = forumThread;
+        mFetchThreadsTask = fetchThreadsTask;
     }
 
     @Override
@@ -64,6 +67,7 @@ public class CommentExpandableAdapter extends ExpandableRecyclerAdapter<ThreadVi
 
     @Override
     public void onBindChildViewHolder(CommentViewHolder childViewHolder, final int i, Object o) {
+        Log.d("CEA", "position : " + i);
         final ForumComment forumComment = (ForumComment)o;
         Glide.with(mContext).load(forumComment.getImgUrl()).into(childViewHolder.getProfilePictureView());
         childViewHolder.getNameView().setText(forumComment.getPoster());
@@ -94,21 +98,15 @@ public class CommentExpandableAdapter extends ExpandableRecyclerAdapter<ThreadVi
                         public void onClick(View v) {
                             Map<String, String> map = new HashMap<>();
                             map.put("threadID", mForumThread.getId());
-                            map.put("arrayPos", i + "");
+                            map.put("arrayPos", i-1 + "");
                             map.put("text", commentEditText.getText().toString());
                             new NetworkingService().putRequestForumThread(mContext, "comment", map, new NetworkingService.VolleyCallback() {
                                 @Override
                                 public void onSuccess(String result) {
-                                    forumComment.setText(commentEditText.getText().toString());
-                                    notifyDataSetChanged();
-//                                    if (result.equals("OK"))
-//                                        new ForumFragment.FetchThreadsTask().execute();
-//                                    else
-//                                        Log.d("ForumFragment", "Error : deleting");
+                                    mFetchThreadsTask.execute();
                                 }
                             });
                             commentDialog.dismiss();
-//                            new ForumFragment.FetchThreadsTask().execute();
                         }
                     });
                     commentDialog.setContentView(view);
@@ -126,16 +124,11 @@ public class CommentExpandableAdapter extends ExpandableRecyclerAdapter<ThreadVi
             public boolean onLongClick(View v) {
                 Map<String, String> map = new HashMap<>();
                 map.put("threadID", mForumThread.getId());
-                map.put("arrayPos", i + "");
+                map.put("arrayPos", i-1 + "");
                 new NetworkingService().deleteRequestForumThread(mContext, "comment", map, new NetworkingService.VolleyCallback() {
                     @Override
                     public void onSuccess(String result) {
-                        mForumThread.getForumCommentList().remove(i);
-                        notifyDataSetChanged();
-//                        if (result.equals("OK"))
-//                            new ForumFragment.FetchThreadsTask().execute();
-//                        else
-//                            Log.d("ForumFragment", "Error : deleting");
+                        mFetchThreadsTask.execute();
                     }
                 });
                 Toast.makeText(mContext, "Remove success", Toast.LENGTH_SHORT).show();
