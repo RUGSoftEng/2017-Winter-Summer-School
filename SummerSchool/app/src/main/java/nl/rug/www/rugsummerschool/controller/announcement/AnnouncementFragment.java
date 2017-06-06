@@ -16,8 +16,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import nl.rug.www.rugsummerschool.controller.ContentsLab;
 import nl.rug.www.rugsummerschool.R;
+import nl.rug.www.rugsummerschool.controller.ContentsLab;
 import nl.rug.www.rugsummerschool.model.Announcement;
 
 /**

@@ -11,8 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 
 import java.util.List;
 
-import nl.rug.www.rugsummerschool.controller.ContentsLab;
 import nl.rug.www.rugsummerschool.R;
+import nl.rug.www.rugsummerschool.controller.ContentsLab;
 import nl.rug.www.rugsummerschool.model.Announcement;
 
 /**

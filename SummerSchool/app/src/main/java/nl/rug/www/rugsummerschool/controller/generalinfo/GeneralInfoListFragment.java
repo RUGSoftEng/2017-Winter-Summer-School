@@ -17,10 +17,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import nl.rug.www.rugsummerschool.controller.ContentsLab;
-import nl.rug.www.rugsummerschool.networking.NetworkingService;
 import nl.rug.www.rugsummerschool.R;
+import nl.rug.www.rugsummerschool.controller.ContentsLab;
 import nl.rug.www.rugsummerschool.model.GeneralInfo;
+import nl.rug.www.rugsummerschool.networking.NetworkingService;
 
 /**
  * This class is a fragment on main pager activity.

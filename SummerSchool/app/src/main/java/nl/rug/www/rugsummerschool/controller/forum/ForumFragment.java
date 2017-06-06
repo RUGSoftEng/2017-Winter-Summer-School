@@ -1,5 +1,6 @@
 package nl.rug.www.rugsummerschool.controller.forum;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -24,6 +25,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bignerdranch.expandablerecyclerview.Adapter.ExpandableRecyclerAdapter;
+import com.bignerdranch.expandablerecyclerview.Model.ParentObject;
+import com.bumptech.glide.Glide;
 import com.dgreenhalgh.android.simpleitemdecoration.linear.DividerItemDecoration;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -92,7 +96,7 @@ public class ForumFragment extends Fragment {
                     // User is signed in
                     FragmentManager fm = mActivity.getSupportFragmentManager();
                     if(!mActivity.isFinishing())
-                    fm.beginTransaction().replace(R.id.fragment_forum_container, new ForumLoginFragment()).commitAllowingStateLoss();
+                        fm.beginTransaction().replace(R.id.fragment_forum_container, new ForumLoginFragment()).commitAllowingStateLoss();
                 }
             }
         });
@@ -129,10 +133,21 @@ public class ForumFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), ThreadActivity.class);
                 intent.putExtra(ThreadActivity.ARG_ADD_OR_EDIT, INT_ADD);
-                startActivity(intent);
+                startActivityForResult(intent, INT_ADD);
             }
         });
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK) return;
+
+        if (requestCode == INT_ADD) {
+            new FetchThreadsTask().execute();
+        } else if (requestCode == INT_EDIT) {
+            new FetchThreadsTask().execute();
+        }
     }
 
     private void setupAdapter() {
@@ -140,7 +155,6 @@ public class ForumFragment extends Fragment {
             mForumRecyclerView.setAdapter(new ForumAdapter(mItems));
         }
     }
-
 
     private class ForumHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener, View.OnClickListener{
 
@@ -153,10 +167,12 @@ public class ForumFragment extends Fragment {
         private TextView mDescriptionTextView;
         private TextView mNewTextView;
         private RecyclerView mCommentsRecyclerView;
+        private CommentExpandableAdapter mCommentExpandableAdapter;
 
         public ForumHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_forum_thread, parent, false));
 
+            mPosterImageView = (ImageView)itemView.findViewById(R.id.forum_poster_profile_picture);
             mPosterTextView = (TextView)itemView.findViewById(R.id.forum_poster_text_view);
             mPostedDateTextView = (TextView)itemView.findViewById(R.id.date);
             mPostedTimeTextView = (TextView)itemView.findViewById(R.id.time);
@@ -171,8 +187,19 @@ public class ForumFragment extends Fragment {
             itemView.setOnClickListener(this);
         }
 
+        private void setAdapter() {
+            if (isAdded()) {
+                mCommentExpandableAdapter = new CommentExpandableAdapter(getActivity(), generateComments(), mForumThread, new FetchThreadsTask());
+                mCommentExpandableAdapter.setCustomParentAnimationViewId(R.id.expandable_arrow);
+                mCommentExpandableAdapter.setParentClickableViewAnimationDuration(ExpandableRecyclerAdapter.DEFAULT_ROTATE_DURATION_MS);
+                mCommentExpandableAdapter.setParentAndIconExpandOnClick(true);
+                mCommentsRecyclerView.setAdapter(mCommentExpandableAdapter);
+            }
+        }
+
         private void bind(ForumThread forumThread) {
             mForumThread = forumThread;
+            Glide.with(getActivity()).load(mForumThread.getImgUrl()).into(mPosterImageView);
             mPosterTextView.setText(mForumThread.getPoster());
             Date date = new DateTime(mForumThread.getDate()).toDate();
             SimpleDateFormat parseDate = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
@@ -182,8 +209,7 @@ public class ForumFragment extends Fragment {
             mTitleTextView.setText(mForumThread.getTitle());
             mDescriptionTextView.setText(mForumThread.getDescription());
             List<ForumComment> comments = mForumThread.getForumCommentList();
-            if (comments != null)
-                mCommentsRecyclerView.setAdapter(new CommentAdapter(comments));
+            if (comments != null) setAdapter();
 
             Date today = new Date();
             if (today.getTime() - date.getTime() < MILLIS_PER_DAY) {
@@ -191,6 +217,12 @@ public class ForumFragment extends Fragment {
             } else {
                 mNewTextView.setVisibility(View.GONE);
             }
+        }
+
+        private ArrayList<ParentObject> generateComments() {
+            ArrayList<ParentObject> parentObjects = new ArrayList<>();
+            parentObjects.add(mForumThread);
+            return parentObjects;
         }
 
         @Override
@@ -202,14 +234,22 @@ public class ForumFragment extends Fragment {
             sendButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    String imgurl = ContentsLab.get().getmLogInData().get(0);
+                    String name = ContentsLab.get().getmLogInData().get(1);
+                    String uid = ContentsLab.get().getmLogInData().get(3);
                     Map<String, String> map = new HashMap<>();
                     map.put("threadID", mForumThread.getId());
-                    map.put("author", "Jeongkyun Oh");
-                    map.put("posterID", "s1928371");
+                    map.put("author", name);
+                    map.put("posterID", uid);
                     map.put("text", commentEditText.getText().toString());
-                    new NetworkingService().postRequestForumThread(getActivity(), "comment", map);
+                    map.put("imgurl", imgurl);
+                    new NetworkingService().postRequestForumThread(getActivity(), "comment", map, new NetworkingService.VolleyCallback() {
+                        @Override
+                        public void onSuccess(String result) {
+                            new FetchThreadsTask().execute();
+                        }
+                    });
                     commentDialog.dismiss();
-                    new FetchThreadsTask().execute();
                 }
             });
             commentDialog.setContentView(view);
@@ -218,7 +258,7 @@ public class ForumFragment extends Fragment {
 
         @Override
         public boolean onLongClick(View v) {
-            String id = "s1928371";
+            String id = ContentsLab.get().getmLogInData().get(3);
             if(mForumThread.getPosterId().equals(id)) {
                 View view = View.inflate(getActivity(), R.layout.alertdialog_edit_delete, null);
                 final BottomSheetDialog editDeleteDialog = new BottomSheetDialog(getActivity());
@@ -231,7 +271,7 @@ public class ForumFragment extends Fragment {
                         String[] data = {mForumThread.getId(), mForumThread.getTitle(), mForumThread.getDescription()};
                         intent.putExtra(ThreadActivity.ARG_ADD_OR_EDIT, INT_EDIT);
                         intent.putExtra(ThreadActivity.ARG_EDITABLE_DATA, data);
-                        startActivity(intent);
+                        startActivityForResult(intent, INT_EDIT);
                         editDeleteDialog.dismiss();
                     }
                 });
@@ -241,117 +281,21 @@ public class ForumFragment extends Fragment {
                     public void onClick(View v) {
                         Map<String, String> map = new HashMap<>();
                         map.put("threadID", mForumThread.getId());
-                        new NetworkingService().deleteRequestForumThread(getActivity(), "thread", map);
+                        new NetworkingService().deleteRequestForumThread(getActivity(), "thread", map, new NetworkingService.VolleyCallback() {
+                            @Override
+                            public void onSuccess(String result) {
+                                new FetchThreadsTask().execute();
+                            }
+                        });
                         editDeleteDialog.dismiss();
                     }
                 });
                 editDeleteDialog.show();
             } else {
+
                 Toast.makeText(getActivity(), "Not your post", Toast.LENGTH_SHORT).show();
             }
             return true;
-        }
-
-        private class CommentHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
-
-            private ForumComment mForumComment;
-            private ImageView mCommentImageView;
-            private TextView mCommentPosterTextView;
-            private TextView mCommentContentsTextView;
-            private TextView mCommentDateTextView;
-            private TextView mCommentNewTextView;
-
-            public CommentHolder(LayoutInflater inflater, ViewGroup parent) {
-                super(inflater.inflate(R.layout.list_item_forum_comment, parent, false));
-
-                mCommentPosterTextView = (TextView)itemView.findViewById(R.id.comment_poster_text_view);
-                mCommentContentsTextView = (TextView)itemView.findViewById(R.id.comment_contents_text_view);
-                mCommentDateTextView = (TextView)itemView.findViewById(R.id.comment_date_text_view);
-                mCommentNewTextView = (TextView)itemView.findViewById(R.id.new_image_view);
-                itemView.setOnClickListener(this);
-                itemView.setOnLongClickListener(this);
-            }
-
-            private void bind(ForumComment forumComment) {
-                mForumComment = forumComment;
-                mCommentPosterTextView.setText(mForumComment.getPoster());
-                mCommentContentsTextView.setText(mForumComment.getText());
-                Date date = new DateTime(mForumComment.getDate()).toDate();
-                SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy HH:mm a", Locale.getDefault());
-                mCommentDateTextView.setText(sdf.format(date));
-                Date today = new Date();
-                if (today.getTime() - date.getTime() < MILLIS_PER_DAY) {
-                    mCommentNewTextView.setVisibility(View.VISIBLE);
-                } else {
-                    mCommentNewTextView.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onClick(View v) {
-                String id = "s1928371";
-                if (mForumComment.getPosterId().equals(id)) {
-                    View view = View.inflate(getActivity(), R.layout.alertdialog_comment, null);
-                    Button sendButton = (Button) view.findViewById(R.id.send_button);
-                    final EditText commentEditText = (EditText) view.findViewById(R.id.comment_edit_text);
-                    commentEditText.setText(mForumComment.getText());
-                    final BottomSheetDialog commentDialog = new BottomSheetDialog(getActivity());
-                    sendButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Map<String, String> map = new HashMap<>();
-                            map.put("threadID", mForumThread.getId());
-                            map.put("arrayPos", getAdapterPosition() + "");
-                            map.put("text", commentEditText.getText().toString());
-                            new NetworkingService().putRequestForumThread(getActivity(), "comment", map);
-                            commentDialog.dismiss();
-                            new FetchThreadsTask().execute();
-                        }
-                    });
-                    commentDialog.setContentView(view);
-                    commentDialog.show();
-
-                } else {
-                    Toast.makeText(getActivity(), "Not your comment", Toast.LENGTH_SHORT).show();
-                }
-
-            }
-
-            @Override
-            public boolean onLongClick(View v) {
-                Map<String, String> map = new HashMap<>();
-                map.put("threadID", mForumThread.getId());
-                map.put("arrayPos", getAdapterPosition() + "");
-                new NetworkingService().deleteRequestForumThread(getActivity(), "comment", map);
-                Toast.makeText(getActivity(), "Remove success", Toast.LENGTH_SHORT).show();
-                return true;
-            }
-        }
-
-        private class CommentAdapter extends RecyclerView.Adapter<CommentHolder> {
-
-            private List<ForumComment> mForumComments;
-
-            public CommentAdapter(List<ForumComment> forumComments) {
-                mForumComments = forumComments;
-            }
-
-            @Override
-            public CommentHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-                return new CommentHolder(layoutInflater, parent);
-            }
-
-            @Override
-            public void onBindViewHolder(CommentHolder holder, int position) {
-                ForumComment forumComment = mForumComments.get(position);
-                holder.bind(forumComment);
-            }
-
-            @Override
-            public int getItemCount() {
-                return mForumComments.size();
-            }
         }
     }
 
@@ -381,7 +325,7 @@ public class ForumFragment extends Fragment {
         }
     }
 
-    private class FetchThreadsTask extends AsyncTask<Void, Void, List<ForumThread>> {
+    public class FetchThreadsTask extends AsyncTask<Void, Void, List<ForumThread>> {
 
         @Override
         protected void onPreExecute() {
@@ -395,8 +339,8 @@ public class ForumFragment extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(List<ForumThread> announcements) {
-            mItems = announcements;
+        protected void onPostExecute(List<ForumThread> forumThreads) {
+            mItems = forumThreads;
             setupAdapter();
             ContentsLab.get().updateForumThreads(mItems);
             if (mSwipeRefreshLayout.isRefreshing()) {

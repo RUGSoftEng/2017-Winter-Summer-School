@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nl.rug.www.rugsummerschool.model.Announcement;
+import nl.rug.www.rugsummerschool.model.EventsPerDay;
 import nl.rug.www.rugsummerschool.model.ForumThread;
 import nl.rug.www.rugsummerschool.model.GeneralInfo;
 import nl.rug.www.rugsummerschool.model.Lecturer;
-import nl.rug.www.rugsummerschool.model.EventsPerDay;
 
 /**
  * ContentsLab stores data that fetched from the database.

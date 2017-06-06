@@ -9,8 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import nl.rug.www.rugsummerschool.controller.ContentsLab;
 import nl.rug.www.rugsummerschool.R;
+import nl.rug.www.rugsummerschool.controller.ContentsLab;
 import nl.rug.www.rugsummerschool.model.GeneralInfo;
 
 /**

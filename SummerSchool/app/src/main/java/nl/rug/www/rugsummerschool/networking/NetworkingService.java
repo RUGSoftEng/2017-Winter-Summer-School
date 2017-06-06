@@ -34,7 +34,6 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -42,12 +41,12 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import nl.rug.www.rugsummerschool.model.Announcement;
+import nl.rug.www.rugsummerschool.model.Event;
+import nl.rug.www.rugsummerschool.model.EventsPerDay;
 import nl.rug.www.rugsummerschool.model.ForumComment;
 import nl.rug.www.rugsummerschool.model.ForumThread;
 import nl.rug.www.rugsummerschool.model.GeneralInfo;
 import nl.rug.www.rugsummerschool.model.Lecturer;
-import nl.rug.www.rugsummerschool.model.Event;
-import nl.rug.www.rugsummerschool.model.EventsPerDay;
 
 /**
  * This class is to deal with all process for fetching data from online.
@@ -74,6 +73,10 @@ public class NetworkingService {
     private static final int FORUM = 4;
     private static final int FORUM_POST = 5;
     private static final int LOGIN_CODE = 6;
+
+    public interface VolleyCallback {
+        void onSuccess(String result);
+    }
 
     private byte[] getUrlBytes(String urlSpec) throws IOException {
         URL url = new URL(urlSpec);
@@ -363,6 +366,7 @@ public class NetworkingService {
             forumThread.setPoster(contentJsonObject.getString("author"));
             forumThread.setDate(contentJsonObject.getString("date"));
             forumThread.setPosterId(contentJsonObject.getString("posterID"));
+            forumThread.setImgUrl(contentJsonObject.getString("imgurl"));
             List<ForumComment> comments = new ArrayList<>();
             JSONArray jsonComments = contentJsonObject.getJSONArray("comments");
             for (int j = 0; j < jsonComments.length(); ++j) {
@@ -373,6 +377,7 @@ public class NetworkingService {
                 comment.setPoster(jsonObject.getString("author"));
                 comment.setText(jsonObject.getString("text"));
                 comment.setDate(jsonObject.getString("date"));
+                comment.setImgUrl(jsonObject.getString("imgurl"));
                 comments.add(comment);
             }
             forumThread.setForumCommentList(comments);
@@ -380,7 +385,7 @@ public class NetworkingService {
         }
     }
 
-    public void putRequestForumThread(Context context, String forumPath, Map<String, String> valuePairs) {
+    public void putRequestForumThread(Context context, final String forumPath, Map<String, String> valuePairs, final VolleyCallback volleyCallback) {
         Uri.Builder builder = new Uri.Builder();
         builder.scheme("http").encodedAuthority(URL_DATABASE);
         builder.appendPath("forum").appendPath(forumPath).appendPath("item")
@@ -404,6 +409,7 @@ public class NetworkingService {
                     @Override
                     public void onResponse(String response) {
                         Log.d(TAG, "On response result : " + response);
+                        volleyCallback.onSuccess(response);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -415,7 +421,7 @@ public class NetworkingService {
         queue.add(stringRequest);
     }
 
-    public void deleteRequestForumThread(Context context, String forumPath, Map<String, String> valuePairs) {
+    public void deleteRequestForumThread(Context context, String forumPath, Map<String, String> valuePairs, final VolleyCallback volleyCallback) {
         Uri.Builder builder = new Uri.Builder();
         builder.scheme("http").encodedAuthority(URL_DATABASE);
         builder.appendPath("forum").appendPath(forumPath).appendPath("item")
@@ -430,6 +436,7 @@ public class NetworkingService {
                     @Override
                     public void onResponse(String response) {
                         Log.d(TAG, "On response result : " + response);
+                        volleyCallback.onSuccess(response);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -441,11 +448,11 @@ public class NetworkingService {
         queue.add(stringRequest);
     }
 
-    public void postRequestForumThread(Context context, String forumPath, Map<String, String> valuePairs) {
+    public void postRequestForumThread(Context context, final String forumPath, Map<String, String> valuePairs, final VolleyCallback volleyCallback) {
         try {
             Uri.Builder builder = new Uri.Builder();
-            builder.scheme("http").encodedAuthority(URL_DATABASE);
-            builder.appendPath("forum").appendPath(forumPath).appendPath("item");
+            builder.scheme("http").encodedAuthority(URL_DATABASE)
+                    .appendPath("forum").appendPath(forumPath).appendPath("item");
             String url = builder.toString();
 
             RequestQueue queue = Volley.newRequestQueue(context);
@@ -464,6 +471,7 @@ public class NetworkingService {
                 @Override
                 public void onResponse(String response) {
                     Log.d(TAG, "On response result : " + response);
+                    volleyCallback.onSuccess(response);
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -524,7 +532,7 @@ public class NetworkingService {
             queue.add(stringRequest);
 
         }catch (Exception e){
-
+            e.printStackTrace();
         }
     }
 }

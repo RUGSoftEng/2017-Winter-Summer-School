@@ -3,16 +3,13 @@ package nl.rug.www.rugsummerschool.controller;
 import android.app.ActionBar;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -22,7 +19,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
-
 import nl.rug.www.rugsummerschool.R;
 import nl.rug.www.rugsummerschool.controller.announcement.AnnouncementListFragment;
 import nl.rug.www.rugsummerschool.controller.forum.ForumRootFragment;
@@ -168,30 +164,30 @@ public class MainPagerActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                mAnnouncementButton.setImageDrawable(ContextCompat.getDrawable(MainPagerActivity.this, R.drawable.announcement));
-                mGeneralInfoButton.setImageDrawable(ContextCompat.getDrawable(MainPagerActivity.this, R.drawable.generalinformation));
-                mLecturerButton.setImageDrawable(ContextCompat.getDrawable(MainPagerActivity.this, R.drawable.lecturer));
-                mTimeTableButton.setImageDrawable(ContextCompat.getDrawable(MainPagerActivity.this, R.drawable.timetable));
-                mForumButton.setImageDrawable(ContextCompat.getDrawable(MainPagerActivity.this, R.drawable.forum));
-                mMyProfileButton.setImageDrawable(ContextCompat.getDrawable(MainPagerActivity.this, R.drawable.my_account));
+                mAnnouncementButton.setImageDrawable(ContextCompat.getDrawable(MainPagerActivity.this, R.drawable.announcementblack));
+                mGeneralInfoButton.setImageDrawable(ContextCompat.getDrawable(MainPagerActivity.this, R.drawable.generalinformationblack));
+                mLecturerButton.setImageDrawable(ContextCompat.getDrawable(MainPagerActivity.this, R.drawable.lecturerblack));
+                mTimeTableButton.setImageDrawable(ContextCompat.getDrawable(MainPagerActivity.this, R.drawable.timetableblack));
+                mForumButton.setImageDrawable(ContextCompat.getDrawable(MainPagerActivity.this, R.drawable.forumblack));
+                mMyProfileButton.setImageDrawable(ContextCompat.getDrawable(MainPagerActivity.this, R.drawable.my_accountblack));
                 switch (position) {
                     case 0 :
-                        mAnnouncementButton.setImageDrawable(ContextCompat.getDrawable(MainPagerActivity.this, R.drawable.announcementblack));
+                        mAnnouncementButton.setImageDrawable(ContextCompat.getDrawable(MainPagerActivity.this, R.drawable.announcement));
                         break;
                     case 1 :
-                        mGeneralInfoButton.setImageDrawable(ContextCompat.getDrawable(MainPagerActivity.this, R.drawable.generalinformationblack));
+                        mGeneralInfoButton.setImageDrawable(ContextCompat.getDrawable(MainPagerActivity.this, R.drawable.generalinformation));
                         break;
                     case 2 :
-                        mLecturerButton.setImageDrawable(ContextCompat.getDrawable(MainPagerActivity.this, R.drawable.lecturerblack));
+                        mLecturerButton.setImageDrawable(ContextCompat.getDrawable(MainPagerActivity.this, R.drawable.lecturer));
                         break;
                     case 3 :
-                        mTimeTableButton.setImageDrawable(ContextCompat.getDrawable(MainPagerActivity.this, R.drawable.timetableblack));
+                        mTimeTableButton.setImageDrawable(ContextCompat.getDrawable(MainPagerActivity.this, R.drawable.timetable));
                         break;
                     case 4 :
-                        mForumButton.setImageDrawable(ContextCompat.getDrawable(MainPagerActivity.this, R.drawable.forumblack));
+                        mForumButton.setImageDrawable(ContextCompat.getDrawable(MainPagerActivity.this, R.drawable.forum));
                         break;
                     case 5 :
-                        mMyProfileButton.setImageDrawable(ContextCompat.getDrawable(MainPagerActivity.this, R.drawable.my_accountblack));
+                        mMyProfileButton.setImageDrawable(ContextCompat.getDrawable(MainPagerActivity.this, R.drawable.my_account));
                         break;
                     default:
                         break;
