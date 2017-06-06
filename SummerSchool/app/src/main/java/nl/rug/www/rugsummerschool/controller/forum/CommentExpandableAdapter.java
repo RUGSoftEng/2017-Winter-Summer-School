@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bignerdranch.expandablerecyclerview.Adapter.ExpandableRecyclerAdapter;
@@ -90,6 +91,8 @@ public class CommentExpandableAdapter extends ExpandableRecyclerAdapter<ThreadVi
                 if (forumComment.getPosterId().equals(id)) {
                     View view = View.inflate(mContext, R.layout.alertdialog_comment, null);
                     Button sendButton = (Button) view.findViewById(R.id.send_button);
+                    ImageView commenter = (ImageView) view.findViewById(R.id.comment_poster_profile_image_view);
+                    Glide.with(mContext).load(ContentsLab.get().getmLogInData().get(0)).into(commenter);
                     final EditText commentEditText = (EditText) view.findViewById(R.id.comment_edit_text);
                     commentEditText.setText(forumComment.getText());
                     final BottomSheetDialog commentDialog = new BottomSheetDialog(mContext);
