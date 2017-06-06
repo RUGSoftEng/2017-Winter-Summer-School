@@ -37,6 +37,7 @@ public class FCMService extends FirebaseMessagingService {
                 .setContentText(message)
                 .setSmallIcon(R.drawable.announcement)
                 .setContentIntent(pendingIntent)
+                .setStyle(new NotificationCompat.BigTextStyle())
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setPriority(Notification.PRIORITY_MAX);
 
