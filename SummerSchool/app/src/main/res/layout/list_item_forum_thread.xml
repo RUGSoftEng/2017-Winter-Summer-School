@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="4dp"
+    android:layout_marginTop="16dp"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
@@ -15,7 +15,8 @@
             android:id="@+id/forum_poster_profile_picture"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:layout_marginEnd="4dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
             android:src="@drawable/profile"/>
 
         <TextView
@@ -30,12 +31,49 @@
             android:text="Jeongkyun Oh"/>
 
         <TextView
-            android:id="@+id/forum_posted_time_text_view"
+            android:id="@+id/new_image_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginEnd="4dp"
-            android:text="a minute ago"/>
+            android:layout_marginStart="16dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:text="new"
+            android:textStyle="bold|italic"
+            android:textColor="@android:color/white"
+            android:background="@drawable/roundnew"
+            android:visibility="gone"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:textColor="@color/colorGray"
+                android:textSize="12sp"
+                tools:text="Mar 6, 2010" />
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:textColor="@color/colorGray"
+                android:textSize="12sp"
+                tools:text="3:00 PM" />
+
+        </LinearLayout>
+
+
 
     </LinearLayout>
 
@@ -63,9 +101,22 @@
         android:textColor="#000000"
         android:text="A very long time ago, before man came along to upset the natural balance, all animals lived together peacefully. But in those days, none of the animals had heads of their own, except the elephant, who was the King of the animals. He had a large collection of heads in all shapes and sizes, which he kept stored in a large cave. Every time an animal wished to leave the village compound to go out into the field or the bush, he would go to the elephant first and ask to borrow a head. On his return to the animal village the head would be returned to the king’s store. This worked very well for a time. The only problem was that there were not quite enough heads for all the animals. There always seemed to be one short, so at least one of the animals always had to stay behind in the village."/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:textColor="@android:color/white"
+        android:background="@color/colorGray"
+        android:drawableRight="@drawable/ic_keyboard_arrow_left_white_24dp"
+        android:gravity="center_vertical"
+        android:text="Comments"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/forum_comments_recycler_view"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
     </android.support.v7.widget.RecyclerView>

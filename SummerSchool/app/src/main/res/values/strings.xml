@@ -9,7 +9,7 @@
     <string name="not_correct_code">Wrong code, please try again</string>
 
     <string name="fb_login_protocol_scheme">fb1850528335213838</string>
-    <string name="facebook_app_id">1889186731295134</string>
+    <string name="facebook_app_id">1687355508237264</string>
 
     <string name="login_with_facebook">Login with Facebook</string>
     <string name="login_with_google">Login with Google+</string>
@@ -54,4 +54,42 @@
     <string name="previous"><![CDATA[< Previous]]></string>
     <string name="next"><![CDATA[Next >]]></string>
     <string name="comments">COMMENTS</string>
+
+    <string name="signup_prompt">Hey you\'re new! Let us know more about you!</string>
+    <string name="signup_field0">Birthday</string>
+    <string name="signup_field1">Field of Study</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="signup_continue">Continue</string>
+    <string name="signin_prompt">Sign in to view forums</string>
+
+    <string-array name="FOS_Array">
+        <item>Biochemical Science</item>
+        <item>Business and Economics</item>
+        <item>Computer Science</item>
+        <item>Biochemical Science</item>
+        <item>Business and Economics</item>
+        <item>Computer Science</item>
+        <item>Biochemical Science</item>
+        <item>Business and Economics</item>
+        <item>Computer Science</item>
+        <item>Biochemical Science</item>
+        <item>Business and Economics</item>
+    </string-array>
+
+    <string-array name="Month_Array">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
 </resources>

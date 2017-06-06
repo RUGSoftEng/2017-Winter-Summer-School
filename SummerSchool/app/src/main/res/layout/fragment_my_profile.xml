@@ -1,12 +1,13 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -19,15 +20,29 @@
                 android:src="@drawable/header_profile"
                 android:contentDescription="@string/header_cover_image"/>
 
-            <ImageView
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:id="@+id/user_profile_photo"
-                android:padding="1dp"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true">
+            <!--<ImageView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:id="@+id/user_profile_photo"-->
+                <!--android:padding="1dp"-->
+                <!--android:layout_alignParentBottom="true"-->
+                <!--android:layout_centerHorizontal="true">-->
 
-            </ImageView>
+            <!--</ImageView>-->
+
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:id="@+id/user_profile_photo"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:src="@drawable/profile"
+                app:civ_border_color="@android:color/white"
+                app:civ_border_width="4dp"
+                app:civ_shadow="true"
+                app:civ_shadow_radius="10"
+                app:civ_shadow_color="@color/colorTitle"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true" />
 
 
         </RelativeLayout>
@@ -44,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="76dp"
+                android:layout_marginTop="24dp"
                 tools:text="Jane Doe"
                 android:textColor="#fff"
                 android:textSize="24sp"
@@ -56,7 +71,6 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/user_profile_name"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="12dp"
                 android:text="@string/university_of_groningen_summer_2017"
                 android:textColor="#fff"
                 android:textSize="14sp" />
@@ -66,7 +80,7 @@
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginTop="5dp"
             android:orientation="vertical">
 
@@ -81,34 +95,10 @@
                 tools:text="name" />
 
             <TextView
-                android:id="@+id/user_gender"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_marginBottom="3dp"
-                android:layout_marginTop="3dp"
-                android:background="#fff"
-                android:clickable="true"
-                android:padding="20dp"
-                tools:text="Gender" />
-
-            <TextView
-                android:id="@+id/user_birthday"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="#fff"
-                android:clickable="true"
-                android:padding="20dp"
-                tools:text="Birthday" />
-
-            <TextView
                 android:id="@+id/user_email"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:layout_marginBottom="3dp"
-                android:layout_marginTop="3dp"
                 android:background="#fff"
                 android:clickable="true"
                 android:padding="20dp"
@@ -116,13 +106,13 @@
 
             <Button
                 android:id="@+id/log_out_button"
-                android:layout_gravity="end"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/log_out_button"
-                android:textColor="#ffffff"
+                android:layout_gravity="end"
                 android:layout_margin="4dp"
-                android:background="@color/colorPrimary"/>
+                android:background="@color/colorPrimary"
+                android:text="@string/log_out_button"
+                android:textColor="#ffffff" />
 
         </LinearLayout>
     </LinearLayout>

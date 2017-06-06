@@ -4,7 +4,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/colorPrimary"
-                tools:context="nl.rug.www.summerschool.controller.LoginActivity">
+                tools:context="nl.rug.www.rugsummerschool.controller.LoginActivity">
 
     <ImageView
         android:id="@+id/mainlogo"
@@ -39,6 +39,13 @@
         android:hint="@string/enter_your_code_hint"
         android:inputType="textPassword"
         android:maxLines="1" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/codeText"
+        android:layout_centerHorizontal="true"/>
 
     <Button
         android:id="@+id/login_button"
