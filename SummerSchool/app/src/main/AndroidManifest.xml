@@ -14,15 +14,12 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
 
-        <service
-            android:name="nl.rug.www.rugsummerschool.networking.FCMIDService">
+        <service android:name=".networking.FCMIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
-
-        <service
-            android:name="nl.rug.www.rugsummerschool.networking.FCMService">
+        <service android:name=".networking.FCMService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
@@ -41,30 +38,33 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="nl.rug.www.rugsummerschool.controller.LoginActivity"
+            android:name=".controller.LoginActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"
-            android:theme="@style/RugTheme.NoActionBar">
+            android:theme="@style/RugTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
-            android:name="nl.rug.www.rugsummerschool.controller.announcement.AnnouncementPagerActivity"
-            android:parentActivityName="nl.rug.www.rugsummerschool.controller.MainPagerActivity"/>
+            android:name=".controller.announcement.AnnouncementPagerActivity"
+            android:parentActivityName=".controller.MainPagerActivity"/>
         <activity
-            android:name="nl.rug.www.rugsummerschool.controller.generalinfo.GeneralInfoPagerActivity"
-            android:parentActivityName="nl.rug.www.rugsummerschool.controller.MainPagerActivity"/>
+            android:name=".controller.generalinfo.GeneralInfoPagerActivity"
+            android:parentActivityName=".controller.MainPagerActivity"/>
         <activity
-            android:name="nl.rug.www.rugsummerschool.controller.lecturer.LecturerPagerActivity"
-            android:parentActivityName="nl.rug.www.rugsummerschool.controller.MainPagerActivity"/>
-        <activity android:name="nl.rug.www.rugsummerschool.controller.MainPagerActivity"
+            android:name=".controller.lecturer.LecturerPagerActivity"
+            android:parentActivityName=".controller.MainPagerActivity"/>
+        <activity
+            android:name=".controller.MainPagerActivity"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
-                  android:windowSoftInputMode="adjustPan"/>
-        <activity android:name="nl.rug.www.rugsummerschool.controller.forum.ThreadActivity"
-            android:parentActivityName="nl.rug.www.rugsummerschool.controller.MainPagerActivity">
+            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".controller.forum.ThreadActivity"
+            android:parentActivityName=".controller.MainPagerActivity">
         </activity>
     </application>
 

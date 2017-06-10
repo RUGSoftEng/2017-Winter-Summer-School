@@ -13,12 +13,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
 
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
+
 import nl.rug.www.rugsummerschool.R;
 import nl.rug.www.rugsummerschool.controller.announcement.AnnouncementListFragment;
 import nl.rug.www.rugsummerschool.controller.forum.ForumRootFragment;
@@ -66,7 +65,7 @@ public class MainPagerActivity extends AppCompatActivity {
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if(user != null){
-            ArrayList<String> mlogInData = new ArrayList<String>();
+            ArrayList<String> mlogInData = new ArrayList<>();
             mlogInData.add(user.getPhotoUrl().toString());
             mlogInData.add(user.getDisplayName());
             mlogInData.add(user.getEmail());
@@ -74,7 +73,7 @@ public class MainPagerActivity extends AppCompatActivity {
             ContentsLab.get().setmLogInData(mlogInData);
         }
 
-        actionBar.setTitle("");
+        actionBar.setTitle(null);
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
         actionBar.setCustomView(R.layout.drawable_actionbar);
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
@@ -156,11 +155,7 @@ public class MainPagerActivity extends AppCompatActivity {
 
         mViewPager.setAdapter(mAdapter);
 
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
+        mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 
             @Override
             public void onPageSelected(int position) {
@@ -193,12 +188,6 @@ public class MainPagerActivity extends AppCompatActivity {
                         break;
                 }
             }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
         });
     }
-
 }

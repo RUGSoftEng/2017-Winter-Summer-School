@@ -102,13 +102,14 @@ public class GeneralInfoListFragment extends Fragment {
         private void bind(GeneralInfo generalInfo){
             mGeneralInfo = generalInfo;
             mTitleTextView.setText(mGeneralInfo.getTitle());
+            mTitleTextView.setSelected(true);
             mImageView.setImageResource(selectPicture(mGeneralInfo.getTitle().toLowerCase()));
         }
 
         private int selectPicture(String title) {
-            for (int i = 0; i < mStrings.length; ++i) {
-                if (title.contains(mStrings[i]))
-                    return mPicHashMap.get(mStrings[i]);
+            for (String s : mStrings) {
+                if (title.contains(s))
+                    return mPicHashMap.get(s);
             }
 
             int idx = Math.abs(title.hashCode() % 4);

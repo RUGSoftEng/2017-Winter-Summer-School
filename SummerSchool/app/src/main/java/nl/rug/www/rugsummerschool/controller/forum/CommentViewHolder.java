@@ -11,13 +11,14 @@ import nl.rug.www.rugsummerschool.R;
 import nl.rug.www.rugsummerschool.model.ForumThread;
 
 /**
- * Created by jk on 6/5/17.
+ * This class is ForumComment adapter class in order to adapt items to ViewHolder.
+ *
+ * @since 05/06/2017
+ * @author Jeongkyun Oh
  */
 
 public class CommentViewHolder extends ChildViewHolder {
 
-    private Context mContext;
-    private ForumThread mForumThread;
     private ImageView mProfilePictureView;
     private TextView mNameView;
     private TextView mDateView;
@@ -26,8 +27,6 @@ public class CommentViewHolder extends ChildViewHolder {
 
     public CommentViewHolder(View itemView, ForumThread forumThread, Context context) {
         super(itemView);
-        mForumThread = forumThread;
-        mContext = context;
         mProfilePictureView = (ImageView)itemView.findViewById(R.id.comment_image_view);
         mNameView = (TextView)itemView.findViewById(R.id.comment_poster_text_view);
         mDateView = (TextView)itemView.findViewById(R.id.comment_date_text_view);

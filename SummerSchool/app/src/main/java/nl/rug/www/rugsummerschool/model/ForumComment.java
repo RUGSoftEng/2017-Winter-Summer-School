@@ -6,6 +6,7 @@ package nl.rug.www.rugsummerschool.model;
 
 public class ForumComment {
 
+    private String mCommentId;
     private String mPosterId;
     private String mPoster;
     private String mDate;
@@ -14,6 +15,14 @@ public class ForumComment {
 
     public String getImgUrl() {
         return mImgUrl;
+    }
+
+    public String getCommentId() {
+        return mCommentId;
+    }
+
+    public void setCommentId(String commentId) {
+        mCommentId = commentId;
     }
 
     public void setImgUrl(String imgUrl) {

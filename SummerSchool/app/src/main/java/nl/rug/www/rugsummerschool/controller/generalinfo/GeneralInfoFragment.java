@@ -43,13 +43,14 @@ public class GeneralInfoFragment extends Fragment {
         mGeneralInfo = ContentsLab.get().getGeneralInfo(generalInfoId);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_generalinfo, container, false);
 
         TextView mDescription = (TextView)view.findViewById(R.id.generalinfo_detail);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            mDescription.setText(Html.fromHtml(mGeneralInfo.getDescription(), Html.FROM_HTML_MODE_COMPACT));
+            mDescription.setText(Html.fromHtml(mGeneralInfo.getDescription(), Html.FROM_HTML_MODE_LEGACY));
         } else {
             mDescription.setText(Html.fromHtml(mGeneralInfo.getDescription()));
         }

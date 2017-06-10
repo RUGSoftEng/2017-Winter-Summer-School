@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import nl.rug.www.rugsummerschool.R;
 import nl.rug.www.rugsummerschool.controller.ContentsLab;
@@ -60,12 +61,14 @@ public class LecturerFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String url = mLecturer.getWebsite();
-                if (!url.substring(0, 7).equals("http://") && !url.substring(0, 8).equals("https://"))
-                    url = "http://" + url;
-
-                Uri website = Uri.parse(url);
-                Intent websiteIntent = new Intent(Intent.ACTION_VIEW, website);
-                startActivity(websiteIntent);
+                try {
+                    Uri website = Uri.parse(url);
+                    Intent websiteIntent = new Intent(Intent.ACTION_VIEW, website);
+                    startActivity(websiteIntent);
+                } catch (Exception e){
+                    Toast.makeText(getActivity(), "Please check if the address is correct.\nMake sure that 'http://' should be included.", Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
             }
         });
         ImageView mLecturerImageView = (ImageView)view.findViewById(R.id.lecturer_image_view);

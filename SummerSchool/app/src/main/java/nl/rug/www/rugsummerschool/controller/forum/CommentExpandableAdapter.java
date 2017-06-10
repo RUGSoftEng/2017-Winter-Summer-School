@@ -1,7 +1,9 @@
 package nl.rug.www.rugsummerschool.controller.forum;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.design.widget.BottomSheetDialog;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bignerdranch.expandablerecyclerview.Adapter.ExpandableRecyclerAdapter;
+import com.bignerdranch.expandablerecyclerview.ViewHolder.ParentViewHolder;
 import com.bumptech.glide.Glide;
 
 import org.joda.time.DateTime;
@@ -32,10 +35,13 @@ import nl.rug.www.rugsummerschool.networking.NetworkingService;
 import static org.joda.time.DateTimeConstants.MILLIS_PER_DAY;
 
 /**
- * Created by jk on 6/5/17.
+ * This class is ForumComment adapter class in order to adapt items to ViewHolder.
+ *
+ * @since 10/06/2017
+ * @author Jeongkyun Oh
  */
 
-public class CommentExpandableAdapter extends ExpandableRecyclerAdapter<ThreadViewHolder, CommentViewHolder> {
+public class CommentExpandableAdapter extends ExpandableRecyclerAdapter<ParentViewHolder, CommentViewHolder> {
 
     private LayoutInflater mLayoutInflater;
     private Context mContext;
@@ -51,9 +57,9 @@ public class CommentExpandableAdapter extends ExpandableRecyclerAdapter<ThreadVi
     }
 
     @Override
-    public ThreadViewHolder onCreateParentViewHolder(ViewGroup viewGroup) {
+    public ParentViewHolder onCreateParentViewHolder(ViewGroup viewGroup) {
         View view = mLayoutInflater.inflate(R.layout.list_item_forum_comment_parent, viewGroup, false);
-        return new ThreadViewHolder(view);
+        return new ParentViewHolder(view);
     }
 
     @Override
@@ -63,12 +69,11 @@ public class CommentExpandableAdapter extends ExpandableRecyclerAdapter<ThreadVi
     }
 
     @Override
-    public void onBindParentViewHolder(ThreadViewHolder parentViewHolder, int i, Object o) {
+    public void onBindParentViewHolder(ParentViewHolder parentViewHolder, int i, Object o) {
     }
 
     @Override
     public void onBindChildViewHolder(CommentViewHolder childViewHolder, final int i, Object o) {
-        Log.d("CEA", "position : " + i);
         final ForumComment forumComment = (ForumComment)o;
         Glide.with(mContext).load(forumComment.getImgUrl()).into(childViewHolder.getProfilePictureView());
         childViewHolder.getNameView().setText(forumComment.getPoster());
@@ -91,8 +96,8 @@ public class CommentExpandableAdapter extends ExpandableRecyclerAdapter<ThreadVi
                 if (forumComment.getPosterId().equals(id)) {
                     View view = View.inflate(mContext, R.layout.alertdialog_comment, null);
                     Button sendButton = (Button) view.findViewById(R.id.send_button);
-                    ImageView commenter = (ImageView) view.findViewById(R.id.comment_poster_profile_image_view);
-                    Glide.with(mContext).load(ContentsLab.get().getmLogInData().get(0)).into(commenter);
+                    ImageView commentorPic = (ImageView) view.findViewById(R.id.commentor_pic);
+                    Glide.with(mContext).load(ContentsLab.get().getmLogInData().get(0)).into(commentorPic);
                     final EditText commentEditText = (EditText) view.findViewById(R.id.comment_edit_text);
                     commentEditText.setText(forumComment.getText());
                     final BottomSheetDialog commentDialog = new BottomSheetDialog(mContext);
@@ -101,7 +106,7 @@ public class CommentExpandableAdapter extends ExpandableRecyclerAdapter<ThreadVi
                         public void onClick(View v) {
                             Map<String, String> map = new HashMap<>();
                             map.put("threadID", mForumThread.getId());
-                            map.put("arrayPos", i-1 + "");
+                            map.put("commentID", forumComment.getCommentId());
                             map.put("text", commentEditText.getText().toString());
                             new NetworkingService().putRequestForumThread(mContext, "comment", map, new NetworkingService.VolleyCallback() {
                                 @Override
@@ -116,7 +121,7 @@ public class CommentExpandableAdapter extends ExpandableRecyclerAdapter<ThreadVi
                     commentDialog.show();
 
                 } else {
-                    Toast.makeText(mContext, "Not your comment", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "This is not your comment!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -125,16 +130,36 @@ public class CommentExpandableAdapter extends ExpandableRecyclerAdapter<ThreadVi
 
             @Override
             public boolean onLongClick(View v) {
-                Map<String, String> map = new HashMap<>();
-                map.put("threadID", mForumThread.getId());
-                map.put("arrayPos", i-1 + "");
-                new NetworkingService().deleteRequestForumThread(mContext, "comment", map, new NetworkingService.VolleyCallback() {
-                    @Override
-                    public void onSuccess(String result) {
-                        mFetchThreadsTask.execute();
-                    }
-                });
-                Toast.makeText(mContext, "Remove success", Toast.LENGTH_SHORT).show();
+                String id = ContentsLab.get().getmLogInData().get(3);
+                if (forumComment.getPosterId().equals(id)) {
+                    AlertDialog alertDialog = new AlertDialog.Builder(mContext)
+                            .setTitle("Remove comment")
+                            .setMessage("Are you sure?")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Map<String, String> map = new HashMap<>();
+                                    map.put("threadID", mForumThread.getId());
+                                    map.put("commentID", forumComment.getCommentId());
+                                    new NetworkingService().deleteRequestForumThread(mContext, "comment", map, new NetworkingService.VolleyCallback() {
+                                        @Override
+                                        public void onSuccess(String result) {
+                                            mFetchThreadsTask.execute();
+                                        }
+                                    });
+                                }
+                            }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            }).create();
+
+                    alertDialog.show();
+
+                } else {
+                    Toast.makeText(mContext, "Not your comment", Toast.LENGTH_SHORT).show();
+                }
                 return true;
             }
         });

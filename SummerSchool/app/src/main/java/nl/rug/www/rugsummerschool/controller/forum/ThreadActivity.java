@@ -18,6 +18,13 @@ import nl.rug.www.rugsummerschool.networking.NetworkingService;
 import static nl.rug.www.rugsummerschool.controller.forum.ForumFragment.INT_ADD;
 import static nl.rug.www.rugsummerschool.controller.forum.ForumFragment.INT_EDIT;
 
+/**
+ * This is an Activity class to post or edit a forum thread.
+ *
+ * @since 05/06/2017
+ * @author Jeongkyun Oh
+ */
+
 public class ThreadActivity extends AppCompatActivity {
 
     public static final String ARG_ADD_OR_EDIT = "add_or_edit";
@@ -60,10 +67,8 @@ public class ThreadActivity extends AppCompatActivity {
                             new NetworkingService().postRequestForumThread(ThreadActivity.this, "thread", map, new NetworkingService.VolleyCallback() {
                                 @Override
                                 public void onSuccess(String result) {
-//                                    if (result.equals("OK")) {
-                                        setResult(Activity.RESULT_OK);
-                                        finish();
-//                                    }
+                                    setResult(Activity.RESULT_OK);
+                                    finish();
                                 }
                             });
                         }
@@ -90,10 +95,8 @@ public class ThreadActivity extends AppCompatActivity {
                             new NetworkingService().putRequestForumThread(ThreadActivity.this, "thread", map, new NetworkingService.VolleyCallback() {
                                 @Override
                                 public void onSuccess(String result) {
-//                                    if (result.equals("OK")) {
-                                        setResult(Activity.RESULT_OK);
-                                        finish();
-//                                    }
+                                    setResult(Activity.RESULT_OK);
+                                    finish();
                                 }
                             });
                         }

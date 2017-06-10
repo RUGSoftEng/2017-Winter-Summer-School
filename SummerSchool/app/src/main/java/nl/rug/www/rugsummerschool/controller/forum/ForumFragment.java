@@ -2,6 +2,7 @@ package nl.rug.www.rugsummerschool.controller.forum;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -41,6 +43,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 
 import nl.rug.www.rugsummerschool.R;
 import nl.rug.www.rugsummerschool.controller.ContentsLab;
@@ -49,6 +52,13 @@ import nl.rug.www.rugsummerschool.model.ForumThread;
 import nl.rug.www.rugsummerschool.networking.NetworkingService;
 
 import static org.joda.time.DateTimeConstants.MILLIS_PER_DAY;
+
+/**
+ * This is main forum fragment class that shows all of the forum threads and comments.
+ *
+ * @since 05/06/2017
+ * @author Jeongkyun Oh
+ */
 
 public class ForumFragment extends Fragment {
 
@@ -62,8 +72,6 @@ public class ForumFragment extends Fragment {
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private List<ForumThread> mItems = new ArrayList<>();
-
-    private String UID;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -105,7 +113,7 @@ public class ForumFragment extends Fragment {
             fm.beginTransaction().replace(R.id.fragment_forum_container, new ForumLoginFragment()).commit();
         }
         //get log in data
-        UID = ContentsLab.get().getmLogInData().get(3);
+        String UID = ContentsLab.get().getmLogInData().get(3);
         Log.d("FORUMFRAG", "" + UID);
 
         TextView section = (TextView)view.findViewById(R.id.section_name);
@@ -169,7 +177,7 @@ public class ForumFragment extends Fragment {
         private RecyclerView mCommentsRecyclerView;
         private CommentExpandableAdapter mCommentExpandableAdapter;
 
-        public ForumHolder(LayoutInflater inflater, ViewGroup parent) {
+        private ForumHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_forum_thread, parent, false));
 
             mPosterImageView = (ImageView)itemView.findViewById(R.id.forum_poster_profile_picture);
@@ -219,8 +227,8 @@ public class ForumFragment extends Fragment {
             }
         }
 
-        private ArrayList<ParentObject> generateComments() {
-            ArrayList<ParentObject> parentObjects = new ArrayList<>();
+        private List<ParentObject> generateComments() {
+            List<ParentObject> parentObjects = new ArrayList<>();
             parentObjects.add(mForumThread);
             return parentObjects;
         }
@@ -229,8 +237,8 @@ public class ForumFragment extends Fragment {
         public void onClick(View v) {
             View view = View.inflate(getActivity(), R.layout.alertdialog_comment, null);
             Button sendButton = (Button) view.findViewById(R.id.send_button);
-            ImageView commenter = (ImageView) view.findViewById(R.id.comment_poster_profile_image_view);
-            Glide.with(getActivity()).load(ContentsLab.get().getmLogInData().get(0)).into(commenter);
+            ImageView commentorPic = (ImageView)view.findViewById(R.id.commentor_pic);
+            Glide.with(getActivity()).load(ContentsLab.get().getmLogInData().get(0)).into(commentorPic);
             final EditText commentEditText = (EditText) view.findViewById(R.id.comment_edit_text);
             final BottomSheetDialog commentDialog = new BottomSheetDialog(getActivity());
             sendButton.setOnClickListener(new View.OnClickListener() {
@@ -241,6 +249,7 @@ public class ForumFragment extends Fragment {
                     String uid = ContentsLab.get().getmLogInData().get(3);
                     Map<String, String> map = new HashMap<>();
                     map.put("threadID", mForumThread.getId());
+                    map.put("commentID", UUID.randomUUID().toString());
                     map.put("author", name);
                     map.put("posterID", uid);
                     map.put("text", commentEditText.getText().toString());
@@ -281,21 +290,37 @@ public class ForumFragment extends Fragment {
                 delete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Map<String, String> map = new HashMap<>();
-                        map.put("threadID", mForumThread.getId());
-                        new NetworkingService().deleteRequestForumThread(getActivity(), "thread", map, new NetworkingService.VolleyCallback() {
-                            @Override
-                            public void onSuccess(String result) {
-                                new FetchThreadsTask().execute();
-                            }
-                        });
+
+                        AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
+                                .setTitle("Remove Thread")
+                                .setMessage("Are you sure?")
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Map<String, String> map = new HashMap<>();
+                                        map.put("threadID", mForumThread.getId());
+                                        new NetworkingService().deleteRequestForumThread(getActivity(), "thread", map, new NetworkingService.VolleyCallback() {
+                                            @Override
+                                            public void onSuccess(String result) {
+                                                new FetchThreadsTask().execute();
+                                            }
+                                        });
+                                    }
+                                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                    }
+                                }).create();
+
+                        alertDialog.show();
+
                         editDeleteDialog.dismiss();
                     }
                 });
                 editDeleteDialog.show();
             } else {
-
-                Toast.makeText(getActivity(), "Not your post", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "This is not your post", Toast.LENGTH_SHORT).show();
             }
             return true;
         }
@@ -305,7 +330,7 @@ public class ForumFragment extends Fragment {
 
         private List<ForumThread> mForumThreads;
 
-        public ForumAdapter(List<ForumThread> forumThreads) {
+        private ForumAdapter(List<ForumThread> forumThreads) {
             mForumThreads = forumThreads;
         }
 

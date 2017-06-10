@@ -25,7 +25,7 @@ import nl.rug.www.rugsummerschool.model.Announcement;
 public class AnnouncementPagerActivity extends AppCompatActivity {
 
     private static final String EXTRA_ANNOUNCEMENT_ID =
-            "nl.rug.www.summerschool.announcement_id";
+            "nl.rug.www.rugsummerschool.announcement_id";
 
     private List<Announcement> mAnnouncements;
 

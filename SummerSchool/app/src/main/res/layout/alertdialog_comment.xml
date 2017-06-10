@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="horizontal"
               android:layout_width="match_parent"
               android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/comment_poster_profile_image_view"
+    <com.mikhaellopez.circularimageview.CircularImageView
+        android:id="@+id/commentor_pic"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_margin="4dp"
-        android:src="@drawable/profile"/>
+        android:src="@drawable/profile"
+        app:civ_border_width="4dp"
+        app:civ_shadow_radius="10"/>
 
     <EditText
         android:id="@+id/comment_edit_text"
@@ -18,8 +21,8 @@
         android:layout_weight="1"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:textSize="16dp"
-        android:hint="Type a messege"
+        android:textSize="16sp"
+        android:hint="@string/type_a_messege"
         android:background="@android:color/transparent"/>
 
     <Button
@@ -27,7 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="send"/>
+        android:text="@string/send"/>
 
 
 

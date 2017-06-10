@@ -63,6 +63,18 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="signup_continue">Continue</string>
     <string name="signin_prompt">Sign in to view forums</string>
+    <string name="post">POST</string>
+    <string name="type_in_title">Type in title</string>
+    <string name="type_in_contents">Type in contents</string>
+    <string name="type_a_messege">Type a messege</string>
+    <string name="send">send</string>
+    <string name="delete_image_button">Delete Image Button</string>
+    <string name="edit_image_button">Edit Image Button</string>
+    <string name="appbar_banner">AppBar Banner</string>
+    <string name="forumview_before_login">ForumView before login</string>
+    <string name="newIcon">new</string>
+    <string name="drawable_arrow">drawable arrow</string>
+    <string name="generalinfo_content_image">generalinfo content image</string>
 
     <string-array name="FOS_Array">
         <item>Biochemical Science</item>
