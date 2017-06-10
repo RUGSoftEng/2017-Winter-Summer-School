@@ -34,7 +34,7 @@ import static org.joda.time.DateTimeConstants.MILLIS_PER_DAY;
 
 /**
  * This class is a fragment on main pager activity.
- * It shows a list of titles of all announcements fetched from database.
+ * It shows a list of titles of all announcements fetched from server.
  *
  * @since 13/04/2017
  * @author Jeongkyun Oh
@@ -125,10 +125,12 @@ public class AnnouncementListFragment extends Fragment {
             mAnnouncement = announcement;
             mTitleTextView.setText(mAnnouncement.getTitle());
             String poster = mAnnouncement.getPoster();
-            mInitialView.setText(poster.toUpperCase().charAt(0) + "");
+            String initial = poster.toUpperCase().charAt(0) + "";
+            mInitialView.setText(initial);
             GradientDrawable circle = (GradientDrawable)mInitialView.getBackground();
             circle.setColor(generateColor(poster));
-            mAuthorTextView.setText("By " + poster);
+            String byPoster = "By " + poster;
+            mAuthorTextView.setText(byPoster);
             Date date = new DateTime(mAnnouncement.getDate()).toDate();
             Date today = new Date();
             if (today.getTime() - date.getTime() < MILLIS_PER_DAY) {

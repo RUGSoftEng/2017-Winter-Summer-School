@@ -21,6 +21,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserInfo;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import nl.rug.www.rugsummerschool.R;
 import nl.rug.www.rugsummerschool.controller.ContentsLab;
@@ -36,11 +39,10 @@ import nl.rug.www.rugsummerschool.networking.NetworkingService;
 
 public class MyProfileFragment extends Fragment implements View.OnClickListener {
 
-    private static final String ARG_CONTENT_ID = "log_in_data";
     private static final String TAG = "MyProfileFragment";
     //UI Object Declaration
     private TextView displayNameTV;
-    private TextView nameTV;
+    private TextView schoolnameTV;
     private TextView emailTV;
     private TextView fosTV;
     private TextView dobTV;
@@ -75,8 +77,18 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
         displayNameTV = (TextView) view.findViewById(R.id.user_profile_name);
         displayNameTV.setText(displayName);
 
-        nameTV = (TextView) view.findViewById(R.id.user_name);
-        nameTV.setText(displayName);
+        schoolnameTV = (TextView) view.findViewById(R.id.user_profile_short_bio);
+        Calendar today = new GregorianCalendar();
+        String shortBio = "Groningen University - ";
+        int year = today.get(Calendar.YEAR);
+        shortBio += year;
+        int month = today.get(Calendar.MONTH);
+        if (month >= 4 && month <= 9) {
+            shortBio += " Summer School";
+        } else {
+            shortBio += " Winter School";
+        }
+        schoolnameTV.setText(shortBio);
 
         emailTV = (TextView) view.findViewById(R.id.user_email);
         emailTV.setText(email);

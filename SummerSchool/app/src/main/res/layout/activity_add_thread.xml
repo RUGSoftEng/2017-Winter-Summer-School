@@ -18,7 +18,7 @@
             android:id="@+id/title_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Type in title"
+            android:hint="@string/type_in_title"
             android:layout_margin="16dp"/>
 
         <EditText
@@ -26,8 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:layout_below="@id/title_edit_text"
-            android:hint="Type in contents"/>
+            android:hint="@string/type_in_contents"/>
 
     </LinearLayout>
 
@@ -36,8 +35,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryDark"
-        android:text="POST"
+        android:text="@string/post"
         android:textColor="@android:color/white"
-        android:layout_alignParentBottom="true"/>
+        />
 
 </LinearLayout>

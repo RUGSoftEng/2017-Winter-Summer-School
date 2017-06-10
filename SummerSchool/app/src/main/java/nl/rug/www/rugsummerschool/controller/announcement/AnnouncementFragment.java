@@ -52,17 +52,24 @@ public class AnnouncementFragment extends Fragment {
         mAnnouncement = ContentsLab.get().getAnnouncement(announcementId);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_announcement, container, false);
 
         TextView mDescription = (TextView)view.findViewById(R.id.announcement_detail);
-        mDescription.setText(Html.fromHtml(mAnnouncement.getDescription()));
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            mDescription.setText(Html.fromHtml(mAnnouncement.getDescription(), Html.FROM_HTML_MODE_LEGACY));
+        } else {
+            mDescription.setText(Html.fromHtml(mAnnouncement.getDescription()));
+        }
+
         TextView mPoster = (TextView)view.findViewById(R.id.poster_text_view);
         String poster = mAnnouncement.getPoster();
         mPoster.setText(poster);
         TextView initialCircle = (TextView)view.findViewById(R.id.initial_text_view);
-        initialCircle.setText("" + poster.toUpperCase().charAt(0));
+        String initial = poster.toUpperCase().charAt(0) + "";
+        initialCircle.setText(initial);
         GradientDrawable circle = (GradientDrawable)initialCircle.getBackground();
         circle.setColor(generateColor(poster));
         TextView mDate = (TextView)view.findViewById(R.id.date_text_view);

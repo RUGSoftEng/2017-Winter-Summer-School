@@ -18,8 +18,6 @@ import com.android.volley.toolbox.Volley;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,12 +47,7 @@ import nl.rug.www.rugsummerschool.model.GeneralInfo;
 import nl.rug.www.rugsummerschool.model.Lecturer;
 
 /**
- * This class is to deal with all process for fetching data from online.
- * Fetching data from database works only local server of port 8080.
- * In order to fetch data from server, you should uncomment jsonString
- * on each fetch method, and comment temporary jsonString.
- * Only mobile running on emulator that runs server can access via "https://10.0.2.2:8080".
- * Otherwise, use temporary jsonStrings.
+ * This class is to deal with all process for fetching data from server.
  *
  * @since 13/04/2017
  * @author Jeongkyun Oh
@@ -69,10 +62,8 @@ public class NetworkingService {
     private static final int ANNOUNCEMENT = 0;
     private static final int GENERAL_INFO = 1;
     private static final int LECTURER = 2;
-    private static final int TIMETABLE = 3;
-    private static final int FORUM = 4;
-    private static final int FORUM_POST = 5;
-    private static final int LOGIN_CODE = 6;
+    private static final int FORUM = 3;
+    private static final int LOGIN_CODE = 4;
 
     public interface VolleyCallback {
         void onSuccess(String result);
@@ -142,9 +133,7 @@ public class NetworkingService {
         try {
             String jsonString = getUrlString(builder.toString());
             return new JSONObject(jsonString);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
         return null;
@@ -373,6 +362,7 @@ public class NetworkingService {
                 ForumComment comment = new ForumComment();
                 JSONObject jsonObject = jsonComments.getJSONObject(j);
                 if (jsonObject == null) break;
+                comment.setCommentId(jsonObject.getString("commentID"));
                 comment.setPosterId(jsonObject.getString("posterID"));
                 comment.setPoster(jsonObject.getString("author"));
                 comment.setText(jsonObject.getString("text"));
@@ -396,7 +386,7 @@ public class NetworkingService {
                         .appendQueryParameter("description", valuePairs.get("description"));
                 break;
             case "comment" :
-                builder.appendQueryParameter("arrayPos", valuePairs.get("arrayPos"))
+                builder.appendQueryParameter("commentID", valuePairs.get("commentID"))
                         .appendQueryParameter("text", valuePairs.get("text"));
                 break;
         }
@@ -426,7 +416,7 @@ public class NetworkingService {
         builder.scheme("http").encodedAuthority(URL_DATABASE);
         builder.appendPath("forum").appendPath(forumPath).appendPath("item")
                 .appendQueryParameter("threadID", valuePairs.get("threadID"));
-        if (forumPath.equals("comment")) builder.appendQueryParameter("arrayPos", valuePairs.get("arrayPos"));
+        if (forumPath.equals("comment")) builder.appendQueryParameter("commentID", valuePairs.get("commentID"));
 
         String url = builder.toString();
 

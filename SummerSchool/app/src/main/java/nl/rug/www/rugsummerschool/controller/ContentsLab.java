@@ -26,7 +26,9 @@ public class ContentsLab {
 
     private ArrayList<Announcement> mAnnouncements;
     private ArrayList<GeneralInfo> mGeneralInfos;
-    private ArrayList<EventsPerDay> mEventsPerDays;
+    private ArrayList<EventsPerDay> mPreviousWeekEvents;
+    private ArrayList<EventsPerDay> mCurrentWeekEvents;
+    private ArrayList<EventsPerDay> mNextWeekEvents;
     private ArrayList<Lecturer> mLecturers;
     private ArrayList<ForumThread> mForumThreads;
     private ArrayList<String> mLogInData;
@@ -43,7 +45,9 @@ public class ContentsLab {
     private ContentsLab() {
         mAnnouncements = new ArrayList<>();
         mGeneralInfos = new ArrayList<>();
-        mEventsPerDays = new ArrayList<>();
+        mPreviousWeekEvents = new ArrayList<>();
+        mCurrentWeekEvents = new ArrayList<>();
+        mNextWeekEvents = new ArrayList<>();
         mLecturers = new ArrayList<>();
         mForumThreads = new ArrayList<>();
         mFakeUsers = new ArrayList<>();
@@ -69,7 +73,11 @@ public class ContentsLab {
         return null;
     }
 
-    public List<EventsPerDay> getEventsPerDays() { return mEventsPerDays; }
+    public List<EventsPerDay> getPreviousWeekEvents() { return mPreviousWeekEvents; }
+
+    public List<EventsPerDay> getCurrentWeekEvents() { return mCurrentWeekEvents; }
+
+    public List<EventsPerDay> getNextWeekEvents() { return mNextWeekEvents; }
 
     public List<Lecturer> getLecturers() { return mLecturers; }
 
@@ -88,10 +96,6 @@ public class ContentsLab {
         return false;
     }
 
-    public List<ForumThread> getForumThreads() {
-        return mForumThreads;
-    }
-
     public void updateAnnouncements(List<Announcement> announcements) {
         mAnnouncements = (ArrayList<Announcement>) announcements;
     }
@@ -104,8 +108,16 @@ public class ContentsLab {
         mLecturers = (ArrayList<Lecturer>) lecturers;
     }
 
+    public void updatePreviousWeekTimeTable(List<EventsPerDay> eventsPerDays) {
+        mPreviousWeekEvents = (ArrayList<EventsPerDay>) eventsPerDays;
+    }
+
     public void updateTimeTableWeeks(List<EventsPerDay> eventsPerDays) {
-        mEventsPerDays = (ArrayList<EventsPerDay>) eventsPerDays;
+        mCurrentWeekEvents = (ArrayList<EventsPerDay>) eventsPerDays;
+    }
+
+    public void updateNextWeekTimeTable(List<EventsPerDay> eventsPerDays) {
+        mNextWeekEvents = (ArrayList<EventsPerDay>) eventsPerDays;
     }
 
     public void updateForumThreads(List<ForumThread> forumThreads) {

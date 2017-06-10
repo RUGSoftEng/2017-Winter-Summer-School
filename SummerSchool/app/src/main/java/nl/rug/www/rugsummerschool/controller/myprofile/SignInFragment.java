@@ -90,7 +90,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
 
         //initialise
         spinner = (ProgressBar) view.findViewById(R.id.load_spinner);
-        spinner.setVisibility(View.GONE);
+        spinner.setVisibility(View.INVISIBLE);
         invisibleFbButton = (LoginButton) view.findViewById(R.id.invisibleFB);
         mfacebookLoginButton = (Button) view.findViewById(R.id.facebook_login_button);
         mfacebookLoginButton.setOnClickListener(this);

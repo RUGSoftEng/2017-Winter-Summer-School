@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,6 @@ import com.bignerdranch.expandablerecyclerview.ViewHolder.ChildViewHolder;
 import com.bignerdranch.expandablerecyclerview.ViewHolder.ParentViewHolder;
 
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -49,6 +47,10 @@ public class TimeTableFragment extends Fragment {
     private RecyclerView mTimeTableRecyclerView;
     private TimeTableExpandableAdapter mTimeTableExpandableAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+
+    private static final int PREVIOUS = -1;
+    private static final int CURRENT = 0;
+    private static final int NEXT = 1;
     private int mWeek = 0;
 
     @Override
@@ -68,7 +70,10 @@ public class TimeTableFragment extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                new FetchTimeTablesTask().execute();
+                new FetchTimeTablesTask(CURRENT, mWeek).execute();
+                new FetchTimeTablesTask(PREVIOUS, mWeek-1).execute();
+                new FetchTimeTablesTask(NEXT, mWeek+1).execute();
+                setupAdapter();
             }
         });
 
@@ -77,7 +82,11 @@ public class TimeTableFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 mWeek--;
-                new FetchTimeTablesTask().execute();
+                ContentsLab contentsLab = ContentsLab.get();
+                contentsLab.updateNextWeekTimeTable(contentsLab.getCurrentWeekEvents());
+                contentsLab.updateTimeTableWeeks(contentsLab.getPreviousWeekEvents());
+                new FetchTimeTablesTask(PREVIOUS, mWeek-1).execute();
+                setupAdapter();
             }
         });
 
@@ -86,15 +95,21 @@ public class TimeTableFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 mWeek++;
-                new FetchTimeTablesTask().execute();
+                ContentsLab contentsLab = ContentsLab.get();
+                contentsLab.updatePreviousWeekTimeTable(contentsLab.getCurrentWeekEvents());
+                contentsLab.updateTimeTableWeeks(contentsLab.getNextWeekEvents());
+                new FetchTimeTablesTask(NEXT, mWeek+1).execute();
+                setupAdapter();
             }
         });
 
         mTimeTableRecyclerView = (RecyclerView)view.findViewById(R.id.recycler_view);
         mTimeTableRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        setupAdapter();
-        new FetchTimeTablesTask().execute();
+        new FetchTimeTablesTask(CURRENT, mWeek).execute();
+        new FetchTimeTablesTask(PREVIOUS, mWeek-1).execute();
+        new FetchTimeTablesTask(NEXT, mWeek+1).execute();
+
         return view;
     }
 
@@ -177,7 +192,7 @@ public class TimeTableFragment extends Fragment {
     private ArrayList<ParentObject> generateTimeTableWeek() {
         ContentsLab contentsLab = ContentsLab.get();
         ArrayList<ParentObject> parentObjects = new ArrayList<>();
-        List<EventsPerDay> eventsPerDays = contentsLab.getEventsPerDays();
+        List<EventsPerDay> eventsPerDays = contentsLab.getCurrentWeekEvents();
         for (EventsPerDay t : eventsPerDays) {
             parentObjects.add(t);
         }
@@ -187,17 +202,35 @@ public class TimeTableFragment extends Fragment {
     private class FetchTimeTablesTask extends AsyncTask<Void, Void, List<EventsPerDay>> {
 
         List<EventsPerDay> mItems;
+        private int week;
+        private int pressedButton;
+
+        public FetchTimeTablesTask(int pressedButton, int week) {
+            this.pressedButton = pressedButton;
+            this.week = week;
+        }
 
         @Override
         protected List<EventsPerDay> doInBackground(Void... params) {
-            return new NetworkingService().fetchTimeTables(mWeek);
+            return new NetworkingService().fetchTimeTables(this.week);
         }
 
         @Override
         protected void onPostExecute(List<EventsPerDay> timeTables) {
             mItems = timeTables;
-            ContentsLab.get().updateTimeTableWeeks(mItems);
-            setupAdapter();
+            switch (pressedButton) {
+                case PREVIOUS :
+                    ContentsLab.get().updatePreviousWeekTimeTable(mItems);
+                    break;
+                case CURRENT :
+                    ContentsLab.get().updateTimeTableWeeks(mItems);
+                    setupAdapter();
+                    break;
+                case NEXT :
+                    ContentsLab.get().updateNextWeekTimeTable(mItems);
+                    break;
+            }
+
             if (mSwipeRefreshLayout.isRefreshing()) {
                 mSwipeRefreshLayout.setRefreshing(false);
             }

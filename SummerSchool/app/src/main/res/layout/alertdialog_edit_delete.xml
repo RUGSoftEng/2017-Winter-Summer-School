@@ -5,19 +5,21 @@
               android:layout_height="wrap_content">
 
     <ImageView
-            android:id="@+id/edit_image_view"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/colorAccent"
-            android:src="@mipmap/icon_edit"/>
+        android:id="@+id/edit_image_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/colorAccent"
+        android:src="@mipmap/icon_edit"
+        android:contentDescription="@string/edit_image_button"/>
 
     <ImageView
-            android:id="@+id/delete_image_view"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/colorPrimary"
-            android:src="@mipmap/icon_delete"/>
+        android:id="@+id/delete_image_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/colorPrimary"
+        android:src="@mipmap/icon_delete"
+        android:contentDescription="@string/delete_image_button"/>
 
 </LinearLayout>

@@ -1,23 +1,21 @@
 package nl.rug.www.rugsummerschool.controller;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.firebase.iid.FirebaseInstanceId;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import nl.rug.www.rugsummerschool.R;
-import nl.rug.www.rugsummerschool.networking.FCMService;
 import nl.rug.www.rugsummerschool.networking.NetworkingService;
 
 /**
@@ -31,9 +29,12 @@ import nl.rug.www.rugsummerschool.networking.NetworkingService;
 public class LoginActivity extends AppCompatActivity {
 
     /** temporary correct code to enter main activity */
+    private EditText mPasswordEditText;
     private Button mLoginButton;
-    private List<String> mLogInCodes;
     private ProgressBar mProgressBar;
+    private SharedPreferences mSharedPreferences;
+
+    private static final String TAG = "LoginActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,24 +44,39 @@ public class LoginActivity extends AppCompatActivity {
         mProgressBar = (ProgressBar)findViewById(R.id.progress_bar_login);
         mLoginButton = (Button)findViewById(R.id.login_button);
         mLoginButton.setEnabled(false);
-        final EditText codeText = (EditText)findViewById(R.id.codeText);
+        mPasswordEditText = (EditText)findViewById(R.id.codeText);
+        mPasswordEditText.setEnabled(false);
+
+        new FetchLogInCodes().execute();
+
+        mSharedPreferences = getSharedPreferences("ActivityPreference", Context.MODE_PRIVATE);
 
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String code = codeText.getText().toString();
+                String code = mPasswordEditText.getText().toString();
                 if (ContentsLab.get().checkLogInCode(code)) {
-                    Intent intent = new Intent(LoginActivity.this, MainPagerActivity.class);
-                    startActivity(intent);
-                    finish();
+                    Log.d(TAG, "In Button lisetner true/false and passcode before : " + mSharedPreferences.getBoolean("password_correct", false) + mSharedPreferences.getString("password", null));
+                    if (!mSharedPreferences.getBoolean("password_correct", false)) {
+                        SharedPreferences.Editor ed = mSharedPreferences.edit();
+                        ed.putBoolean("password_correct", true);
+                        ed.putString("password", code);
+                        ed.apply();
+                        Log.d(TAG, "In Button lisetner true/false and passcode after : " + mSharedPreferences.getBoolean("password_correct", false) + mSharedPreferences.getString("password", null));
+                    }
+                    runMainPagerActivity();
                 } else {
-                    Toast.makeText(getApplicationContext(), R.string.not_correct_code, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, R.string.not_correct_code, Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        new FetchLogInCodes().execute();
+    }
 
+    private void runMainPagerActivity() {
+        Intent intent = new Intent(LoginActivity.this, MainPagerActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private class FetchLogInCodes extends AsyncTask<Void, Void, List<String>> {
@@ -73,8 +89,21 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(List<String> logInCodes) {
             ContentsLab.get().updateLogInCodes(logInCodes);
+            Log.d(TAG, "In PostExcute true/false and passcode Before : " + mSharedPreferences.getBoolean("password_correct", false) + mSharedPreferences.getString("password", null));
+            if (mSharedPreferences.getBoolean("password_correct", true)) {
+                String code = mSharedPreferences.getString("password", null);
+                if (ContentsLab.get().checkLogInCode(code)) {
+                    runMainPagerActivity();
+                } else {
+                    SharedPreferences.Editor ed = mSharedPreferences.edit();
+                    ed.putBoolean("password_correct", false);
+                    ed.apply();
+                }
+                Log.d(TAG, "In PostExcute true/false and passcode After : " + mSharedPreferences.getBoolean("password_correct", false) + mSharedPreferences.getString("password", null));
+            }
             mProgressBar.setVisibility(View.GONE);
             mLoginButton.setEnabled(true);
+            mPasswordEditText.setEnabled(true);
         }
     }
 }
