@@ -113,6 +113,17 @@ public class CommentExpandableAdapter extends ExpandableRecyclerAdapter<ParentVi
                                 public void onSuccess(String result) {
                                     mFetchThreadsTask.execute();
                                 }
+
+                                @Override
+                                public void onFail(String result) {
+                                    Toast.makeText(mContext, "It fails to edit the comment.\nPlease try again.", Toast.LENGTH_SHORT).show();
+                                }
+
+                                @Override
+                                public void onError(String result) {
+                                    Toast.makeText(mContext, "Error:" + result, Toast.LENGTH_SHORT).show();
+                                }
+
                             });
                             commentDialog.dismiss();
                         }
@@ -145,6 +156,16 @@ public class CommentExpandableAdapter extends ExpandableRecyclerAdapter<ParentVi
                                         @Override
                                         public void onSuccess(String result) {
                                             mFetchThreadsTask.execute();
+                                        }
+
+                                        @Override
+                                        public void onFail(String result) {
+                                            Toast.makeText(mContext, "It fails to delete the comment.\nPlease try again.", Toast.LENGTH_SHORT).show();
+                                        }
+
+                                        @Override
+                                        public void onError(String result) {
+                                            Toast.makeText(mContext, "Error:" + result, Toast.LENGTH_SHORT).show();
                                         }
                                     });
                                 }

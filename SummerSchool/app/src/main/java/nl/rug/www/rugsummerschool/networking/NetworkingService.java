@@ -67,6 +67,8 @@ public class NetworkingService {
 
     public interface VolleyCallback {
         void onSuccess(String result);
+        void onFail(String result);
+        void onError(String result);
     }
 
     private byte[] getUrlBytes(String urlSpec) throws IOException {
@@ -398,13 +400,17 @@ public class NetworkingService {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d(TAG, "On response result : " + response);
-                        volleyCallback.onSuccess(response);
+                        Log.d(TAG, "On response result (PUT Request) : " + response);
+                        if (response.equals("OK") || response.equals("200"))
+                            volleyCallback.onSuccess(response);
+                        else
+                            volleyCallback.onFail(response);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d(TAG, "Error message : " + error.toString());
+                Log.d(TAG, "Error message (PUT Request): " + error.toString());
+                volleyCallback.onError(error.toString());
             }
         });
 
@@ -425,13 +431,17 @@ public class NetworkingService {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d(TAG, "On response result : " + response);
-                        volleyCallback.onSuccess(response);
+                        Log.d(TAG, "On response result (DELETE Request): " + response);
+                        if (response.equals("OK") || response.equals("200"))
+                            volleyCallback.onSuccess(response);
+                        else
+                            volleyCallback.onFail(response);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d(TAG, "Error message : " + error.toString());
+                Log.d(TAG, "Error message : (DELETE Request)" + error.toString());
+                volleyCallback.onError(error.toString());
             }
         });
 
@@ -458,15 +468,19 @@ public class NetworkingService {
 
             StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                     new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    Log.d(TAG, "On response result : " + response);
-                    volleyCallback.onSuccess(response);
-                }
-            }, new Response.ErrorListener() {
+                        @Override
+                        public void onResponse(String response) {
+                            Log.d(TAG, "On response result (POST Request): " + response);
+                            if (response.equals("OK") || response.equals("200"))
+                                volleyCallback.onSuccess(response);
+                            else
+                                volleyCallback.onFail(response);
+                        }
+                    }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.d(TAG, "On error response : " + error.toString());
+                    Log.d(TAG, "Error message : (POST Request)" + error.toString());
+                    volleyCallback.onError(error.toString());
                 }
             }) {
                 @Override
@@ -503,19 +517,18 @@ public class NetworkingService {
             builder.scheme("http").encodedAuthority(URL_DATABASE);
             builder.appendPath("token").appendQueryParameter("id", Token);
             String url = builder.toString();
-            Log.d(TAG + "===", url);
 
             RequestQueue queue = Volley.newRequestQueue(context);
             StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            Log.d(TAG, "On response result : " + response);
+                            Log.d(TAG, "On response result (POST FCMID): " + response);
                         }
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.d(TAG, "Error message : " + error.toString());
+                    Log.d(TAG, "Error message (POST FCMID): " + error.toString());
                 }
             });
 

@@ -259,6 +259,16 @@ public class ForumFragment extends Fragment {
                         public void onSuccess(String result) {
                             new FetchThreadsTask().execute();
                         }
+
+                        @Override
+                        public void onFail(String result) {
+                            Toast.makeText(getActivity(), "It fails to post your forum thread.\nPlease try again.", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onError(String result) {
+                            Toast.makeText(getActivity(), "Error:" + result, Toast.LENGTH_SHORT).show();
+                        }
                     });
                     commentDialog.dismiss();
                 }
@@ -303,6 +313,16 @@ public class ForumFragment extends Fragment {
                                             @Override
                                             public void onSuccess(String result) {
                                                 new FetchThreadsTask().execute();
+                                            }
+
+                                            @Override
+                                            public void onFail(String result) {
+                                                Toast.makeText(getActivity(), "It fails to delete your forum thread.\nPlease try again.", Toast.LENGTH_SHORT).show();
+                                            }
+
+                                            @Override
+                                            public void onError(String result) {
+                                                Toast.makeText(getActivity(), "Error:"+result, Toast.LENGTH_SHORT).show();
                                             }
                                         });
                                     }
