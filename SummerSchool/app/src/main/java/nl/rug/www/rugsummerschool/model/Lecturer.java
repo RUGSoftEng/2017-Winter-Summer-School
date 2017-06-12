@@ -2,6 +2,8 @@ package nl.rug.www.rugsummerschool.model;
 
 import android.graphics.drawable.Drawable;
 
+import java.io.Serializable;
+
 /**
  * This class is a model of lecturer information that contains
  *
@@ -11,7 +13,7 @@ import android.graphics.drawable.Drawable;
 
 public class Lecturer extends Content {
 
-    private Drawable mProfilePicture;
+    private String imgurl;
     private String website;
 
     public String getWebsite() {
@@ -22,11 +24,11 @@ public class Lecturer extends Content {
         this.website = website;
     }
 
-    public Drawable getProfilePicture() {
-        return mProfilePicture;
+    public String getImgurl() {
+        return imgurl;
     }
 
-    public void setProfilePicture(Drawable profilePicture) {
-        mProfilePicture = profilePicture;
+    public void setImgurl(String imgurl) {
+        this.imgurl = imgurl;
     }
 }

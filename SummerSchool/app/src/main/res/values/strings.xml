@@ -75,6 +75,9 @@
     <string name="newIcon">new</string>
     <string name="drawable_arrow">drawable arrow</string>
     <string name="generalinfo_content_image">generalinfo content image</string>
+    <string name="detail">Detail?</string>
+    <string name="where">Where?</string>
+    <string name="close_button">close button</string>
 
     <string-array name="FOS_Array">
         <item>Biochemical Science</item>

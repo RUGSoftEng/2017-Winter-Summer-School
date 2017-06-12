@@ -42,8 +42,8 @@
         <RelativeLayout
             android:id="@+id/profile_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#ebca0707"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimary"
             android:paddingBottom="24dp">
 
             <TextView
@@ -88,7 +88,6 @@
             android:layout_height="wrap_content"
             android:text="@string/log_out_button"
             android:textColor="#ffffff"
-            android:layout_margin="4dp"
             android:background="@color/colorPrimaryDark"/>
     </LinearLayout>
 

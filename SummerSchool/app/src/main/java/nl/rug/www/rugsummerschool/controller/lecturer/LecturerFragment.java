@@ -13,6 +13,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
+import java.net.URL;
+
 import nl.rug.www.rugsummerschool.R;
 import nl.rug.www.rugsummerschool.controller.ContentsLab;
 import nl.rug.www.rugsummerschool.model.Lecturer;
@@ -62,9 +66,10 @@ public class LecturerFragment extends Fragment {
             public void onClick(View v) {
                 String url = mLecturer.getWebsite();
                 try {
-                    Uri website = Uri.parse(url);
+                    Uri website = Uri.parse(new URL(url).toURI().toString());
                     Intent websiteIntent = new Intent(Intent.ACTION_VIEW, website);
                     startActivity(websiteIntent);
+
                 } catch (Exception e){
                     Toast.makeText(getActivity(), "Please check if the address is correct.\nMake sure that 'http://' should be included.", Toast.LENGTH_LONG).show();
                     e.printStackTrace();
@@ -72,11 +77,9 @@ public class LecturerFragment extends Fragment {
             }
         });
         ImageView mLecturerImageView = (ImageView)view.findViewById(R.id.lecturer_image_view);
-        Drawable drawable = mLecturer.getProfilePicture();
-        if (drawable != null)
-            mLecturerImageView.setImageDrawable(drawable);
-        else
-            mLecturerImageView.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.profile));
+        String url = mLecturer.getImgurl();
+        if (!url.equals(""))
+            Glide.with(getActivity()).load(mLecturer.getImgurl()).into(mLecturerImageView);
 
         return view;
     }

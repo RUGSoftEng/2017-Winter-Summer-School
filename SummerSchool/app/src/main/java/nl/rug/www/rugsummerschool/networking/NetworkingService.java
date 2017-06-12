@@ -299,6 +299,8 @@ public class NetworkingService {
                 JSONObject object = new JSONObject(eventsArray.getString(j));
                 event.setId(object.getString("id"));
                 event.setTitle(object.getString("summary"));
+                event.setDescription(object.getString("description"));
+                event.setLocation(object.getString("location"));
                 JSONObject startDate = object.getJSONObject("start");
                 JSONObject endDate = object.getJSONObject("end");
                 event.setStartDate(startDate.getString("dateTime"));
@@ -329,15 +331,7 @@ public class NetworkingService {
                     .encodedAuthority(URL_DATABASE)
                     .appendPath(contentJsonObject.getString("imagepath"));
             Log.d(TAG, "URL string :" + builder.toString());
-            URL url = new URL(builder.toString());
-            InputStream content;
-            try {
-                content = (InputStream) url.getContent();
-                Drawable picture = Drawable.createFromStream(content, "src");
-                lecturer.setProfilePicture(picture);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            lecturer.setImgurl(builder.toString());
 
             items.add(lecturer);
         }
@@ -401,7 +395,7 @@ public class NetworkingService {
                     @Override
                     public void onResponse(String response) {
                         Log.d(TAG, "On response result (PUT Request) : " + response);
-                        if (response.equals("OK") || response.equals("200"))
+                        if ("OK".equals(response) || "200".equals(response))
                             volleyCallback.onSuccess(response);
                         else
                             volleyCallback.onFail(response);
@@ -432,7 +426,7 @@ public class NetworkingService {
                     @Override
                     public void onResponse(String response) {
                         Log.d(TAG, "On response result (DELETE Request): " + response);
-                        if (response.equals("OK") || response.equals("200"))
+                        if ("OK".equals(response) || "200".equals(response))
                             volleyCallback.onSuccess(response);
                         else
                             volleyCallback.onFail(response);
@@ -471,7 +465,7 @@ public class NetworkingService {
                         @Override
                         public void onResponse(String response) {
                             Log.d(TAG, "On response result (POST Request): " + response);
-                            if (response.equals("OK") || response.equals("200"))
+                            if ("OK".equals(response) || "200".equals(response))
                                 volleyCallback.onSuccess(response);
                             else
                                 volleyCallback.onFail(response);
