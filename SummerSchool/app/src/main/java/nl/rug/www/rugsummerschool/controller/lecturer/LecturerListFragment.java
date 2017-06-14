@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,11 +91,10 @@ public class LecturerListFragment extends Fragment {
         private void bind(Lecturer lecturer){
             mLecturer = lecturer;
             mTitleTextView.setText(mLecturer.getTitle());
-            Drawable drawable = mLecturer.getProfilePicture();
-            if (drawable != null)
-                mLecturerImageView.setImageDrawable(drawable);
-            else
-                mLecturerImageView.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.profile));
+
+            String url = mLecturer.getImgurl();
+            if (!url.equals(""))
+                Glide.with(getActivity()).load(mLecturer.getImgurl()).into(mLecturerImageView);
         }
 
         @Override

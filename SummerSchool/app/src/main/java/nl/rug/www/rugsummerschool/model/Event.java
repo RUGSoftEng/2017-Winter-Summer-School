@@ -11,6 +11,7 @@ public class Event extends Content {
 
     private String mStartDate;
     private String mEndDate;
+    private String mLocation;
 
     public String getStartDate() {
         return mStartDate;
@@ -26,5 +27,13 @@ public class Event extends Content {
 
     public void setEndDate(String endDate) {
         mEndDate = endDate;
+    }
+
+    public String getLocation() {
+        return mLocation;
+    }
+
+    public void setLocation(String location) {
+        mLocation = location;
     }
 }

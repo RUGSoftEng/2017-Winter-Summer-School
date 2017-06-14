@@ -70,6 +70,18 @@ public class ThreadActivity extends AppCompatActivity {
                                     setResult(Activity.RESULT_OK);
                                     finish();
                                 }
+
+                                @Override
+                                public void onFail(String result) {
+                                    setResult(Activity.RESULT_CANCELED);
+                                    Toast.makeText(ThreadActivity.this, "It fails to post forum thread.", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                }
+
+                                @Override
+                                public void onError(String result) {
+                                    Toast.makeText(ThreadActivity.this, "Error:" + result, Toast.LENGTH_SHORT).show();
+                                }
                             });
                         }
                     }
@@ -97,6 +109,18 @@ public class ThreadActivity extends AppCompatActivity {
                                 public void onSuccess(String result) {
                                     setResult(Activity.RESULT_OK);
                                     finish();
+                                }
+
+                                @Override
+                                public void onFail(String result) {
+                                    Toast.makeText(ThreadActivity.this, "It fails to edit forum thread.", Toast.LENGTH_SHORT).show();
+                                    setResult(Activity.RESULT_CANCELED);
+                                    finish();
+                                }
+
+                                @Override
+                                public void onError(String result) {
+                                    Toast.makeText(ThreadActivity.this, "Error:" + result, Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }

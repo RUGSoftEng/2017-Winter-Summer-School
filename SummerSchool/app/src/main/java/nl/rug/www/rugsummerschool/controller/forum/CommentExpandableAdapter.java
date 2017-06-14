@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +43,6 @@ import static org.joda.time.DateTimeConstants.MILLIS_PER_DAY;
 public class CommentExpandableAdapter extends ExpandableRecyclerAdapter<ParentViewHolder, CommentViewHolder> {
 
     private LayoutInflater mLayoutInflater;
-    private Context mContext;
     private ForumThread mForumThread;
     private ForumFragment.FetchThreadsTask mFetchThreadsTask;
 
@@ -70,6 +68,7 @@ public class CommentExpandableAdapter extends ExpandableRecyclerAdapter<ParentVi
 
     @Override
     public void onBindParentViewHolder(ParentViewHolder parentViewHolder, int i, Object o) {
+        // no need to bind with parentObject
     }
 
     @Override
@@ -113,6 +112,17 @@ public class CommentExpandableAdapter extends ExpandableRecyclerAdapter<ParentVi
                                 public void onSuccess(String result) {
                                     mFetchThreadsTask.execute();
                                 }
+
+                                @Override
+                                public void onFail(String result) {
+                                    Toast.makeText(mContext, "It fails to edit the comment.\nPlease try again.", Toast.LENGTH_SHORT).show();
+                                }
+
+                                @Override
+                                public void onError(String result) {
+                                    Toast.makeText(mContext, "Error:" + result, Toast.LENGTH_SHORT).show();
+                                }
+
                             });
                             commentDialog.dismiss();
                         }
@@ -145,6 +155,16 @@ public class CommentExpandableAdapter extends ExpandableRecyclerAdapter<ParentVi
                                         @Override
                                         public void onSuccess(String result) {
                                             mFetchThreadsTask.execute();
+                                        }
+
+                                        @Override
+                                        public void onFail(String result) {
+                                            Toast.makeText(mContext, "It fails to delete the comment.\nPlease try again.", Toast.LENGTH_SHORT).show();
+                                        }
+
+                                        @Override
+                                        public void onError(String result) {
+                                            Toast.makeText(mContext, "Error:" + result, Toast.LENGTH_SHORT).show();
                                         }
                                     });
                                 }

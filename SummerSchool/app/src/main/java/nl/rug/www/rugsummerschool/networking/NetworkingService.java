@@ -67,6 +67,8 @@ public class NetworkingService {
 
     public interface VolleyCallback {
         void onSuccess(String result);
+        void onFail(String result);
+        void onError(String result);
     }
 
     private byte[] getUrlBytes(String urlSpec) throws IOException {
@@ -297,6 +299,8 @@ public class NetworkingService {
                 JSONObject object = new JSONObject(eventsArray.getString(j));
                 event.setId(object.getString("id"));
                 event.setTitle(object.getString("summary"));
+                event.setDescription(object.getString("description"));
+                event.setLocation(object.getString("location"));
                 JSONObject startDate = object.getJSONObject("start");
                 JSONObject endDate = object.getJSONObject("end");
                 event.setStartDate(startDate.getString("dateTime"));
@@ -327,15 +331,7 @@ public class NetworkingService {
                     .encodedAuthority(URL_DATABASE)
                     .appendPath(contentJsonObject.getString("imagepath"));
             Log.d(TAG, "URL string :" + builder.toString());
-            URL url = new URL(builder.toString());
-            InputStream content;
-            try {
-                content = (InputStream) url.getContent();
-                Drawable picture = Drawable.createFromStream(content, "src");
-                lecturer.setProfilePicture(picture);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            lecturer.setImgurl(builder.toString());
 
             items.add(lecturer);
         }
@@ -398,13 +394,17 @@ public class NetworkingService {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d(TAG, "On response result : " + response);
-                        volleyCallback.onSuccess(response);
+                        Log.d(TAG, "On response result (PUT Request) : " + response);
+                        if ("OK".equals(response) || "200".equals(response))
+                            volleyCallback.onSuccess(response);
+                        else
+                            volleyCallback.onFail(response);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d(TAG, "Error message : " + error.toString());
+                Log.d(TAG, "Error message (PUT Request): " + error.toString());
+                volleyCallback.onError(error.toString());
             }
         });
 
@@ -425,13 +425,17 @@ public class NetworkingService {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d(TAG, "On response result : " + response);
-                        volleyCallback.onSuccess(response);
+                        Log.d(TAG, "On response result (DELETE Request): " + response);
+                        if ("OK".equals(response) || "200".equals(response))
+                            volleyCallback.onSuccess(response);
+                        else
+                            volleyCallback.onFail(response);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d(TAG, "Error message : " + error.toString());
+                Log.d(TAG, "Error message : (DELETE Request)" + error.toString());
+                volleyCallback.onError(error.toString());
             }
         });
 
@@ -458,15 +462,19 @@ public class NetworkingService {
 
             StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                     new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    Log.d(TAG, "On response result : " + response);
-                    volleyCallback.onSuccess(response);
-                }
-            }, new Response.ErrorListener() {
+                        @Override
+                        public void onResponse(String response) {
+                            Log.d(TAG, "On response result (POST Request): " + response);
+                            if ("OK".equals(response) || "200".equals(response))
+                                volleyCallback.onSuccess(response);
+                            else
+                                volleyCallback.onFail(response);
+                        }
+                    }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.d(TAG, "On error response : " + error.toString());
+                    Log.d(TAG, "Error message : (POST Request)" + error.toString());
+                    volleyCallback.onError(error.toString());
                 }
             }) {
                 @Override
@@ -503,19 +511,18 @@ public class NetworkingService {
             builder.scheme("http").encodedAuthority(URL_DATABASE);
             builder.appendPath("token").appendQueryParameter("id", Token);
             String url = builder.toString();
-            Log.d(TAG + "===", url);
 
             RequestQueue queue = Volley.newRequestQueue(context);
             StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            Log.d(TAG, "On response result : " + response);
+                            Log.d(TAG, "On response result (POST FCMID): " + response);
                         }
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.d(TAG, "Error message : " + error.toString());
+                    Log.d(TAG, "Error message (POST FCMID): " + error.toString());
                 }
             });
 

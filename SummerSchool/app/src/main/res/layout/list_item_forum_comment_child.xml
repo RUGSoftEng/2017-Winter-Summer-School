@@ -42,8 +42,8 @@
                 android:layout_marginStart="16dp"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
-                tools:text="new"
-                android:textStyle="bold|italic"
+                android:text="@string/newIcon"
+                android:textStyle="bold"
                 android:textColor="@android:color/white"
                 android:background="@drawable/roundnew"
                 android:visibility="gone"/>

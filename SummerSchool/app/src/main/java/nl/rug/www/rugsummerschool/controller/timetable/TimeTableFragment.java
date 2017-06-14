@@ -2,15 +2,19 @@ package nl.rug.www.rugsummerschool.controller.timetable;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.bignerdranch.expandablerecyclerview.Adapter.ExpandableRecyclerAdapter;
@@ -141,7 +145,6 @@ public class TimeTableFragment extends Fragment {
 
         private TimeTableChildViewHolder(View itemView) {
             super(itemView);
-
             mTimeTextView = (TextView) itemView.findViewById(R.id.time_text_view);
             mSubjectTextView = (TextView) itemView.findViewById(R.id.subject_description);
         }
@@ -176,7 +179,7 @@ public class TimeTableFragment extends Fragment {
 
         @Override
         public void onBindChildViewHolder(TimeTableChildViewHolder timeTableChildViewHolder, int i, Object o) {
-            Event event = (Event)o;
+            final Event event = (Event)o;
             timeTableChildViewHolder.mSubjectTextView.setText(event.getTitle());
             Date start = new DateTime(event.getStartDate()).toDate();
 
@@ -186,6 +189,31 @@ public class TimeTableFragment extends Fragment {
 
             timeTableChildViewHolder.mTimeTextView.
                     setText(time.format(start)+" - "+time.format(end));
+
+            timeTableChildViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    LayoutInflater inflater = LayoutInflater.from(getActivity());
+                    View popupView = inflater.inflate(R.layout.popupwindow, null);
+                    ImageView closeView = (ImageView)popupView.findViewById(R.id.close_button);
+                    TextView locView = (TextView)popupView.findViewById(R.id.popup_location);
+                    locView.setText(event.getLocation());
+                    TextView detailView = (TextView)popupView.findViewById(R.id.popup_detail);
+                    detailView.setText(event.getDescription());
+                    final PopupWindow popup = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        popup.setElevation(0.5f);
+                    }
+                    popup.showAtLocation(popupView, Gravity.CENTER, 0, 0);
+                    closeView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            popup.dismiss();
+                        }
+                    });
+
+                }
+            });
         }
     }
 

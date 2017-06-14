@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,7 +33,8 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressBar mProgressBar;
     private SharedPreferences mSharedPreferences;
 
-    private static final String TAG = "LoginActivity";
+    private static final String CORRECT = "correct";
+    private static final String CODE = "code";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,13 +56,11 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String code = mPasswordEditText.getText().toString();
                 if (ContentsLab.get().checkLogInCode(code)) {
-                    Log.d(TAG, "In Button lisetner true/false and passcode before : " + mSharedPreferences.getBoolean("password_correct", false) + mSharedPreferences.getString("password", null));
-                    if (!mSharedPreferences.getBoolean("password_correct", false)) {
+                    if (!mSharedPreferences.getBoolean(CORRECT, false)) {
                         SharedPreferences.Editor ed = mSharedPreferences.edit();
-                        ed.putBoolean("password_correct", true);
-                        ed.putString("password", code);
+                        ed.putBoolean(CORRECT, true);
+                        ed.putString(CODE, code);
                         ed.apply();
-                        Log.d(TAG, "In Button lisetner true/false and passcode after : " + mSharedPreferences.getBoolean("password_correct", false) + mSharedPreferences.getString("password", null));
                     }
                     runMainPagerActivity();
                 } else {
@@ -89,17 +87,15 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(List<String> logInCodes) {
             ContentsLab.get().updateLogInCodes(logInCodes);
-            Log.d(TAG, "In PostExcute true/false and passcode Before : " + mSharedPreferences.getBoolean("password_correct", false) + mSharedPreferences.getString("password", null));
-            if (mSharedPreferences.getBoolean("password_correct", true)) {
-                String code = mSharedPreferences.getString("password", null);
+            if (mSharedPreferences.getBoolean(CORRECT, true)) {
+                String code = mSharedPreferences.getString(CODE, null);
                 if (ContentsLab.get().checkLogInCode(code)) {
                     runMainPagerActivity();
                 } else {
                     SharedPreferences.Editor ed = mSharedPreferences.edit();
-                    ed.putBoolean("password_correct", false);
+                    ed.putBoolean(CORRECT, false);
                     ed.apply();
                 }
-                Log.d(TAG, "In PostExcute true/false and passcode After : " + mSharedPreferences.getBoolean("password_correct", false) + mSharedPreferences.getString("password", null));
             }
             mProgressBar.setVisibility(View.GONE);
             mLoginButton.setEnabled(true);
