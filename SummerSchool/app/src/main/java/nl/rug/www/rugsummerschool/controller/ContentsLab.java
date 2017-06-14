@@ -55,7 +55,9 @@ public class ContentsLab {
         createFakeUsers();
     }
 
-    public List<GeneralInfo> getGeneralInfos() { return mGeneralInfos; }
+    public List<GeneralInfo> getGeneralInfos() {
+        return mGeneralInfos;
+    }
 
     public GeneralInfo getGeneralInfo(String id) {
         for (GeneralInfo c : mGeneralInfos) {
