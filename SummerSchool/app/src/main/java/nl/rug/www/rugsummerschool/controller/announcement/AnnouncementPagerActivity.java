@@ -2,18 +2,21 @@ package nl.rug.www.rugsummerschool.controller.announcement;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import java.util.List;
 
 import nl.rug.www.rugsummerschool.R;
 import nl.rug.www.rugsummerschool.controller.ContentsLab;
 import nl.rug.www.rugsummerschool.model.Announcement;
+import nl.rug.www.rugsummerschool.networking.NetworkingService;
 
 /**
  * This class is an acitivty that allows the announcement fragments on this to be slided by.
@@ -45,6 +48,7 @@ public class AnnouncementPagerActivity extends AppCompatActivity {
         final ViewPager mViewPager = (ViewPager) findViewById(R.id.content_view_pager);
 
         mAnnouncements = ContentsLab.get().getAnnouncements();
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         mViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
 
@@ -83,5 +87,11 @@ public class AnnouncementPagerActivity extends AppCompatActivity {
                 break;
             }
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        finish();
     }
 }

@@ -56,6 +56,10 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SIM = SignInManager.get(getActivity());
+        if (!SIM.getmGoogleApiClient().isConnected()) {
+            SIM.getmGoogleApiClient().connect();
+        }
     }
 
     @Nullable
@@ -93,10 +97,6 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
         emailTV = (TextView) view.findViewById(R.id.user_email);
         emailTV.setText(email);
 
-        SIM = SignInManager.get(getActivity());
-        if (!SIM.getmGoogleApiClient().isConnected()) {
-            SIM.getmGoogleApiClient().connect();
-        }
         return view;
     }
 
