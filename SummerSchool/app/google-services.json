@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "202157512063-eu575p90t65ofaci287i32cpe0pq1sg3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "nl.rug.www.rugsummerschool",
+            "certificate_hash": "7d4a4e7e3d5579c718ead94aa575015d9d2da0d5"
+          }
+        },
+        {
           "client_id": "202157512063-7jdd5adgmkddr1f00sugvcvfnd0s7dv7.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

@@ -32,7 +32,6 @@ public class ContentsLab {
     private ArrayList<Lecturer> mLecturers;
     private ArrayList<ForumThread> mForumThreads;
     private ArrayList<String> mLogInData;
-    private ArrayList<String> mFakeUsers;
     private ArrayList<String> mLogInCodes;
 
     public static ContentsLab get() {
@@ -50,9 +49,7 @@ public class ContentsLab {
         mNextWeekEvents = new ArrayList<>();
         mLecturers = new ArrayList<>();
         mForumThreads = new ArrayList<>();
-        mFakeUsers = new ArrayList<>();
         mLogInCodes = new ArrayList<>();
-        createFakeUsers();
     }
 
     public List<GeneralInfo> getGeneralInfos() {
@@ -136,30 +133,5 @@ public class ContentsLab {
 
     public void setmLogInData(ArrayList<String> mLogInData) {
         this.mLogInData = mLogInData;
-    }
-
-    public boolean userExist(String UID) {
-        for(int i = 0; i < mFakeUsers.size(); i++){
-            if(UID.equals(mFakeUsers.get(i))) return true;
-        }
-        return false;
-    }
-
-    public void addFakeData(String data){
-        mLogInData.add(data);
-    }
-
-    public void addFakeUsers(String UID) {
-        mFakeUsers.add(UID);
-    }
-
-    private void createFakeUsers(){
-        mFakeUsers.add("lPgWPazXwVSq5XYl3FiK6GAmaNE3");
-    }
-
-    public void printUsers(){
-        for(int i = 0; i < mFakeUsers.size(); i++){
-            Log.i("USER STRING", mFakeUsers.get(i));
-        }
     }
 }

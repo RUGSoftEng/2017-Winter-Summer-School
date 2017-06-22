@@ -50,12 +50,15 @@
         </activity>
         <activity
             android:name=".controller.announcement.AnnouncementPagerActivity"
+            android:screenOrientation="portrait"
             android:parentActivityName=".controller.MainPagerActivity"/>
         <activity
             android:name=".controller.generalinfo.GeneralInfoPagerActivity"
+            android:screenOrientation="portrait"
             android:parentActivityName=".controller.MainPagerActivity"/>
         <activity
             android:name=".controller.lecturer.LecturerPagerActivity"
+            android:screenOrientation="portrait"
             android:parentActivityName=".controller.MainPagerActivity"/>
         <activity
             android:name=".controller.MainPagerActivity"

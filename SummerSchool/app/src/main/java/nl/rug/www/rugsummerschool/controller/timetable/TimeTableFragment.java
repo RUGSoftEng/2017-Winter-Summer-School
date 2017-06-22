@@ -185,7 +185,6 @@ public class TimeTableFragment extends Fragment {
 
             Date end = new DateTime(event.getEndDate()).toDate();
             SimpleDateFormat time = new SimpleDateFormat("HH:mm", Locale.getDefault());
-            time.setTimeZone(TimeZone.getTimeZone("UTC"));
 
             timeTableChildViewHolder.mTimeTextView.
                     setText(time.format(start)+" - "+time.format(end));

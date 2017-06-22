@@ -70,7 +70,6 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     private LoginButton invisibleFbButton;
     private Button mfacebookLoginButton;
     private CallbackManager mCallbackManager;
-    private boolean facebookBtnClicked = false;
 
     protected AppCompatActivity mActivity;
 
@@ -96,9 +95,11 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         mfacebookLoginButton.setOnClickListener(this);
         mgoogleLoginButton = (Button) view.findViewById(R.id.google_login_button);
         mgoogleLoginButton.setOnClickListener(this);
+        mgoogleLoginButton.setEnabled(true);
+        mfacebookLoginButton.setEnabled(true);
 
 
-        mlogInData = new ArrayList<String>();
+        mlogInData = new ArrayList<>();
         //instantiate SignInManager for GSO and googleAPI
         initFirebaseService();
         initGoogleLogInService();
@@ -136,23 +137,15 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                 }
                 break;
             case R.id.facebook_login_button:
-                if(!facebookBtnClicked) {
-                    invisibleFbButton.performClick();
-                    facebookBtnClicked = true;
-                }
+                invisibleFbButton.performClick();
                 break;
         }
+        mgoogleLoginButton.setEnabled(false);
+        mfacebookLoginButton.setEnabled(false);
     }
 
     public void changeFragment(){
         FragmentManager fm = mActivity.getSupportFragmentManager();
-//        if(ContentsLab.get().userExist(UID)) {
-//            Log.d(TAG, "Existing User Sign in!");
-//            fm.beginTransaction().replace(R.id.fragment_container, new MyProfileFragment()).commit();
-//        }else{
-//            Log.d(TAG, "New User Sign in!");
-//            fm.beginTransaction().replace(R.id.fragment_container, SignUpFragment.newInstance(UID)).commit();
-//        }
         fm.beginTransaction().replace(R.id.fragment_container, new MyProfileFragment()).commit();
     }
     //0 - photourl 1-displayname 2-email 3-uid 4-birthday 5-fos
@@ -163,7 +156,6 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         Log.i(TAG, "Email: " + user.getEmail());
         Log.i(TAG, "PhotoURL: " + user.getPhotoUrl());
         Log.i(TAG, "UniqueID: " + user.getUid());
-        ContentsLab.get().printUsers();
 
         mlogInData.add(user.getPhotoUrl().toString());
         mlogInData.add(user.getDisplayName());
@@ -172,7 +164,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
 
         ContentsLab.get().setmLogInData(mlogInData);
         changeFragment();
-        spinner.setVisibility(View.GONE);
+        spinner.setVisibility(View.INVISIBLE);
     }
 
     //INIT FIREBASE SERVICE
@@ -223,11 +215,13 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                 Toast.makeText(getActivity(), "Google account login is failed", Toast.LENGTH_SHORT).show();
                 // Google Sign In failed, update UI appropriately
                 // ...
-                spinner.setVisibility(View.GONE);
+                spinner.setVisibility(View.INVISIBLE);
             }
         }
         //for facebook
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
+        mgoogleLoginButton.setEnabled(true);
+        mfacebookLoginButton.setEnabled(true);
     }
 
 
@@ -245,7 +239,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                             setMlogInData(user);
                         } else {
                             // If sign in fails, display a message to the user.
-                            spinner.setVisibility(View.GONE);
+                            spinner.setVisibility(View.INVISIBLE);
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(mActivity, "You already have an existing facebook",
                                     Toast.LENGTH_SHORT).show();
@@ -274,22 +268,25 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
             public void onSuccess(LoginResult loginResult) {
                 Log.d(TAG, "facebook:onSuccess:" + loginResult);
                 handleFacebookAccessToken(loginResult.getAccessToken());
-                facebookBtnClicked = false;
-                spinner.setVisibility(View.GONE);
+                spinner.setVisibility(View.INVISIBLE);
+                mgoogleLoginButton.setEnabled(true);
+                mfacebookLoginButton.setEnabled(true);
             }
 
             @Override
             public void onCancel() {
                 Log.d(TAG, "facebook:onCancel");
-                facebookBtnClicked = false;
-                spinner.setVisibility(View.GONE);
+                spinner.setVisibility(View.INVISIBLE);
+                mgoogleLoginButton.setEnabled(true);
+                mfacebookLoginButton.setEnabled(true);
             }
 
             @Override
             public void onError(FacebookException error) {
                 Log.d(TAG, "facebook:onError", error);
-                facebookBtnClicked = false;
-                spinner.setVisibility(View.GONE);
+                spinner.setVisibility(View.INVISIBLE);
+                mgoogleLoginButton.setEnabled(true);
+                mfacebookLoginButton.setEnabled(true);
             }
         });
     }

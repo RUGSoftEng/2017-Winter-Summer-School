@@ -36,7 +36,7 @@ public class GeneralInfoListFragment extends Fragment {
     private List<GeneralInfo> mItems = new ArrayList<>();
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private HashMap<String, Integer> mPicHashMap;
-    private String[] mStrings = {"weather", "visa", "housing", "departure", "insurance", "financial", "do", "welcome"};
+    private String[] mStrings = {"weather", "visa", "house", "departure", "insurance", "financial", "do", "welcome", "diet", "internet", "information", "location"};
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,6 +50,10 @@ public class GeneralInfoListFragment extends Fragment {
         mPicHashMap.put(mStrings[5], R.mipmap.icon_money);
         mPicHashMap.put(mStrings[6], R.mipmap.icon_list);
         mPicHashMap.put(mStrings[7], R.mipmap.icon_home);
+        mPicHashMap.put(mStrings[8], R.mipmap.ic_diet);
+        mPicHashMap.put(mStrings[9], R.mipmap.ic_internet);
+        mPicHashMap.put(mStrings[10], R.mipmap.ic_info);
+        mPicHashMap.put(mStrings[11], R.mipmap.ic_loc);
         setRetainInstance(true);
     }
 
