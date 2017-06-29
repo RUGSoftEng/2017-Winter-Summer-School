@@ -4,7 +4,7 @@ apply plugin: "org.sonarqube"
 sonarqube {
     properties {
         property "sonar.projectName", "SummerSchool"
-        property "sonar.projectKey", "nl.rug.www.rugsummerschool"
+        property "sonar.projectKey", "nl.rug.www.rugsummerschools"
         property "sonar.sources", "src/main/java"
         property "sonar.language", "java"
         property "sonar.sourceEncoding", "UTF-8"
@@ -15,11 +15,11 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "nl.rug.www.rugsummerschool"
+        applicationId "nl.rug.www.rugsummerschools"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 2
-        versionName '1.1'
+        versionCode 4
+        versionName '1.5'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
