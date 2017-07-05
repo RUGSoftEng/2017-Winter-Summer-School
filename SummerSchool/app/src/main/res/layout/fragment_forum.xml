@@ -13,13 +13,13 @@
         android:layout_height="wrap_content">
 
         <TextView
-            style="?android:listSeparatorTextViewStyle"
             android:id="@+id/section_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:background="@color/colorAccent"
             android:textColor="#ffffff"
+            android:textStyle="bold"
             tools:text="Section"/>
 
         <android.support.v4.widget.SwipeRefreshLayout
