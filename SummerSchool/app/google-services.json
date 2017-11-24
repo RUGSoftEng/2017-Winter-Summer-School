@@ -1,46 +1,43 @@
 {
   "project_info": {
-    "project_number": "202157512063",
-    "firebase_url": "https://summerschool-cee36.firebaseio.com",
-    "project_id": "summerschool-cee36",
-    "storage_bucket": "summerschool-cee36.appspot.com"
+    "project_number": "756053742791",
+    "firebase_url": "https://rugsummerschools.firebaseio.com",
+    "project_id": "rugsummerschools",
+    "storage_bucket": "rugsummerschools.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:202157512063:android:d0f98c5d46fe6d98",
+        "mobilesdk_app_id": "1:756053742791:android:219fa1aa60e73e8b",
         "android_client_info": {
-          "package_name": "nl.rug.www.rugsummerschool"
+          "package_name": "nl.rug.www.rugsummerschools"
         }
       },
       "oauth_client": [
         {
-          "client_id": "202157512063-7jdd5adgmkddr1f00sugvcvfnd0s7dv7.apps.googleusercontent.com",
+          "client_id": "756053742791-u3l4o0gqjtn6eb2712as4i4vio6hqp4e.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "nl.rug.www.rugsummerschool",
-            "certificate_hash": "58ca267842ebcdd67d1d1ad970fadde26bd793eb"
+            "package_name": "nl.rug.www.rugsummerschools",
+            "certificate_hash": "f3d5cb2c1781a2d36d70b77e8f56e743832435e9"
           }
         },
         {
-          "client_id": "202157512063-ouo922ft21ksts6gmpms54989nhg7dit.apps.googleusercontent.com",
+          "client_id": "756053742791-a20n4dehk5f8n4tk9v7l8nfegvt5giii.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "nl.rug.www.rugsummerschool",
-            "certificate_hash": "035fc6961f41af56f7020f575ec4f079cc3bc0be"
+            "package_name": "nl.rug.www.rugsummerschools",
+            "certificate_hash": "8051fbfe344f720370558c90a637b607d9698aab"
           }
         },
         {
-          "client_id": "202157512063-7hjv914vvn0b6k5nc29u4rucimqb6hgk.apps.googleusercontent.com",
+          "client_id": "756053742791-8kdjhab8o4c3j2kd7d7elja11u2obtu3.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAoOh655jK5rIbDIcixUWUHfKu5tYfKBQg"
-        },
-        {
-          "current_key": "AIzaSyChQZp8RJUpeYtWAJD00clur18MtzNb16w"
+          "current_key": "AIzaSyDoJKZ-IaNF6e5fKtMSH5_oiM6532fvwmM"
         }
       ],
       "services": {
@@ -51,7 +48,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "202157512063-7hjv914vvn0b6k5nc29u4rucimqb6hgk.apps.googleusercontent.com",
+              "client_id": "756053742791-8kdjhab8o4c3j2kd7d7elja11u2obtu3.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

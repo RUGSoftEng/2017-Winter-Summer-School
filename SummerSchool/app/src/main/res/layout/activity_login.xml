@@ -4,7 +4,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/colorPrimary"
-                tools:context="nl.rug.www.rugsummerschool.controller.LoginActivity">
+                tools:context="nl.rug.www.rugsummerschools.controller.LoginActivity">
 
     <ImageView
         android:id="@+id/mainlogo"
@@ -13,7 +13,7 @@
         android:layout_centerHorizontal="true"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@drawable/main_logo"
+        android:src="@drawable/rug_white"
         android:contentDescription="@string/logo_description"/>
 
     <TextView
