@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:background="@color/colorAccent"
-        android:src="@mipmap/icon_edit"
+        android:src="@mipmap/ic_edit"
         android:contentDescription="@string/edit_image_button"/>
 
     <ImageView
@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:background="@color/colorPrimary"
-        android:src="@mipmap/icon_delete"
+        android:src="@mipmap/ic_delete"
         android:contentDescription="@string/delete_image_button"/>
 
 </LinearLayout>

@@ -42,18 +42,18 @@ public class GeneralInfoListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPicHashMap = new HashMap<>();
-        mPicHashMap.put(mStrings[0], R.mipmap.icon_cloud);
-        mPicHashMap.put(mStrings[1], R.mipmap.icon_creditcard);
-        mPicHashMap.put(mStrings[2], R.mipmap.icon_building);
-        mPicHashMap.put(mStrings[3], R.mipmap.icon_flight);
-        mPicHashMap.put(mStrings[4], R.mipmap.icon_hospital);
-        mPicHashMap.put(mStrings[5], R.mipmap.icon_money);
-        mPicHashMap.put(mStrings[6], R.mipmap.icon_list);
-        mPicHashMap.put(mStrings[7], R.mipmap.icon_home);
-        mPicHashMap.put(mStrings[8], R.mipmap.ic_diet);
-        mPicHashMap.put(mStrings[9], R.mipmap.ic_internet);
-        mPicHashMap.put(mStrings[10], R.mipmap.ic_info);
-        mPicHashMap.put(mStrings[11], R.mipmap.ic_loc);
+        mPicHashMap.put(mStrings[0], R.mipmap.ic_gen_info_cloud);
+        mPicHashMap.put(mStrings[1], R.mipmap.ic_gen_info_creditcard);
+        mPicHashMap.put(mStrings[2], R.mipmap.ic_gen_info_building);
+        mPicHashMap.put(mStrings[3], R.mipmap.ic_gen_info_flight);
+        mPicHashMap.put(mStrings[4], R.mipmap.ic_gen_info_hospital);
+        mPicHashMap.put(mStrings[5], R.mipmap.ic_gen_info_money);
+        mPicHashMap.put(mStrings[6], R.mipmap.ic_gen_info_list);
+        mPicHashMap.put(mStrings[7], R.mipmap.ic_gen_info_home);
+        mPicHashMap.put(mStrings[8], R.mipmap.ic_gen_info_diet);
+        mPicHashMap.put(mStrings[9], R.mipmap.ic_gen_info_internet);
+        mPicHashMap.put(mStrings[10], R.mipmap.ic_gen_info_info);
+        mPicHashMap.put(mStrings[11], R.mipmap.ic_gen_info_loc);
         setRetainInstance(true);
     }
 
@@ -120,13 +120,13 @@ public class GeneralInfoListFragment extends Fragment {
 
             switch (idx) {
                 case 0:
-                    return R.mipmap.ic_smile;
+                    return R.mipmap.ic_gen_info_smile;
                 case 1:
-                    return R.mipmap.ic_smile;
+                    return R.mipmap.ic_gen_info_smile;
                 case 2:
-                    return R.mipmap.ic_star;
+                    return R.mipmap.ic_gen_info_star;
                 case 3:
-                    return R.mipmap.ic_arrowup;
+                    return R.mipmap.ic_gen_info_arrowup;
             }
             return 0;
         }

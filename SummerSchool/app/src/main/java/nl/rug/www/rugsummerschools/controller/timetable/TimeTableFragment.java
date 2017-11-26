@@ -192,7 +192,7 @@ public class TimeTableFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     LayoutInflater inflater = LayoutInflater.from(getActivity());
-                    View popupView = inflater.inflate(R.layout.popupwindow, null);
+                    View popupView = inflater.inflate(R.layout.pop_up_window_time_table, null);
                     ImageView closeView = (ImageView)popupView.findViewById(R.id.close_button);
                     TextView locView = (TextView)popupView.findViewById(R.id.popup_location);
                     locView.setText(event.getLocation());

@@ -16,7 +16,7 @@
         android:background="@color/colorPrimary"
         android:text="@string/content_title_label"
         android:textSize="18sp"
-        android:src="@mipmap/icon_building"
+        android:src="@mipmap/ic_gen_info_building"
         android:contentDescription="@string/generalinfo_content_image"/>
 
     <TextView
