@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/fragment_announcement"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -20,7 +19,7 @@
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_gravity="center_vertical"
-                android:background="@drawable/circle"
+                android:background="@drawable/bg_poster_holder"
                 android:fontFamily="sans-serif-medium"
                 android:gravity="center"
                 android:textColor="@android:color/white"

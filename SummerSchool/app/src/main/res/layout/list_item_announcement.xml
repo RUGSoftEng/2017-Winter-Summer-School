@@ -14,7 +14,7 @@
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:layout_gravity="center_vertical"
-        android:background="@drawable/circle"
+        android:background="@drawable/bg_poster_holder"
         android:fontFamily="sans-serif-medium"
         android:gravity="center"
         android:textColor="@android:color/white"
@@ -64,7 +64,7 @@
         android:text="@string/newIcon"
         android:textStyle="bold"
         android:textColor="@android:color/white"
-        android:background="@drawable/roundnew"
+        android:background="@drawable/bg_new"
         android:visibility="gone"/>
 
     <LinearLayout

@@ -14,11 +14,10 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/header_cover_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scaleType="centerCrop"
-                android:src="@drawable/header_profile"
+                android:src="@drawable/bg_profile_header"
                 android:contentDescription="@string/header_cover_image"/>
 
             <com.mikhaellopez.circularimageview.CircularImageView
@@ -28,7 +27,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
-                android:src="@drawable/profile"
+                android:src="@drawable/ic_profile_holder"
                 app:civ_border_color="@android:color/white"
                 app:civ_border_width="4dp"
                 app:civ_shadow="true"
@@ -40,7 +39,6 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/profile_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/colorPrimary"

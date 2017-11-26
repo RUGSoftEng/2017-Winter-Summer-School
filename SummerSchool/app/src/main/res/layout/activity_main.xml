@@ -29,7 +29,7 @@
             android:layout_marginRight="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/announcement"
+            android:background="@drawable/ic_announcement_pressed"
             android:contentDescription="@string/announcement_button"/>
 
         <ImageButton
@@ -40,7 +40,7 @@
             android:layout_marginRight="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/generalinformationblack"
+            android:background="@drawable/ic_general_info"
             android:contentDescription="@string/general_information_button"/>
 
         <ImageButton
@@ -51,7 +51,7 @@
             android:layout_marginRight="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/lecturerblack"
+            android:background="@drawable/ic_lecturer"
             android:contentDescription="@string/lecturer_information_button"/>
 
         <ImageButton
@@ -62,7 +62,7 @@
             android:layout_marginRight="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/timetableblack"
+            android:background="@drawable/ic_time_table"
             android:contentDescription="@string/time_table_button"/>
 
         <ImageButton
@@ -73,7 +73,7 @@
             android:layout_marginRight="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/forumblack"
+            android:background="@drawable/ic_forum"
             android:contentDescription="@string/forum_button"/>
 
         <ImageButton
@@ -84,7 +84,7 @@
             android:layout_marginRight="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/my_accountblack"
+            android:background="@drawable/ic_profile"
             android:contentDescription="@string/my_profile_button"/>
 
     </LinearLayout>

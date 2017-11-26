@@ -77,7 +77,7 @@ public class AnnouncementListFragment extends Fragment {
         mAnnouncementRecyclerView = (RecyclerView)v.findViewById(R.id.recycler_view);
         mAnnouncementRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAnnouncementRecyclerView.addItemDecoration(new DividerItemDecoration(
-                ContextCompat.getDrawable(getActivity(), R.drawable.horizontaldivider)));
+                ContextCompat.getDrawable(getActivity(), R.drawable.divider_horizontal)));
 
         setupAdatper();
 

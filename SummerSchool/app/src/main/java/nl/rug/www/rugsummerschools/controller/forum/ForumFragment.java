@@ -132,7 +132,7 @@ public class ForumFragment extends Fragment {
         mForumRecyclerView = (RecyclerView)view.findViewById(R.id.recycler_view);
         mForumRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mForumRecyclerView.addItemDecoration(new DividerItemDecoration(
-                ContextCompat.getDrawable(getActivity(), R.drawable.horizontaldivider)
+                ContextCompat.getDrawable(getActivity(), R.drawable.divider_horizontal)
         ));
 
         setupAdapter();
@@ -190,7 +190,7 @@ public class ForumFragment extends Fragment {
             mCommentsRecyclerView = (RecyclerView)itemView.findViewById(R.id.forum_comments_recycler_view);
             mCommentsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             mCommentsRecyclerView.addItemDecoration(new DividerItemDecoration(
-                    ContextCompat.getDrawable(getActivity(), R.drawable.horizontaldivider)));
+                    ContextCompat.getDrawable(getActivity(), R.drawable.divider_horizontal)));
             itemView.setOnLongClickListener(this);
             itemView.setOnClickListener(this);
         }

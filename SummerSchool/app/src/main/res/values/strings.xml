@@ -5,7 +5,6 @@
     <string name="log_in_button">Log in</string>
     <string name="logo_description">RUG Logo Image</string>
     <string name="content_title_label">Title</string>
-    <string name="content_detail_label">Details</string>
     <string name="not_correct_code">Wrong code, please try again</string>
 
     <string name="fb_login_protocol_scheme">fb270526376748352</string>
@@ -14,7 +13,6 @@
     <string name="login_with_facebook">Login with Facebook</string>
     <string name="login_with_google">Login with Google+</string>
 
-    <string name="app_header">App header</string>
     <string name="announcement_button">Announcement button</string>
     <string name="announcement">Announcement</string>
     <string name="forum_button">Forum button</string>
@@ -25,29 +23,16 @@
     <string name="lecturer_info">Lecturer Information</string>
     <string name="my_profile_button">My profile button</string>
     <string name="time_table_button">Time table button</string>
-    <string name="sign_in">Sign In</string>
     <string name="time_table">Time Table</string>
 
 
-    <string name="title_is_here">title is here</string>
     <string name="detail_is_here">detail is here</string>
-    <string name="date_is_here">date is here</string>
-    <string name="author_is_here">author is here</string>
-    <string name="name_is_here">name is here</string>
-    <string name="department_is_here">department is here</string>
-
-    <string name="author">author</string>
-    <string name="date">date</string>
-    <string name="lecturer_picture">Lecturer picture</string>
-    <string name="department">Department</string>
 
 
     <string name="name">NAME</string>
-    <string name="lecturer_image_view">Lecturer image view</string>
     <string name="time_example">00:00 ~ 00:00</string>
     <string name="day_of_week_example">Day of week</string>
     <string name="expand_arrow">Expand arrow</string>
-    <string name="birthday">Birthday</string>
     <string name="log_out_button">Log out</string>
     <string name="university_of_groningen_summer_2017">University of Groningen - Summer 2017</string>
     <string name="header_cover_image">Header cover image</string>
@@ -55,13 +40,7 @@
     <string name="next"><![CDATA[Next >]]></string>
     <string name="comments">COMMENTS</string>
 
-    <string name="signup_prompt">Hey you\'re new! Let us know more about you!</string>
-    <string name="signup_field0">Birthday</string>
-    <string name="signup_field1">Field of Study</string>
-
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="signup_continue">Continue</string>
     <string name="signin_prompt">Sign in to view forums</string>
     <string name="post">POST</string>
     <string name="type_in_title">Type in title</string>
@@ -71,7 +50,6 @@
     <string name="delete_image_button">Delete Image Button</string>
     <string name="edit_image_button">Edit Image Button</string>
     <string name="appbar_banner">AppBar Banner</string>
-    <string name="forumview_before_login">ForumView before login</string>
     <string name="newIcon">new</string>
     <string name="drawable_arrow">drawable arrow</string>
     <string name="generalinfo_content_image">generalinfo content image</string>
@@ -79,32 +57,4 @@
     <string name="where">Where?</string>
     <string name="close_button">close button</string>
 
-    <string-array name="FOS_Array">
-        <item>Biochemical Science</item>
-        <item>Business and Economics</item>
-        <item>Computer Science</item>
-        <item>Biochemical Science</item>
-        <item>Business and Economics</item>
-        <item>Computer Science</item>
-        <item>Biochemical Science</item>
-        <item>Business and Economics</item>
-        <item>Computer Science</item>
-        <item>Biochemical Science</item>
-        <item>Business and Economics</item>
-    </string-array>
-
-    <string-array name="Month_Array">
-        <item>January</item>
-        <item>February</item>
-        <item>March</item>
-        <item>April</item>
-        <item>May</item>
-        <item>June</item>
-        <item>July</item>
-        <item>August</item>
-        <item>September</item>
-        <item>October</item>
-        <item>November</item>
-        <item>December</item>
-    </string-array>
 </resources>

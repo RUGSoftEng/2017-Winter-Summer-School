@@ -7,14 +7,13 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/signin_prompt"
         android:textColor="@android:color/holo_red_dark"
         android:textSize="16sp"
-        android:drawableTop="@drawable/my_account_big"/>
+        android:drawableTop="@drawable/ic_profile_big"/>
 
 </LinearLayout>
 
