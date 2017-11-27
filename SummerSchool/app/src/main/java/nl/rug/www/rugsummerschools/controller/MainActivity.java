@@ -38,7 +38,7 @@ import nl.rug.www.rugsummerschools.controller.timetable.TimeTableFragment;
 public class MainActivity extends AppCompatActivity {
 
 
-    private static final int FRAGMENTS_SIZE = 6;
+    private static final int FRAGMENTS_SIZE = 5;
 
     private ViewPager mViewPager;
     private BottomNavigationView mNavigation;
@@ -48,8 +48,7 @@ public class MainActivity extends AppCompatActivity {
             new GeneralInfoListFragment(),
             new LecturerListFragment(),
             new TimeTableFragment(),
-            new ForumRootFragment(),
-            new RootFragment()
+            new ForumRootFragment()
     };
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -135,7 +134,6 @@ public class MainActivity extends AppCompatActivity {
                     case 2 : return mFragments[2];
                     case 3 : return mFragments[3];
                     case 4 : return mFragments[4];
-                    case 5 : return mFragments[5];
                     default: return null;
                 }
             }

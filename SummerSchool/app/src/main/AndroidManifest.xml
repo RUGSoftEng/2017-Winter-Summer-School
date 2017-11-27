@@ -50,15 +50,15 @@
         </activity>
         <activity
             android:name=".controller.announcement.AnnouncementPagerActivity"
-            android:parentActivityName=".controller.MainPagerActivity"
+            android:parentActivityName=".controller.MainActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".controller.generalinfo.GeneralInfoPagerActivity"
-            android:parentActivityName=".controller.MainPagerActivity"
+            android:parentActivityName=".controller.MainActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".controller.lecturer.LecturerPagerActivity"
-            android:parentActivityName=".controller.MainPagerActivity"
+            android:parentActivityName=".controller.MainActivity"
             android:screenOrientation="portrait"/>
         <!--
         <activity
@@ -69,7 +69,7 @@
             !-->
         <activity
             android:name=".controller.forum.ThreadActivity"
-            android:parentActivityName=".controller.MainPagerActivity">
+            android:parentActivityName=".controller.MainActivity">
         </activity>
         <activity
             android:name=".controller.MainActivity"
