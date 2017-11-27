@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void runMainPagerActivity() {
-        Intent intent = new Intent(LoginActivity.this, MainPagerActivity.class);
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
     }

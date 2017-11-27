@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_announcement"
+        android:icon="@drawable/ic_announcement"
+        android:title="Announcement"/>
+
+    <item
+        android:id="@+id/navigation_general"
+        android:icon="@drawable/ic_general_info"
+        android:title="General"/>
+
+    <item
+        android:id="@+id/navigation_lecturer"
+        android:icon="@drawable/ic_lecturer"
+        android:title="Lecturers"/>
+
+    <item
+        android:id="@+id/navigation_time_table"
+        android:icon="@drawable/ic_time_table"
+        android:title="Time Table"/>
+
+    <item
+        android:id="@+id/navigation_forum"
+        android:icon="@drawable/ic_forum"
+        android:title="Forum"/>
+
+</menu>

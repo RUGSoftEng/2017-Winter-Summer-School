@@ -35,6 +35,7 @@ import nl.rug.www.rugsummerschools.controller.timetable.TimeTableFragment;
  * @author Jeongkyun Oh
  */
 
+@Deprecated
 public class MainPagerActivity extends AppCompatActivity {
 
     private static final int FRAGMENTS_SIZE = 6;
@@ -59,7 +60,7 @@ public class MainPagerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_pager);
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
 
@@ -129,20 +130,13 @@ public class MainPagerActivity extends AppCompatActivity {
             @Override
             public Fragment getItem(int position) {
                 switch (position) {
-                    case 0 :
-                        return mFragments[0];
-                    case 1 :
-                        return mFragments[1];
-                    case 2 :
-                        return mFragments[2];
-                    case 3 :
-                        return mFragments[3];
-                    case 4 :
-                        return mFragments[4];
-                    case 5 :
-                        return mFragments[5];
-                    default:
-                        return null;
+                    case 0 : return mFragments[0];
+                    case 1 : return mFragments[1];
+                    case 2 : return mFragments[2];
+                    case 3 : return mFragments[3];
+                    case 4 : return mFragments[4];
+                    case 5 : return mFragments[5];
+                    default: return null;
                 }
             }
 
