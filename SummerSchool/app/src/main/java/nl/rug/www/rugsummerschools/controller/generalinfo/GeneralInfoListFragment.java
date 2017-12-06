@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import nl.rug.www.rugsummerschools.R;
+import nl.rug.www.rugsummerschools.controller.ContentAdapter;
+import nl.rug.www.rugsummerschools.controller.ContentHolder;
 import nl.rug.www.rugsummerschools.controller.ContentsLab;
 import nl.rug.www.rugsummerschools.model.GeneralInfo;
 import nl.rug.www.rugsummerschools.networking.NetworkingService;
@@ -85,86 +87,30 @@ public class GeneralInfoListFragment extends Fragment {
 
     private void setupAdatper() {
         if (isAdded()) {
-            mGeneralInfoRecyclerView.setAdapter(new GeneralInfoAdapter(mItems));
+            mGeneralInfoRecyclerView.setAdapter(new ContentAdapter<GeneralInfo, GeneralInfoHolder>(mItems, getActivity()) {
+                @Override
+                protected GeneralInfoHolder createHolder(LayoutInflater layoutInflater, ViewGroup parent) {
+                    return new GeneralInfoHolder(layoutInflater, parent) {
+                        @Override
+                        protected String[] getStrings() {
+                            return mStrings;
+                        }
+
+                        @Override
+                        protected HashMap<String, Integer> getPicHashMap() {
+                            return mPicHashMap;
+                        }
+
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = GeneralInfoPagerActivity.newIntent(getActivity(), mContent.getId());
+                            startActivity(intent);
+                        }
+                    };
+                }
+            });
         }
     }
-
-    private class GeneralInfoHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        private GeneralInfo mGeneralInfo;
-        private TextView mTitleTextView;
-        private ImageView mImageView;
-
-        private GeneralInfoHolder(LayoutInflater inflater, ViewGroup parent) {
-            super(inflater.inflate(R.layout.list_item_generalinfo, parent, false));
-
-            mTitleTextView = (TextView)itemView.findViewById(R.id.content_title);
-            mImageView = (ImageView)itemView.findViewById(R.id.icon_image_view);
-            itemView.setOnClickListener(this);
-        }
-
-        private void bind(GeneralInfo generalInfo){
-            mGeneralInfo = generalInfo;
-            mTitleTextView.setText(mGeneralInfo.getTitle());
-            mTitleTextView.setSelected(true);
-            mImageView.setImageResource(selectPicture(mGeneralInfo.getTitle().toLowerCase()));
-        }
-
-        private int selectPicture(String title) {
-            for (String s : mStrings) {
-                if (title.contains(s))
-                    return mPicHashMap.get(s);
-            }
-
-            int idx = Math.abs(title.hashCode() % 4);
-
-            switch (idx) {
-                case 0:
-                    return R.mipmap.ic_gen_info_smile;
-                case 1:
-                    return R.mipmap.ic_gen_info_smile;
-                case 2:
-                    return R.mipmap.ic_gen_info_star;
-                case 3:
-                    return R.mipmap.ic_gen_info_arrowup;
-            }
-            return 0;
-        }
-
-        @Override
-        public void onClick(View v) {
-            Intent intent = GeneralInfoPagerActivity.newIntent(getActivity(), mGeneralInfo.getId());
-            startActivity(intent);
-        }
-    }
-
-    private class GeneralInfoAdapter extends RecyclerView.Adapter<GeneralInfoHolder> {
-
-        private List<GeneralInfo> mGeneralInfos;
-
-        private GeneralInfoAdapter(List<GeneralInfo> generalInfos) {
-            mGeneralInfos = generalInfos;
-        }
-
-        @Override
-        public GeneralInfoHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-
-            return new GeneralInfoHolder(layoutInflater, parent);
-        }
-
-        @Override
-        public void onBindViewHolder(GeneralInfoHolder holder, int position) {
-            GeneralInfo generalInfo = mGeneralInfos.get(position);
-            holder.bind(generalInfo);
-        }
-
-        @Override
-        public int getItemCount() {
-            return mGeneralInfos.size();
-        }
-    }
-
 
     private class FetchGeneralInfosTask extends AsyncTask<Void, Void, List<GeneralInfo>> {
 

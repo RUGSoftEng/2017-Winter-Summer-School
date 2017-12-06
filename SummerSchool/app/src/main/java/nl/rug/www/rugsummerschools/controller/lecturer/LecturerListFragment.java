@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nl.rug.www.rugsummerschools.R;
+import nl.rug.www.rugsummerschools.controller.ContentAdapter;
+import nl.rug.www.rugsummerschools.controller.ContentHolder;
 import nl.rug.www.rugsummerschools.controller.ContentsLab;
 import nl.rug.www.rugsummerschools.model.Lecturer;
 import nl.rug.www.rugsummerschools.networking.NetworkingService;
@@ -67,65 +69,18 @@ public class LecturerListFragment extends Fragment {
 
     private void setupAdatper() {
         if (isAdded()) {
-            mLecturerRecyclerView.setAdapter(new LecturerAdapter(mItems));
-        }
-    }
-
-
-    private class LecturerHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        private Lecturer mLecturer;
-        private TextView mTitleTextView;
-        private ImageView mLecturerImageView;
-
-        private LecturerHolder(LayoutInflater inflater, ViewGroup parent) {
-            super(inflater.inflate(R.layout.list_item_lecturer, parent, false));
-
-            mTitleTextView = (TextView)itemView.findViewById(R.id.lecturer_item_name_text_view);
-            mLecturerImageView = (ImageView)itemView.findViewById(R.id.lecturer_image_view);
-            itemView.setOnClickListener(this);
-        }
-
-        private void bind(Lecturer lecturer){
-            mLecturer = lecturer;
-            mTitleTextView.setText(mLecturer.getTitle());
-
-            String url = mLecturer.getImgurl();
-            if (!url.equals(""))
-                Glide.with(getActivity()).load(mLecturer.getImgurl()).into(mLecturerImageView);
-        }
-
-        @Override
-        public void onClick(View v) {
-            Intent intent = LecturerPagerActivity.newIntent(getActivity(), mLecturer.getId());
-            startActivity(intent);
-        }
-    }
-
-    private class LecturerAdapter extends RecyclerView.Adapter<LecturerHolder> {
-
-        private List<Lecturer> mLecturers;
-
-        private LecturerAdapter(List<Lecturer> lecturers) {
-            mLecturers = lecturers;
-        }
-
-        @Override
-        public LecturerHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-
-            return new LecturerHolder(layoutInflater, parent);
-        }
-
-        @Override
-        public void onBindViewHolder(LecturerHolder holder, int position) {
-            Lecturer lecturer = mLecturers.get(position);
-            holder.bind(lecturer);
-        }
-
-        @Override
-        public int getItemCount() {
-            return mLecturers.size();
+            mLecturerRecyclerView.setAdapter(new ContentAdapter<Lecturer, LecturerHolder>(mItems, getActivity()) {
+                @Override
+                protected LecturerHolder createHolder(LayoutInflater layoutInflater, ViewGroup parent) {
+                    return new LecturerHolder(layoutInflater, parent, getActivity()) {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = LecturerPagerActivity.newIntent(getActivity(), mContent.getId());
+                            startActivity(intent);
+                        }
+                    };
+                }
+            });
         }
     }
 
