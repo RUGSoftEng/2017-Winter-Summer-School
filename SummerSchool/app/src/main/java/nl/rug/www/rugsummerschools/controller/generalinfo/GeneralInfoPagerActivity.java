@@ -23,6 +23,7 @@ import nl.rug.www.rugsummerschools.model.GeneralInfo;
  * @author Jeongkyun Oh
  */
 
+@Deprecated
 public class GeneralInfoPagerActivity extends BasePagerActivity<GeneralInfo> {
 
     public static Intent newIntent(Context packageContext, String content) {

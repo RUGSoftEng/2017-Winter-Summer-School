@@ -1,22 +1,12 @@
 package nl.rug.www.rugsummerschools.controller.lecturer;
 
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Bundle;
 import android.support.annotation.StringRes;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import nl.rug.www.rugsummerschools.R;
@@ -66,7 +56,8 @@ public class LecturerListFragment extends ContentsListFragment<Lecturer, Content
                     return new LecturerHolder(layoutInflater, parent, getActivity()) {
                         @Override
                         public void onClick(View v) {
-                            Intent intent = LecturerPagerActivity.newIntent(getActivity(), mContent.getId());
+                            Intent intent = LecturerScrollingActivity.newIntent(getActivity(), mContent.getId());
+//                            Intent intent = LecturerActivity.newIntent(getActivity(), mContent.getId());
                             startActivity(intent);
                         }
                     };

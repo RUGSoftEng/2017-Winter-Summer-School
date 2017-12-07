@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,9 +31,8 @@ public abstract class AnnouncementHolder extends ContentHolder<Announcement> imp
     private TextView mInitialView;
     private TextView mTitleTextView;
     private TextView mAuthorTextView;
-    private TextView mDateTextView;
-    private TextView mTimeTextView;
     private TextView mNewTextView;
+    private TextView mRelativeTimeView;
 
     public AnnouncementHolder(LayoutInflater inflater, ViewGroup parent) {
         super(inflater.inflate(R.layout.list_item_announcement, parent, false));
@@ -40,9 +40,8 @@ public abstract class AnnouncementHolder extends ContentHolder<Announcement> imp
         mInitialView = (TextView)itemView.findViewById(R.id.initial_text_view);
         mTitleTextView = (TextView)itemView.findViewById(R.id.content_title);
         mAuthorTextView = (TextView)itemView.findViewById(R.id.author_text_view);
-        mDateTextView = (TextView)itemView.findViewById(R.id.date);
-        mTimeTextView = (TextView)itemView.findViewById(R.id.time);
         mNewTextView = (TextView)itemView.findViewById(R.id.new_image_view);
+        mRelativeTimeView = (TextView)itemView.findViewById(R.id.time_stamp);
         itemView.setOnClickListener(this);
     }
 
@@ -58,15 +57,6 @@ public abstract class AnnouncementHolder extends ContentHolder<Announcement> imp
         String byPoster = "By " + poster;
         mAuthorTextView.setText(byPoster);
         Date date = new DateTime(mContent.getDate()).toDate();
-        Date today = new Date();
-        if (today.getTime() - date.getTime() < MILLIS_PER_DAY) {
-            mNewTextView.setVisibility(View.VISIBLE);
-        } else {
-            mNewTextView.setVisibility(View.GONE);
-        }
-        SimpleDateFormat parseDate = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
-        SimpleDateFormat parseTime = new SimpleDateFormat("hh:mm a", Locale.getDefault());
-        mDateTextView.setText(parseDate.format(date));
-        mTimeTextView.setText(parseTime.format(date));
+        mRelativeTimeView.setText(DateUtils.getRelativeTimeSpanString(date.getTime(), System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS));
     }
 }

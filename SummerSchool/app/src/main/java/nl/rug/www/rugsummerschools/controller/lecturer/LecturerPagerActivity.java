@@ -26,6 +26,7 @@ import nl.rug.www.rugsummerschools.model.Lecturer;
  * @author Jeongkyun Oh
  */
 
+@Deprecated
 public class LecturerPagerActivity extends BasePagerActivity<Lecturer> {
 
     public static Intent newIntent(Context packageContext, String content) {
