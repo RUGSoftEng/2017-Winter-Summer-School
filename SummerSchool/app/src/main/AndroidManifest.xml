@@ -38,15 +38,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".controller.LoginActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/RugTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan">
+            android:name=".SplashActivity"
+            android:theme="@style/RugTheme.SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".controller.LoginActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/RugTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan">
         </activity>
         <activity
             android:name=".controller.announcement.AnnouncementPagerActivity"
