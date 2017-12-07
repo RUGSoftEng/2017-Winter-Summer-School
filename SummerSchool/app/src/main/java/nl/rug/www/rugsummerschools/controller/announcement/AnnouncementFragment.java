@@ -71,7 +71,7 @@ public class AnnouncementFragment extends Fragment {
         String initial = poster.toUpperCase().charAt(0) + "";
         initialCircle.setText(initial);
         GradientDrawable circle = (GradientDrawable)initialCircle.getBackground();
-        circle.setColor(generateColor(poster));
+        circle.setColor(mAnnouncement.getColor());
         TextView mDate = (TextView)view.findViewById(R.id.date_text_view);
         TextView mTime = (TextView)view.findViewById(R.id.time_text_view);
         Date date = new DateTime(mAnnouncement.getDate()).toDate();
@@ -81,13 +81,5 @@ public class AnnouncementFragment extends Fragment {
         mTime.setText(parseTime.format(date));
 
         return view;
-    }
-
-    private int generateColor(String name) {
-        int hash = name.hashCode();
-        int r = (hash & 0xFF0000) >> 16;
-        int g = (hash & 0x00FF00) >> 8;
-        int b = hash & 0x0000FF;
-        return Color.rgb(r, g, b);
     }
 }

@@ -3,6 +3,7 @@ package nl.rug.www.rugsummerschools.controller.lecturer;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -22,6 +23,7 @@ import nl.rug.www.rugsummerschools.R;
 import nl.rug.www.rugsummerschools.controller.ContentAdapter;
 import nl.rug.www.rugsummerschools.controller.ContentHolder;
 import nl.rug.www.rugsummerschools.controller.ContentsLab;
+import nl.rug.www.rugsummerschools.controller.ContentsListFragment;
 import nl.rug.www.rugsummerschools.model.Lecturer;
 import nl.rug.www.rugsummerschools.networking.NetworkingService;
 
@@ -32,44 +34,33 @@ import nl.rug.www.rugsummerschools.networking.NetworkingService;
  * @since 13/04/2017
  * @author Jeongkyun Oh
  */
-public class LecturerListFragment extends Fragment {
-
-    private RecyclerView mLecturerRecyclerView;
-    private List<Lecturer> mItems = new ArrayList<>();
-    private SwipeRefreshLayout mSwipeRefreshLayout;
+public class LecturerListFragment extends ContentsListFragment<Lecturer, ContentHolder<Lecturer>> {
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setRetainInstance(true);
+    protected void bindViews() {
+        mBinding.recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+    }
+
+    @StringRes
+    @Override
+    protected int getSectionStringId() {
+        return R.string.lecturer_info;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_list, container, false);
-
-        TextView section = (TextView)v.findViewById(R.id.section_name);
-        section.setText(R.string.lecturer_info);
-
-        mSwipeRefreshLayout = (SwipeRefreshLayout)v.findViewById(R.id.refresh_layout);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                new FetchLecturersTask().execute();
-            }
-        });
-
-        mLecturerRecyclerView = (RecyclerView)v.findViewById(R.id.recycler_view);
-        mLecturerRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-
-        setupAdatper();
-        new FetchLecturersTask().execute();
-        return v;
+    protected List<Lecturer> fetchContents() {
+        return new NetworkingService().fetchLecturers();
     }
 
-    private void setupAdatper() {
+    @Override
+    protected void update(List<Lecturer> contents) {
+        ContentsLab.get().updateLecturers(mItems);
+    }
+
+    @Override
+    protected void setupAdatper() {
         if (isAdded()) {
-            mLecturerRecyclerView.setAdapter(new ContentAdapter<Lecturer, LecturerHolder>(mItems, getActivity()) {
+            mBinding.recyclerView.setAdapter(new ContentAdapter<Lecturer, LecturerHolder>(mItems, getActivity()) {
                 @Override
                 protected LecturerHolder createHolder(LayoutInflater layoutInflater, ViewGroup parent) {
                     return new LecturerHolder(layoutInflater, parent, getActivity()) {
@@ -84,27 +75,4 @@ public class LecturerListFragment extends Fragment {
         }
     }
 
-    private class FetchLecturersTask extends AsyncTask<Void, Void, List<Lecturer>> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mSwipeRefreshLayout.setRefreshing(true);
-        }
-
-        @Override
-        protected List<Lecturer> doInBackground(Void... params) {
-            return new NetworkingService().fetchLecturers();
-        }
-
-        @Override
-        protected void onPostExecute(List<Lecturer> lecturers) {
-            mItems = lecturers;
-            setupAdatper();
-            ContentsLab.get().updateLecturers(mItems);
-            if (mSwipeRefreshLayout.isRefreshing()) {
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
-        }
-    }
 }

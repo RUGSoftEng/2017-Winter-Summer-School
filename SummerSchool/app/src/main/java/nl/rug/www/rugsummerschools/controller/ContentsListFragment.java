@@ -3,9 +3,11 @@ package nl.rug.www.rugsummerschools.controller;
 import android.databinding.DataBindingUtil;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +23,9 @@ import nl.rug.www.rugsummerschools.model.Content;
  * Created by jk on 17. 11. 27.
  */
 
-@Deprecated
-public abstract class ContentsListFragment<T extends Content> extends Fragment {
+public abstract class ContentsListFragment<T extends Content, K extends ContentHolder<T>> extends Fragment {
+
+    private static final String TAG = "ContentsListFragment";
 
     /** recycler view inflates list of contents by using viewholder */
     protected FragmentListBinding mBinding;
@@ -30,21 +33,29 @@ public abstract class ContentsListFragment<T extends Content> extends Fragment {
     /** instance of the contents list */
     protected List<T> mItems = new ArrayList<>();
 
-    /** refresh layout in order to update lists of contents */
-    protected SwipeRefreshLayout mSwipeRefreshLayout;
+//    private ThumbnailDownloader<K> mThumbnailDownloader;
 
     protected abstract void bindViews();
     protected abstract int getSectionStringId();
     protected abstract List<T> fetchContents();
     protected abstract void update(List<T> contents);
-    protected abstract void holderbind(ContentsHolder holder, T item);
-    protected abstract View getViews(LayoutInflater inflater, ViewGroup parent);
-    protected abstract ContentsHolder generateContentsHolder(LayoutInflater inflater, ViewGroup parent);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+
+//        Handler responseHandler = new Handler();
+//        mThumbnailDownloader = new ThumbnailDownloader<>(responseHandler);
+//        mThumbnailDownloader.setThumbnailDownloadListener(new ThumbnailDownloader.ThumbnailDownloadListener<K>() {
+//            @Override
+//            public void onThumbnailDownladed(K target, Object thumbnail) {
+//                //TODO : hook up handler with this list fragment.
+//            }
+//        });
+//        mThumbnailDownloader.start();
+//        mThumbnailDownloader.getLooper();
+//        Log.i(TAG, "Background thread started");
     }
 
     @Override
@@ -60,7 +71,7 @@ public abstract class ContentsListFragment<T extends Content> extends Fragment {
         });
 
         if (mItems == null)
-            mSwipeRefreshLayout.setRefreshing(true);
+            mBinding.refreshLayout.setRefreshing(true);
 
         bindViews();
         setupAdatper();
@@ -69,50 +80,27 @@ public abstract class ContentsListFragment<T extends Content> extends Fragment {
         return mBinding.getRoot();
     }
 
-    private void setupAdatper() {
-        if (isAdded()) {
-            mBinding.recyclerView.setAdapter(new ContentsAdapter(mItems));
-        }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+//        mThumbnailDownloader.clearQueue();
     }
 
-    protected abstract class ContentsHolder extends RecyclerView.ViewHolder {
-        public ContentsHolder(LayoutInflater inflater, ViewGroup parent) {
-            super(getViews(inflater, parent));
-        }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+//        mThumbnailDownloader.quit();
+//        Log.i(TAG, "Background thread destroyed");
     }
 
-    private class ContentsAdapter extends RecyclerView.Adapter<ContentsHolder> {
-
-        private List<T> mContents;
-
-        private ContentsAdapter(List<T> contents) {
-            mContents = contents;
-        }
-
-        @Override
-        public ContentsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-            return generateContentsHolder(layoutInflater, parent);
-        }
-
-        @Override
-        public void onBindViewHolder(ContentsHolder holder, int position) {
-            T content = mContents.get(position);
-            holderbind(holder, content);
-        }
-
-        @Override
-        public int getItemCount() {
-            return mContents.size();
-        }
-    }
+    protected abstract void setupAdatper();
 
     private class FetchTask extends AsyncTask<Void, Void, List<T>> {
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mSwipeRefreshLayout.setRefreshing(true);
+            mBinding.refreshLayout.setRefreshing(true);
         }
 
         @Override
@@ -125,8 +113,8 @@ public abstract class ContentsListFragment<T extends Content> extends Fragment {
             mItems = contents;
             setupAdatper();
             update(mItems);
-            if (mSwipeRefreshLayout.isRefreshing()) {
-                mSwipeRefreshLayout.setRefreshing(false);
+            if (mBinding.refreshLayout.isRefreshing()) {
+                mBinding.refreshLayout.setRefreshing(false);
             }
         }
     }

@@ -18,6 +18,8 @@ public abstract class ContentAdapter<T extends Content, K extends ContentHolder<
 
     private Context mContext;
     private List<T> mContents;
+//    TODO: where to get thumbnaildownloader
+//    private ThumbnailDownloader mThumbnailDownloader;
     protected abstract K createHolder(LayoutInflater layoutInflater, ViewGroup parent);
 
     public ContentAdapter(List<T> contents, Context context) {
@@ -34,6 +36,8 @@ public abstract class ContentAdapter<T extends Content, K extends ContentHolder<
     @Override
     public void onBindViewHolder(K holder, int position) {
         T content = mContents.get(position);
+//        TODO: url is wrong so that it needs to be changed
+//        mThumbnailDownloader.queueThumbnail(holder, "url");
         holder.bind(content);
     }
 

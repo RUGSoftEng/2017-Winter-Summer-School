@@ -46,14 +46,6 @@ public abstract class AnnouncementHolder extends ContentHolder<Announcement> imp
         itemView.setOnClickListener(this);
     }
 
-    private int generateColor(String name) {
-        int hash = name.hashCode();
-        int r = (hash & 0xFF0000) >> 16;
-        int g = (hash & 0x00FF00) >> 8;
-        int b = hash & 0x0000FF;
-        return Color.rgb(r, g, b);
-    }
-
     @Override
     public void bind(Announcement announcement) {
         mContent = announcement;
@@ -62,7 +54,7 @@ public abstract class AnnouncementHolder extends ContentHolder<Announcement> imp
         String initial = poster.toUpperCase().charAt(0) + "";
         mInitialView.setText(initial);
         GradientDrawable circle = (GradientDrawable)mInitialView.getBackground();
-        circle.setColor(generateColor(poster));
+        circle.setColor(mContent.getColor());
         String byPoster = "By " + poster;
         mAuthorTextView.setText(byPoster);
         Date date = new DateTime(mContent.getDate()).toDate();

@@ -3,6 +3,7 @@ package nl.rug.www.rugsummerschools.controller.generalinfo;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -21,6 +22,7 @@ import nl.rug.www.rugsummerschools.R;
 import nl.rug.www.rugsummerschools.controller.ContentAdapter;
 import nl.rug.www.rugsummerschools.controller.ContentHolder;
 import nl.rug.www.rugsummerschools.controller.ContentsLab;
+import nl.rug.www.rugsummerschools.controller.ContentsListFragment;
 import nl.rug.www.rugsummerschools.model.GeneralInfo;
 import nl.rug.www.rugsummerschools.networking.NetworkingService;
 
@@ -32,13 +34,31 @@ import nl.rug.www.rugsummerschools.networking.NetworkingService;
  * @author Jeongkyun Oh
  */
 
-public class GeneralInfoListFragment extends Fragment {
+public class GeneralInfoListFragment extends ContentsListFragment<GeneralInfo, ContentHolder<GeneralInfo>> {
 
-    private RecyclerView mGeneralInfoRecyclerView;
-    private List<GeneralInfo> mItems = new ArrayList<>();
-    private SwipeRefreshLayout mSwipeRefreshLayout;
     private HashMap<String, Integer> mPicHashMap;
     private String[] mStrings = {"weather", "visa", "house", "departure", "insurance", "financial", "do", "welcome", "diet", "internet", "information", "location"};
+
+    @Override
+    protected void bindViews() {
+        mBinding.recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+    }
+
+    @StringRes
+    @Override
+    protected int getSectionStringId() {
+        return R.string.general_info;
+    }
+
+    @Override
+    protected List<GeneralInfo> fetchContents() {
+        return new NetworkingService().fetchGeneralInfos();
+    }
+
+    @Override
+    protected void update(List<GeneralInfo> contents) {
+        ContentsLab.get().updateGeneralInfos(mItems);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,38 +76,12 @@ public class GeneralInfoListFragment extends Fragment {
         mPicHashMap.put(mStrings[9], R.mipmap.ic_gen_info_internet);
         mPicHashMap.put(mStrings[10], R.mipmap.ic_gen_info_info);
         mPicHashMap.put(mStrings[11], R.mipmap.ic_gen_info_loc);
-        setRetainInstance(true);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_list, container, false);
-
-        TextView section = (TextView)v.findViewById(R.id.section_name);
-        section.setText(R.string.general_info);
-
-        mSwipeRefreshLayout = (SwipeRefreshLayout)v.findViewById(R.id.refresh_layout);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                new FetchGeneralInfosTask().execute();
-            }
-        });
-
-        if (mItems == null)
-            mSwipeRefreshLayout.setRefreshing(true);
-
-        mGeneralInfoRecyclerView = (RecyclerView)v.findViewById(R.id.recycler_view);
-        mGeneralInfoRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-
-        setupAdatper();
-        new FetchGeneralInfosTask().execute();
-        return v;
-    }
-
-    private void setupAdatper() {
+    protected void setupAdatper() {
         if (isAdded()) {
-            mGeneralInfoRecyclerView.setAdapter(new ContentAdapter<GeneralInfo, GeneralInfoHolder>(mItems, getActivity()) {
+            mBinding.recyclerView.setAdapter(new ContentAdapter<GeneralInfo, GeneralInfoHolder>(mItems, getActivity()) {
                 @Override
                 protected GeneralInfoHolder createHolder(LayoutInflater layoutInflater, ViewGroup parent) {
                     return new GeneralInfoHolder(layoutInflater, parent) {
@@ -109,30 +103,6 @@ public class GeneralInfoListFragment extends Fragment {
                     };
                 }
             });
-        }
-    }
-
-    private class FetchGeneralInfosTask extends AsyncTask<Void, Void, List<GeneralInfo>> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mSwipeRefreshLayout.setRefreshing(true);
-        }
-
-        @Override
-        protected List<GeneralInfo> doInBackground(Void... params) {
-            return new NetworkingService().fetchGeneralInfos();
-        }
-
-        @Override
-        protected void onPostExecute(List<GeneralInfo> generalInfos) {
-            mItems = generalInfos;
-            setupAdatper();
-            ContentsLab.get().updateGeneralInfos(mItems);
-            if (mSwipeRefreshLayout.isRefreshing()) {
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
         }
     }
 }
