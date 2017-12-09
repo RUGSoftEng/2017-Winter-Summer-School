@@ -77,6 +77,7 @@
             android:parentActivityName=".controller.MainActivity">
         </activity>
         <activity
+            android:theme="@style/RugTheme.NoActionBar"
             android:name=".controller.MainActivity"
             android:label="@string/title_activity_main"
             android:launchMode="singleTop"

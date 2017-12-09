@@ -20,10 +20,8 @@ import java.util.ArrayList;
 
 import nl.rug.www.rugsummerschools.R;
 import nl.rug.www.rugsummerschools.controller.announcement.AnnouncementListFragment;
-import nl.rug.www.rugsummerschools.controller.forum.ForumRootFragment;
 import nl.rug.www.rugsummerschools.controller.generalinfo.GeneralInfoListFragment;
 import nl.rug.www.rugsummerschools.controller.lecturer.LecturerListFragment;
-import nl.rug.www.rugsummerschools.controller.myprofile.RootFragment;
 import nl.rug.www.rugsummerschools.controller.timetable.TimeTableFragment;
 
 /**
@@ -52,9 +50,7 @@ public class MainPagerActivity extends AppCompatActivity {
             new AnnouncementListFragment(),
             new GeneralInfoListFragment(),
             new LecturerListFragment(),
-            new TimeTableFragment(),
-            new ForumRootFragment(),
-            new RootFragment()
+            new TimeTableFragment()
     };
 
     @Override

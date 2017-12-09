@@ -7,9 +7,8 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:src="@drawable/bg_app_header"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
         android:contentDescription="@string/appbar_banner"/>
 
 </LinearLayout>
