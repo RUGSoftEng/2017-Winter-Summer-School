@@ -17,6 +17,7 @@ import nl.rug.www.rugsummerschools.model.ForumThread;
  * @author Jeongkyun Oh
  */
 
+@Deprecated
 public class CommentViewHolder extends ChildViewHolder {
 
     private ImageView mProfilePictureView;

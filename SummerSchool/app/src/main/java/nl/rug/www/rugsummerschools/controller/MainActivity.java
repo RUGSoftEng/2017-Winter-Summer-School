@@ -43,7 +43,7 @@ import java.util.ArrayList;
 import nl.rug.www.rugsummerschools.R;
 import nl.rug.www.rugsummerschools.controller.announcement.AnnouncementListFragment;
 import nl.rug.www.rugsummerschools.controller.forum.ForumLoginFragment;
-import nl.rug.www.rugsummerschools.controller.forum.FragmentForDebug;
+import nl.rug.www.rugsummerschools.controller.forum.ForumThreadListFragment;
 import nl.rug.www.rugsummerschools.controller.generalinfo.GeneralInfoListFragment;
 import nl.rug.www.rugsummerschools.controller.lecturer.LecturerListFragment;
 import nl.rug.www.rugsummerschools.controller.timetable.TimeTableFragment;
@@ -57,7 +57,7 @@ import nl.rug.www.rugsummerschools.controller.timetable.TimeTableFragment;
  * @author Jeongkyun Oh
  */
 
-public class MainActivity extends AppCompatActivity implements ForumLoginFragment.OnSignInListener, FragmentForDebug.OnSignOutListener {
+public class MainActivity extends AppCompatActivity implements ForumLoginFragment.OnSignInListener, ForumThreadListFragment.OnSignOutListener {
 
     private static final String TAG = "MainActivity";
     private static final int FRAGMENTS_SIZE = 5;
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements ForumLoginFragmen
             new LecturerListFragment(),
             new TimeTableFragment(),
             new ForumLoginFragment(),
-            new FragmentForDebug()
+            new ForumThreadListFragment()
     };
 
     private FragmentStatePagerAdapter mFragmentStatePagerAdapter = new FragmentStatePagerAdapter(getSupportFragmentManager()) {
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements ForumLoginFragmen
 
         @Override
         public int getItemPosition(@NonNull Object object) {
-            if (object instanceof ForumLoginFragment || object instanceof FragmentForDebug) {
+            if (object instanceof ForumLoginFragment || object instanceof ForumThreadListFragment) {
                 return POSITION_NONE;
             }
             return super.getItemPosition(object);

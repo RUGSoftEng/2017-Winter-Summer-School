@@ -77,24 +77,26 @@
             android:parentActivityName=".controller.MainActivity">
         </activity>
         <activity
-            android:theme="@style/RugTheme.NoActionBar"
             android:name=".controller.MainActivity"
             android:label="@string/title_activity_main"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
+            android:theme="@style/RugTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan">
         </activity>
         <activity
             android:name=".controller.lecturer.LecturerScrollingActivity"
             android:label="@string/title_activity_scrolling"
-            android:theme="@style/RugTheme.NoActionBar"
-            android:parentActivityName=".controller.MainActivity">
+            android:parentActivityName=".controller.MainActivity"
+            android:theme="@style/RugTheme.NoActionBar">
         </activity>
         <activity
             android:name=".controller.generalinfo.GeneralInfoScrollingActivity"
             android:label="@string/title_activity_scrolling"
-            android:theme="@style/RugTheme.NoActionBar"
-            android:parentActivityName=".controller.MainActivity">
+            android:parentActivityName=".controller.MainActivity"
+            android:theme="@style/RugTheme.NoActionBar">
+        </activity>
+        <activity android:name=".controller.forum.ForumThreadDetailActivity">
         </activity>
     </application>
 

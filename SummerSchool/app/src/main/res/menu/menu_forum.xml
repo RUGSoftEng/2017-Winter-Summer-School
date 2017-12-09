@@ -6,4 +6,9 @@
         android:icon="@drawable/ic_log_out"
         android:title="Log out"
         app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/write_forum_thread"
+        android:icon="@drawable/menu_add"
+        android:title="Write a thread"
+        app:showAsAction="ifRoom"/>
 </menu>

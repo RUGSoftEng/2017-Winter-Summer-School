@@ -93,6 +93,13 @@ public class ContentsLab {
         return false;
     }
 
+    public ForumThread getForumThread(String id) {
+        for (ForumThread f : mForumThreads) {
+            if (f.getId().equals(id)) return f;
+        }
+        return null;
+    }
+
     public void updateAnnouncements(List<Announcement> announcements) {
         mAnnouncements = (ArrayList<Announcement>) announcements;
     }

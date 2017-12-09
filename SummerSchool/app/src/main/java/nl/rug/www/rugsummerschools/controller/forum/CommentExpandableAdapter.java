@@ -40,6 +40,7 @@ import static org.joda.time.DateTimeConstants.MILLIS_PER_DAY;
  * @author Jeongkyun Oh
  */
 
+@Deprecated
 public class CommentExpandableAdapter extends ExpandableRecyclerAdapter<ParentViewHolder, CommentViewHolder> {
 
     private LayoutInflater mLayoutInflater;
