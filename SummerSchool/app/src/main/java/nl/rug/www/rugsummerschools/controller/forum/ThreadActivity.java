@@ -8,6 +8,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,15 +57,13 @@ public class ThreadActivity extends AppCompatActivity {
                         if (title.equals("") || description.equals("")) {
                             Toast.makeText(ThreadActivity.this, "Title or description cannot be empty.", Toast.LENGTH_SHORT).show();
                         } else {
-                            String imgurl = ContentsLab.get().getmLogInData().get(0);
-                            String author = ContentsLab.get().getmLogInData().get(1);
-                            String posterID = ContentsLab.get().getmLogInData().get(3);
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                             Map<String, String> map = new HashMap<>();
                             map.put("title", title);
                             map.put("description", description);
-                            map.put("author", author);
-                            map.put("posterID", posterID);
-                            map.put("imgurl", imgurl);
+                            map.put("author", user.getDisplayName());
+                            map.put("posterID", user.getUid());
+                            map.put("imgurl", user.getPhotoUrl().toString());
 
                             new NetworkingService().postRequestForumThread(ThreadActivity.this, "thread", map, new NetworkingService.VolleyCallback() {
                                 @Override

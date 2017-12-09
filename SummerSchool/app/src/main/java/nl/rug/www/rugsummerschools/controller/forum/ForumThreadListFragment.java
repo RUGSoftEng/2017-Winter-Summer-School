@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,6 +29,8 @@ import nl.rug.www.rugsummerschools.networking.NetworkingService;
  */
 
 public class ForumThreadListFragment extends ContentsListFragment<ForumThread, ContentHolder<ForumThread>> {
+
+    private static final String TAG = "ThreadListFragment";
 
     private OnSignOutListener mOnSignOutListener;
 
@@ -69,12 +72,6 @@ public class ForumThreadListFragment extends ContentsListFragment<ForumThread, C
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        setHasOptionsMenu(true);
-    }
-
-    @Override
     protected void setupAdatper() {
         if (isAdded()) {
             mBinding.recyclerView.setAdapter(new ContentAdapter<ForumThread, ForumThreadHolder>(mItems, getActivity()) {
@@ -94,9 +91,16 @@ public class ForumThreadListFragment extends ContentsListFragment<ForumThread, C
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_forum, menu);
         super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_forum, menu);
+        Log.i(TAG, "Options menu is inflated.");
     }
 
     @Override
@@ -104,11 +108,11 @@ public class ForumThreadListFragment extends ContentsListFragment<ForumThread, C
         switch (item.getItemId()) {
             case R.id.log_out_menu :
                 mOnSignOutListener.signOutGoogle();
-                return super.onOptionsItemSelected(item);
+                return true;
             case R.id.write_forum_thread :
                 Intent intent = new Intent(getActivity(), ThreadActivity.class);
                 startActivity(intent);
-                return super.onOptionsItemSelected(item);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

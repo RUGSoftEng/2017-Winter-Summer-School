@@ -71,7 +71,6 @@ public class MainActivity extends AppCompatActivity implements ForumLoginFragmen
     private ViewPager mViewPager;
     private BottomNavigationView mNavigation;
 
-
     private Fragment[] mFragments = {
             new AnnouncementListFragment(),
             new GeneralInfoListFragment(),
@@ -91,9 +90,9 @@ public class MainActivity extends AppCompatActivity implements ForumLoginFragmen
                 case 3 : return mFragments[3];
                 case 4 :
                     if (mAuth.getCurrentUser() == null) {
-                        return mFragments[4];
+                        return new ForumLoginFragment(); // TODO : is this proper to inflate menu options?
                     } else {
-                        return mFragments[5];
+                        return new ForumThreadListFragment(); // TODO : is this proper to inflate menu options?
                     }
                 default: return null;
             }
@@ -106,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements ForumLoginFragmen
 
         @Override
         public int getItemPosition(@NonNull Object object) {
+            // TODO : is this proper solution for transaction replace fragments in view pager activity?
             if (object instanceof ForumLoginFragment || object instanceof ForumThreadListFragment) {
                 return POSITION_NONE;
             }
@@ -209,16 +209,6 @@ public class MainActivity extends AppCompatActivity implements ForumLoginFragmen
 
         mAuth = FirebaseAuth.getInstance();
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if(user != null){
-            ArrayList<String> mlogInData = new ArrayList<>();
-            mlogInData.add(user.getPhotoUrl().toString());
-            mlogInData.add(user.getDisplayName());
-            mlogInData.add(user.getEmail());
-            mlogInData.add(user.getUid());
-            ContentsLab.get().setmLogInData(mlogInData);
-        }
-
         mViewPager = (ViewPager)findViewById(R.id.main_view_pager);
         mViewPager.addOnPageChangeListener(mSimpleOnPageChangeListener);
         mViewPager.setAdapter(mFragmentStatePagerAdapter);
@@ -244,7 +234,6 @@ public class MainActivity extends AppCompatActivity implements ForumLoginFragmen
 
     private void handleFacebookAccessToken(AccessToken token) {
         Log.d(TAG, "handleFacebookAccessToken:" + token);
-
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {

@@ -96,7 +96,9 @@
             android:parentActivityName=".controller.MainActivity"
             android:theme="@style/RugTheme.NoActionBar">
         </activity>
-        <activity android:name=".controller.forum.ForumThreadDetailActivity">
+        <activity
+            android:name=".controller.forum.ForumThreadDetailActivity"
+            android:parentActivityName=".controller.MainActivity">
         </activity>
     </application>
 
