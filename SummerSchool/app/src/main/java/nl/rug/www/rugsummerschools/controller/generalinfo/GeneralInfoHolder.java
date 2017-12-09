@@ -22,6 +22,12 @@ import nl.rug.www.rugsummerschools.model.GeneralInfo;
 
 public abstract class GeneralInfoHolder extends ContentHolder<GeneralInfo> implements View.OnClickListener {
 
+    private static final int CATEGORY_FOOD = 0;
+    private static final int CATEGORY_LOCATION = 1;
+    private static final int CATEGORY_INTERNET = 2;
+    private static final int CATEGORY_ACCOMODATION = 3;
+    private static final int CATEGORY_INFO = 4;
+
     private Context mContext;
     private TextView mTitleTextView;
     private TextView mContentTextView;
@@ -44,19 +50,19 @@ public abstract class GeneralInfoHolder extends ContentHolder<GeneralInfo> imple
         mContentTextView.setText(mContent.getDescription());
 
         switch (mContent.getCategory()) {
-            case 0 :
+            case CATEGORY_FOOD :
                 mImageView.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.bg_food));
                 break;
-            case 1 :
+            case CATEGORY_LOCATION :
                 mImageView.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.bg_map));
                 break;
-            case 2:
+            case CATEGORY_INTERNET:
                 mImageView.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.bg_internet));
                 break;
-            case 3:
+            case CATEGORY_ACCOMODATION:
                 mImageView.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.bg_accomodation));
                 break;
-            case 4:
+            case CATEGORY_INFO:
                 mImageView.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.bg_info));
                 break;
         }

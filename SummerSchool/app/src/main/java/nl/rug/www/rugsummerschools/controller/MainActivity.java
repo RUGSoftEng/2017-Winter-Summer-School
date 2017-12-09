@@ -60,8 +60,12 @@ import nl.rug.www.rugsummerschools.controller.timetable.TimeTableFragment;
 public class MainActivity extends AppCompatActivity implements ForumLoginFragment.OnSignInListener, ForumThreadListFragment.OnSignOutListener {
 
     private static final String TAG = "MainActivity";
+    private static final int PAGE_ACCOUNCEMENT = 0;
+    private static final int PAGE_GENERAL_INFO = 1;
+    private static final int PAGE_LECTURER = 2;
+    private static final int PAGE_TIME_TABLE = 3;
+    private static final int PAGE_FORUM = 4;
     private static final int FRAGMENTS_SIZE = 5;
-
     private static final int RC_SIGN_IN = 9001;
 
     private FirebaseAuth mAuth;
@@ -83,19 +87,14 @@ public class MainActivity extends AppCompatActivity implements ForumLoginFragmen
     private FragmentStatePagerAdapter mFragmentStatePagerAdapter = new FragmentStatePagerAdapter(getSupportFragmentManager()) {
         @Override
         public Fragment getItem(int position) {
-            switch (position) {
-                case 0 : return mFragments[0];
-                case 1 : return mFragments[1];
-                case 2 : return mFragments[2];
-                case 3 : return mFragments[3];
-                case 4 :
-                    if (mAuth.getCurrentUser() == null) {
-                        return new ForumLoginFragment(); // TODO : is this proper to inflate menu options?
-                    } else {
-                        return new ForumThreadListFragment(); // TODO : is this proper to inflate menu options?
-                    }
-                default: return null;
+            if (position == PAGE_FORUM) {
+                if (mAuth.getCurrentUser() == null) {
+                    return new ForumLoginFragment(); // TODO : is this proper to inflate menu options?
+                } else {
+                    return new ForumThreadListFragment(); // TODO : is this proper to inflate menu options?
+                }
             }
+            return mFragments[position];
         }
 
         @Override
@@ -120,19 +119,19 @@ public class MainActivity extends AppCompatActivity implements ForumLoginFragmen
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_announcement:
-                    mViewPager.setCurrentItem(0);
+                    mViewPager.setCurrentItem(PAGE_ACCOUNCEMENT);
                     return true;
                 case R.id.navigation_general:
-                    mViewPager.setCurrentItem(1);
+                    mViewPager.setCurrentItem(PAGE_GENERAL_INFO);
                     return true;
                 case R.id.navigation_lecturer:
-                    mViewPager.setCurrentItem(2);
+                    mViewPager.setCurrentItem(PAGE_LECTURER);
                     return true;
                 case R.id.navigation_time_table:
-                    mViewPager.setCurrentItem(3);
+                    mViewPager.setCurrentItem(PAGE_TIME_TABLE);
                     return true;
                 case R.id.navigation_forum:
-                    mViewPager.setCurrentItem(4);
+                    mViewPager.setCurrentItem(PAGE_FORUM);
                     return true;
             }
             return false;
@@ -143,19 +142,19 @@ public class MainActivity extends AppCompatActivity implements ForumLoginFragmen
         @Override
         public void onPageSelected(int position) {
             switch (position) {
-                case 0 :
+                case PAGE_ACCOUNCEMENT :
                     mNavigation.setSelectedItemId(R.id.navigation_announcement);
                     break;
-                case 1 :
+                case PAGE_GENERAL_INFO :
                     mNavigation.setSelectedItemId(R.id.navigation_general);
                     break;
-                case 2 :
+                case PAGE_LECTURER :
                     mNavigation.setSelectedItemId(R.id.navigation_lecturer);
                     break;
-                case 3 :
+                case PAGE_TIME_TABLE :
                     mNavigation.setSelectedItemId(R.id.navigation_time_table);
                     break;
-                case 4 :
+                case PAGE_FORUM :
                     mNavigation.setSelectedItemId(R.id.navigation_forum);
                     break;
             }
@@ -176,7 +175,17 @@ public class MainActivity extends AppCompatActivity implements ForumLoginFragmen
         mNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         disableShiftingNavigationMode();
 
-        // initialize facebook login
+        initFbLogin();
+        initGoogleLogin();
+
+        mAuth = FirebaseAuth.getInstance();
+
+        mViewPager = (ViewPager)findViewById(R.id.main_view_pager);
+        mViewPager.addOnPageChangeListener(mSimpleOnPageChangeListener);
+        mViewPager.setAdapter(mFragmentStatePagerAdapter);
+    }
+
+    private void initFbLogin() {
         mCallbackManager = CallbackManager.Factory.create();
         mInvisibleFacebookLoginButton = findViewById(R.id.invisible_facebook_button);
         mInvisibleFacebookLoginButton.setReadPermissions("email", "public_profile");
@@ -199,19 +208,14 @@ public class MainActivity extends AppCompatActivity implements ForumLoginFragmen
                 // ...
             }
         });
+    }
 
-        // initialize google login
+    private void initGoogleLogin() {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
-        mAuth = FirebaseAuth.getInstance();
-
-        mViewPager = (ViewPager)findViewById(R.id.main_view_pager);
-        mViewPager.addOnPageChangeListener(mSimpleOnPageChangeListener);
-        mViewPager.setAdapter(mFragmentStatePagerAdapter);
     }
 
     @SuppressLint("RestrictedApi")

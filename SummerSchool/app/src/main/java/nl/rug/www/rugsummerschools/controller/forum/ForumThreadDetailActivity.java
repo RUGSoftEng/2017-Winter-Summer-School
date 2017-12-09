@@ -78,7 +78,6 @@ public class ForumThreadDetailActivity extends AppCompatActivity implements View
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_post_comment :
-                //TODO: Refactoring
                 try {
 
                 } catch (NullPointerException e) {
