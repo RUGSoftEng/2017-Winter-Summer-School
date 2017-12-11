@@ -12,7 +12,11 @@ import android.support.v7.app.AppCompatActivity;
 import java.util.List;
 
 import nl.rug.www.rugsummerschools.R;
+import nl.rug.www.rugsummerschools.controller.BasePagerActivity;
 import nl.rug.www.rugsummerschools.controller.ContentsLab;
+import nl.rug.www.rugsummerschools.controller.generalinfo.GeneralInfoFragment;
+import nl.rug.www.rugsummerschools.controller.generalinfo.GeneralInfoPagerActivity;
+import nl.rug.www.rugsummerschools.model.GeneralInfo;
 import nl.rug.www.rugsummerschools.model.Lecturer;
 
 /**
@@ -22,54 +26,23 @@ import nl.rug.www.rugsummerschools.model.Lecturer;
  * @author Jeongkyun Oh
  */
 
-public class LecturerPagerActivity extends AppCompatActivity {
-
-    private static final String EXTRA_LECTURER_ID =
-            "nl.rug.www.summerschool.lecturer_id";
-
-    private List<Lecturer> mLecturers;
+@Deprecated
+public class LecturerPagerActivity extends BasePagerActivity<Lecturer> {
 
     public static Intent newIntent(Context packageContext, String content) {
         Intent intent = new Intent(packageContext, LecturerPagerActivity.class);
-        intent.putExtra(EXTRA_LECTURER_ID, content);
+        intent.putExtra(EXTRA_CONTENT_ID, content);
         return intent;
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_content_pager);
-
-        String lecturerId = (String) getIntent().getSerializableExtra(EXTRA_LECTURER_ID);
-
-        ViewPager mViewPager = (ViewPager) findViewById(R.id.content_view_pager);
-
-        mLecturers = ContentsLab.get().getLecturers();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        mViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
-            @Override
-            public Fragment getItem(int position) {
-                Lecturer lecturer = mLecturers.get(position);
-                return LecturerFragment.newInstance(lecturer.getId());
-            }
-
-            @Override
-            public int getCount() {
-                return mLecturers.size();
-            }
-        });
-
-        for (int i = 0; i < mLecturers.size(); i++) {
-            if (mLecturers.get(i).getId().equals(lecturerId)) {
-                mViewPager.setCurrentItem(i);
-                break;
-            }
-        }
+    protected List<Lecturer> getContents() {
+        return ContentsLab.get().getLecturers();
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        finish();
+    protected Fragment getFragment(int position) {
+        Lecturer lecturer = getContents().get(position);
+        return LecturerFragment.newInstance(lecturer.getId());
     }
 }

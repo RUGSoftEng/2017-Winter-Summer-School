@@ -60,6 +60,7 @@ import static org.joda.time.DateTimeConstants.MILLIS_PER_DAY;
  * @author Jeongkyun Oh
  */
 
+@Deprecated
 public class ForumFragment extends Fragment {
 
     public static final int INT_ADD = 0;
@@ -103,15 +104,9 @@ public class ForumFragment extends Fragment {
                 if (user == null) {
                     // User is signed in
                     FragmentManager fm = mActivity.getSupportFragmentManager();
-                    if(!mActivity.isFinishing())
-                        fm.beginTransaction().replace(R.id.fragment_forum_container, new ForumLoginFragment()).commitAllowingStateLoss();
                 }
             }
         });
-        if (user == null) {
-            FragmentManager fm = mActivity.getSupportFragmentManager();
-            fm.beginTransaction().replace(R.id.fragment_forum_container, new ForumLoginFragment()).commit();
-        }
         //get log in data
         String UID = ContentsLab.get().getmLogInData().get(3);
         Log.d("FORUMFRAG", "" + UID);
@@ -132,7 +127,7 @@ public class ForumFragment extends Fragment {
         mForumRecyclerView = (RecyclerView)view.findViewById(R.id.recycler_view);
         mForumRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mForumRecyclerView.addItemDecoration(new DividerItemDecoration(
-                ContextCompat.getDrawable(getActivity(), R.drawable.horizontaldivider)
+                ContextCompat.getDrawable(getActivity(), R.drawable.divider_horizontal)
         ));
 
         setupAdapter();
@@ -190,7 +185,7 @@ public class ForumFragment extends Fragment {
             mCommentsRecyclerView = (RecyclerView)itemView.findViewById(R.id.forum_comments_recycler_view);
             mCommentsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             mCommentsRecyclerView.addItemDecoration(new DividerItemDecoration(
-                    ContextCompat.getDrawable(getActivity(), R.drawable.horizontaldivider)));
+                    ContextCompat.getDrawable(getActivity(), R.drawable.divider_horizontal)));
             itemView.setOnLongClickListener(this);
             itemView.setOnClickListener(this);
         }

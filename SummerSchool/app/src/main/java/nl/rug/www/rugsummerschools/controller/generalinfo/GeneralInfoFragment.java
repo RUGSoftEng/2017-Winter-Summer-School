@@ -21,6 +21,7 @@ import nl.rug.www.rugsummerschools.model.GeneralInfo;
  * @author Jeongkyun Oh
  */
 
+@Deprecated
 public class GeneralInfoFragment extends Fragment {
 
     private static final String ARG_GENERAL_INFO_ID = "generalinfo_id";

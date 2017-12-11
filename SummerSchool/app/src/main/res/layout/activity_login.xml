@@ -13,11 +13,10 @@
         android:layout_centerHorizontal="true"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@drawable/rug_white"
+        android:src="@drawable/ic_rug_white"
         android:contentDescription="@string/logo_description"/>
 
     <TextView
-        android:id="@+id/welcomeText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/mainlogo"

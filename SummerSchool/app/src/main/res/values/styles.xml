@@ -15,4 +15,18 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="RugTheme.ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
+        <item name="background">@android:color/white</item>
+        <item name="logo">@drawable/bg_app_header</item>
+        <item name="displayOptions">useLogo|showHome</item>
+    </style>
+
+    <style name="RugTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="RugTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <style name="RugTheme.SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@drawable/bg_splash</item>
+    </style>
+
 </resources>

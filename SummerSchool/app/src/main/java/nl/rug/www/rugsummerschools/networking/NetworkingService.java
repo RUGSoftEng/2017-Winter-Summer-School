@@ -266,6 +266,7 @@ public class NetworkingService {
             generalInfo.setId(contentJsonObject.getString("_id"));
             generalInfo.setTitle(contentJsonObject.getString("title"));
             generalInfo.setDescription(contentJsonObject.getString("description"));
+            generalInfo.setCategory(contentJsonObject.getInt("category"));
 
             items.add(generalInfo);
         }

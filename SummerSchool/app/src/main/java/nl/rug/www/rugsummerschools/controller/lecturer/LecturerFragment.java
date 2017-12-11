@@ -27,6 +27,7 @@ import nl.rug.www.rugsummerschools.model.Lecturer;
  * @author Jeongkyun Oh
  */
 
+@Deprecated
 public class LecturerFragment extends Fragment {
 
     private static final String ARG_LECTURER_ID = "lecturer_id";
@@ -62,16 +63,6 @@ public class LecturerFragment extends Fragment {
         mWebSiteTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = mLecturer.getWebsite();
-                try {
-                    Uri website = Uri.parse(new URL(url).toURI().toString());
-                    Intent websiteIntent = new Intent(Intent.ACTION_VIEW, website);
-                    startActivity(websiteIntent);
-
-                } catch (Exception e){
-                    Toast.makeText(getActivity(), "Please check if the address is correct.\nMake sure that 'http://' should be included.", Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
-                }
             }
         });
         ImageView mLecturerImageView = (ImageView)view.findViewById(R.id.lecturer_image_view);

@@ -8,7 +8,6 @@
     tools:context="nl.rug.www.rugsummerschools.controller.forum.ThreadActivity">
 
     <LinearLayout
-        android:id="@+id/linear_layout_forum"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="0dp"
