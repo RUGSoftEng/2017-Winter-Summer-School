@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,9 @@ import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import org.joda.time.DateTime;
+
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +48,7 @@ public class ForumThreadDetailActivity extends AppCompatActivity implements View
     private TextView mAuthorView;
     private TextView mBodyView;
     private ImageView mPosterPhotoView;
+    private TextView mRelativeTimeView;
     private EditText mCommentEditText;
 
     public static Intent newIntent(Context context, String threadId) {
@@ -63,9 +68,12 @@ public class ForumThreadDetailActivity extends AppCompatActivity implements View
         mBodyView = findViewById(R.id.post_body);
         mCommentEditText = findViewById(R.id.field_comment_text);
         mPosterPhotoView = findViewById(R.id.post_author_photo);
+        mRelativeTimeView = findViewById(R.id.post_time_view);
         mTitleView.setText(mForumThread.getTitle());
         mAuthorView.setText(mForumThread.getPoster());
         mBodyView.setText(mForumThread.getDescription());
+        Date date = new DateTime(mForumThread.getDate()).toDate();
+        mRelativeTimeView.setText(DateUtils.getRelativeTimeSpanString(date.getTime(), System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS));
         Glide.with(this).load(mForumThread.getImgUrl()).into(mPosterPhotoView);
         findViewById(R.id.button_post_comment).setOnClickListener(this);
         RecyclerView recyclerComments = findViewById(R.id.recycler_comments);
@@ -117,6 +125,7 @@ public class ForumThreadDetailActivity extends AppCompatActivity implements View
         private ImageView mAuthorPhotoView;
         private TextView mAuthorView;
         private TextView mCommentView;
+        private TextView mCommentTimeView;
 
         public ThreadDetailHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.item_comment, parent, false));
@@ -124,12 +133,15 @@ public class ForumThreadDetailActivity extends AppCompatActivity implements View
             mAuthorPhotoView = itemView.findViewById(R.id.comment_photo);
             mAuthorView = itemView.findViewById(R.id.comment_author);
             mCommentView = itemView.findViewById(R.id.comment_body);
+            mCommentTimeView = itemView.findViewById(R.id.comment_time_view);
         }
 
         public void bind(ForumComment forumComment) {
             mForumComment = forumComment;
             mAuthorView.setText(mForumComment.getPoster());
             mCommentView.setText(mForumComment.getText());
+            Date date = new DateTime(mForumComment.getDate()).toDate();
+            mCommentTimeView.setText(DateUtils.getRelativeTimeSpanString(date.getTime(), System.currentTimeMillis(), DateUtils.YEAR_IN_MILLIS));
             Glide.with(ForumThreadDetailActivity.this).load(mForumComment.getImgUrl()).into(mAuthorPhotoView);
         }
     }

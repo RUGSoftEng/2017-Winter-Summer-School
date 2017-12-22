@@ -5,6 +5,7 @@ import nl.rug.www.rugsummerschools.controller.ContentHolder;
 import nl.rug.www.rugsummerschools.model.ForumThread;
 
 import android.content.Context;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+
+import org.joda.time.DateTime;
+
+import java.util.Date;
 
 /**
  * Created by jk on 17. 12. 9.
@@ -23,6 +28,8 @@ public abstract class ForumThreadHolder extends ContentHolder<ForumThread> imple
     private TextView mTitleView;
     private TextView mAuthorView;
     private TextView mBodyView;
+    private TextView mNumCommentView;
+    private TextView mRelativeTimeView;
     private ImageView mPosterPhotoView;
 
     public ForumThreadHolder(LayoutInflater inflater, ViewGroup parent, Context context) {
@@ -33,6 +40,8 @@ public abstract class ForumThreadHolder extends ContentHolder<ForumThread> imple
         mAuthorView = itemView.findViewById(R.id.post_author);
         mBodyView = itemView.findViewById(R.id.post_body);
         mPosterPhotoView = itemView.findViewById(R.id.post_author_photo);
+        mNumCommentView = itemView.findViewById(R.id.number_of_comments);
+        mRelativeTimeView = itemView.findViewById(R.id.post_time_view);
         itemView.setOnClickListener(this);
     }
 
@@ -41,6 +50,10 @@ public abstract class ForumThreadHolder extends ContentHolder<ForumThread> imple
         mTitleView.setText(mContent.getTitle());
         mAuthorView.setText(mContent.getPoster());
         mBodyView.setText(mContent.getDescription());
+        String numComments = mContent.getForumCommentList().size() + " comments";
+        mNumCommentView.setText(numComments);
+        Date date = new DateTime(mContent.getDate()).toDate();
+        mRelativeTimeView.setText(DateUtils.getRelativeTimeSpanString(date.getTime(), System.currentTimeMillis(), DateUtils.DAY_IN_MILLIS));
         Glide.with(mContext).load(forumThread.getImgUrl()).into(mPosterPhotoView);
     }
 }
