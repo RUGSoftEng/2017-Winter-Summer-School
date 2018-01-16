@@ -16,20 +16,40 @@
         app:civ_border_width="0dp"
         app:civ_shadow="false"/>
 
-    <TextView
-        android:id="@+id/post_author"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:layout_marginStart="10dp"
-        android:gravity="center_vertical"
-        tools:text="someauthor@email.com" />
-
-    <TextView
-        android:id="@+id/post_time_view"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp">
+
+        <TextView
+            android:id="@+id/post_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:textStyle="bold"
+            tools:text="someauthor@email.com" />
+
+        <TextView
+            android:id="@+id/post_time_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:textSize="12sp"
+            tools:text="13 minutes ago"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/btn_more_post"
+        android:layout_gravity="center"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_vertical_more"
         android:layout_marginEnd="5dp"
-        tools:text="13 minutes ago"/>
+        android:visibility="gone"
+        android:clickable="true"
+        />
 
 </LinearLayout>

@@ -2,18 +2,21 @@ package nl.rug.www.rugsummerschools.controller.forum;
 
 import android.content.Context;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,7 +65,50 @@ public class ForumThreadDetailActivity extends AppCompatActivity implements View
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forum_thread_detail);
         String threadId = getIntent().getStringExtra(EXTRA_FORUM_THREAD_ID);
+
+        final LinearLayout commentPostView = findViewById(R.id.comment_form);
+        NestedScrollView nestedScrollView = findViewById(R.id.nsv_forum_detail);
+        nestedScrollView.requestFocus();
+        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (scrollY - oldScrollY > 0) {
+                    commentPostView.setVisibility(View.GONE);
+                } else {
+                    commentPostView.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        ImageView commentPostImageView = findViewById(R.id.comment_post_photo);
+        ImageView moreButton = findViewById(R.id.btn_more_post);
+        moreButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popupMenu = new PopupMenu(ForumThreadDetailActivity.this, v);
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.edit_menu :
+                                Toast.makeText(getApplicationContext(), "edit", Toast.LENGTH_LONG).show();
+                                break;
+                            case R.id.delete_menu :
+                                Toast.makeText(getApplicationContext(), "delete", Toast.LENGTH_LONG).show();
+                                break;
+                        }
+                        return true;
+                    }
+                });
+                MenuInflater inflater = popupMenu.getMenuInflater();
+                inflater.inflate(R.menu.menu_edit_delete, popupMenu.getMenu());
+                popupMenu.show();
+            }
+        });
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        Glide.with(this).load(user.getPhotoUrl()).into(commentPostImageView);
         mForumThread = ContentsLab.get().getForumThread(threadId);
+        if (user.getUid().equals(mForumThread.getPosterId()))
+            moreButton.setVisibility(View.VISIBLE);
         mTitleView = findViewById(R.id.post_title);
         mAuthorView = findViewById(R.id.post_author);
         mBodyView = findViewById(R.id.post_body);
@@ -77,6 +123,7 @@ public class ForumThreadDetailActivity extends AppCompatActivity implements View
         Glide.with(this).load(mForumThread.getImgUrl()).into(mPosterPhotoView);
         findViewById(R.id.button_post_comment).setOnClickListener(this);
         RecyclerView recyclerComments = findViewById(R.id.recycler_comments);
+        recyclerComments.setFocusable(false);
         recyclerComments.setLayoutManager(new LinearLayoutManager(this));
         recyclerComments.setAdapter(new ThreadDetailAdapter());
 
@@ -86,11 +133,6 @@ public class ForumThreadDetailActivity extends AppCompatActivity implements View
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_post_comment :
-                try {
-
-                } catch (NullPointerException e) {
-                    Log.e(TAG, e.getMessage() + "Send comment:");
-                }
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 Map<String, String> map = new HashMap<>();
                 map.put("threadID", mForumThread.getId());
@@ -126,6 +168,7 @@ public class ForumThreadDetailActivity extends AppCompatActivity implements View
         private TextView mAuthorView;
         private TextView mCommentView;
         private TextView mCommentTimeView;
+        private ImageView mMoreButton;
 
         public ThreadDetailHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.item_comment, parent, false));
@@ -134,6 +177,7 @@ public class ForumThreadDetailActivity extends AppCompatActivity implements View
             mAuthorView = itemView.findViewById(R.id.comment_author);
             mCommentView = itemView.findViewById(R.id.comment_body);
             mCommentTimeView = itemView.findViewById(R.id.comment_time_view);
+            mMoreButton = itemView.findViewById(R.id.btn_more_comment);
         }
 
         public void bind(ForumComment forumComment) {
@@ -143,6 +187,9 @@ public class ForumThreadDetailActivity extends AppCompatActivity implements View
             Date date = new DateTime(mForumComment.getDate()).toDate();
             mCommentTimeView.setText(DateUtils.getRelativeTimeSpanString(date.getTime(), System.currentTimeMillis(), DateUtils.YEAR_IN_MILLIS));
             Glide.with(ForumThreadDetailActivity.this).load(mForumComment.getImgUrl()).into(mAuthorPhotoView);
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user.getUid().equals(mForumComment.getPosterId()))
+                mMoreButton.setVisibility(View.VISIBLE);
         }
     }
 
