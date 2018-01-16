@@ -51,11 +51,12 @@ import nl.rug.www.rugsummerschools.model.Lecturer;
  * @author Jeongkyun Oh
  */
 
+@Deprecated
 public class NetworkingService {
 
     private static final String TAG = "NetworkingService";
 
-    private static final String URL_DATABASE = "turing13.housing.rug.nl:8800";
+    private static final String URL_DATABASE = "turing13.housing.rug.nl:8800/API";
 
     private static final int ANNOUNCEMENT = 0;
     private static final int GENERAL_INFO = 1;
@@ -101,19 +102,19 @@ public class NetworkingService {
         builder.scheme("http").encodedAuthority(URL_DATABASE);
         switch (type) {
             case ANNOUNCEMENT :
-                builder.appendPath("announcement").appendPath("item");
+                builder.appendPath("announcement");
                 break;
             case GENERAL_INFO :
-                builder.appendPath("generalinfo").appendPath("item");
+                builder.appendPath("generalinfo");
                 break;
             case LECTURER :
-                builder.appendPath("lecturer").appendPath("item");
+                builder.appendPath("lecturer");
                 break;
             case FORUM :
-                builder.appendPath("forum").appendPath("item");
+                builder.appendPath("forum").appendPath("thread");
                 break;
             case LOGIN_CODE :
-                builder.appendPath("loginCode");
+                builder.appendPath("loginCode").appendQueryParameter("code", "11111111");
                 break;
         }
         String jsonString;
@@ -245,9 +246,9 @@ public class NetworkingService {
             if (!contentJsonObject.isNull("poster"))
                 announcement.setPoster(contentJsonObject.getString("poster"));
             else
-                announcement.setPoster("");
-            if (!contentJsonObject.isNull("date"))
-                announcement.setDate(contentJsonObject.getString("date"));
+                announcement.setPoster("Unknown");
+            if (!contentJsonObject.isNull("created"))
+                announcement.setDate(contentJsonObject.getString("created"));
             else
                 announcement.setDate("");
 
@@ -266,7 +267,7 @@ public class NetworkingService {
             generalInfo.setId(contentJsonObject.getString("_id"));
             generalInfo.setTitle(contentJsonObject.getString("title"));
             generalInfo.setDescription(contentJsonObject.getString("description"));
-            generalInfo.setCategory(contentJsonObject.getInt("category"));
+            generalInfo.setCategory(contentJsonObject.getString("category"));
 
             items.add(generalInfo);
         }
@@ -348,9 +349,9 @@ public class NetworkingService {
             forumThread.setTitle(contentJsonObject.getString("title"));
             forumThread.setDescription(contentJsonObject.getString("description"));
             forumThread.setPoster(contentJsonObject.getString("author"));
-            forumThread.setDate(contentJsonObject.getString("date"));
+            forumThread.setDate(contentJsonObject.getString("created"));
             forumThread.setPosterId(contentJsonObject.getString("posterID"));
-            forumThread.setImgUrl(contentJsonObject.getString("imgurl"));
+            forumThread.setImgUrl(contentJsonObject.getString("imgURL"));
             List<ForumComment> comments = new ArrayList<>();
             JSONArray jsonComments = contentJsonObject.getJSONArray("comments");
             for (int j = 0; j < jsonComments.length(); ++j) {
@@ -373,7 +374,7 @@ public class NetworkingService {
     public void putRequestForumThread(Context context, final String forumPath, Map<String, String> valuePairs, final VolleyCallback volleyCallback) {
         Uri.Builder builder = new Uri.Builder();
         builder.scheme("http").encodedAuthority(URL_DATABASE);
-        builder.appendPath("forum").appendPath(forumPath).appendPath("item")
+        builder.appendPath("forum").appendPath(forumPath)
                 .appendQueryParameter("threadID", valuePairs.get("threadID"));
         switch (forumPath) {
             case "thread" :
@@ -413,7 +414,7 @@ public class NetworkingService {
     public void deleteRequestForumThread(Context context, String forumPath, Map<String, String> valuePairs, final VolleyCallback volleyCallback) {
         Uri.Builder builder = new Uri.Builder();
         builder.scheme("http").encodedAuthority(URL_DATABASE);
-        builder.appendPath("forum").appendPath(forumPath).appendPath("item")
+        builder.appendPath("forum").appendPath(forumPath)
                 .appendQueryParameter("threadID", valuePairs.get("threadID"));
         if (forumPath.equals("comment")) builder.appendQueryParameter("commentID", valuePairs.get("commentID"));
 
@@ -445,7 +446,7 @@ public class NetworkingService {
         try {
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("http").encodedAuthority(URL_DATABASE)
-                    .appendPath("forum").appendPath(forumPath).appendPath("item");
+                    .appendPath("forum").appendPath(forumPath);
             String url = builder.toString();
 
             RequestQueue queue = Volley.newRequestQueue(context);
