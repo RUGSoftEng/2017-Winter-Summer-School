@@ -14,6 +14,8 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -267,8 +269,7 @@ public class NetworkingService {
             generalInfo.setId(contentJsonObject.getString("_id"));
             generalInfo.setTitle(contentJsonObject.getString("title"));
             generalInfo.setDescription(contentJsonObject.getString("description"));
-            generalInfo.setCategory(contentJsonObject.getString("category"));
-
+//            generalInfo.setCategory(contentJsonObject.getString("category"));
             items.add(generalInfo);
         }
     }

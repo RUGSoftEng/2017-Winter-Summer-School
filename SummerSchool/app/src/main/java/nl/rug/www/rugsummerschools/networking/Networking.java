@@ -27,20 +27,9 @@ public class Networking {
 
     private RequestQueue mRequestQueue;
 
-    interface VolleyCallback {
-        void onSuccess(String result);
-        void onFail(String result);
+    interface VolleyCallback<T> {
+        void onResponse(T result);
         void onError(String result);
-    }
-
-    interface JSONObjectCallback {
-        void onResponse(JSONObject jsonObject);
-        void onError(String error);
-    }
-
-    interface JSONArrayCallback {
-        void onResponse(JSONArray jsonArray);
-        void onError(String error);
     }
 
     public Networking(Context context) {
@@ -51,8 +40,8 @@ public class Networking {
         Uri.Builder builder = new Uri.Builder();
         builder
                 .scheme("http")
-                .encodedAuthority(HTTPURL)
-                .appendPath("API");
+                .encodedAuthority(HTTPURL);
+//                .appendPath("API"); // Calendar API not included
 
         if (paths != null) {
             for (String s : paths) {
@@ -74,7 +63,7 @@ public class Networking {
         return url;
     }
 
-    public void getJSONObjectRequest(List<String> paths, Map<String, String> queryParams, final JSONObjectCallback callback) {
+    public void getJSONObjectRequest(List<String> paths, Map<String, String> queryParams, final VolleyCallback<JSONObject> callback) {
         String url = buildURL(paths, queryParams);
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -94,7 +83,7 @@ public class Networking {
         mRequestQueue.add(request);
     }
 
-    public void getJSONArrayRequest(List<String> paths, Map<String, String> queryParams, final JSONArrayCallback callback) {
+    public void getJSONArrayRequest(List<String> paths, Map<String, String> queryParams, final VolleyCallback<JSONArray> callback) {
         String url = buildURL(paths, queryParams);
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
@@ -113,18 +102,14 @@ public class Networking {
         mRequestQueue.add(request);
     }
 
-    public void getDeleteRequest(int method, List<String> paths, Map<String, String> queryParams, final Map<String, String> valuePairs, final VolleyCallback callback) {
+    public void getDeleteRequest(int method, List<String> paths, Map<String, String> queryParams, final Map<String, String> valuePairs, final VolleyCallback<String> callback) {
         String url = buildURL(paths, queryParams);
         StringRequest request = new StringRequest(method, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         Log.d("Response", response);
-                        if ("OK".equals(response)) {
-                            callback.onSuccess(response);
-                        } else {
-                            callback.onFail(response);
-                        }
+                        callback.onResponse(response);
                     }
                 },
                 new Response.ErrorListener() {
@@ -136,18 +121,14 @@ public class Networking {
         mRequestQueue.add(request);
     }
 
-    public void postPutRequest(int method, List<String> paths, Map<String, String> queryParams, final Map<String, String> valuePairs, final VolleyCallback callback) {
+    public void postPutRequest(int method, List<String> paths, Map<String, String> queryParams, final Map<String, String> valuePairs, final VolleyCallback<String> callback) {
         String url = buildURL(paths, queryParams);
         StringRequest request = new StringRequest(method, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         Log.d("Response", response);
-                        if ("OK".equals(response)) {
-                            callback.onSuccess(response);
-                        } else {
-                            callback.onFail(response);
-                        }
+                        callback.onResponse(response);
                     }
                 },
                 new Response.ErrorListener() {
