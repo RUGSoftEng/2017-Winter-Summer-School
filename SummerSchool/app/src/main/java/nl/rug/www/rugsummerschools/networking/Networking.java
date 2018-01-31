@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -27,9 +28,9 @@ public class Networking {
 
     private RequestQueue mRequestQueue;
 
-    interface VolleyCallback<T> {
+    public interface VolleyCallback<T> {
         void onResponse(T result);
-        void onError(String result);
+        void onError(NetworkResponse result);
     }
 
     public Networking(Context context) {
@@ -41,7 +42,7 @@ public class Networking {
         builder
                 .scheme("http")
                 .encodedAuthority(HTTP_URL)
-                .appendPath("API"); // Calendar API not included
+                .appendPath("API");
 
         if (paths != null) {
             for (String s : paths) {
@@ -77,7 +78,7 @@ public class Networking {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d(TAG, "Get request Error : " + error.toString());
-                        callback.onError(error.toString());
+                        callback.onError(error.networkResponse);
                     }
                 });
         mRequestQueue.add(request);
@@ -96,7 +97,7 @@ public class Networking {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d(TAG, "Get request Error : " + error.toString());
-                        callback.onError(error.toString());
+                        callback.onError(error.networkResponse);
                     }
                 });
         mRequestQueue.add(request);
