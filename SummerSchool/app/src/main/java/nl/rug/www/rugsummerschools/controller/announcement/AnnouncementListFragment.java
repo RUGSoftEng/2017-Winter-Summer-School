@@ -62,7 +62,9 @@ public class AnnouncementListFragment extends ContentsListFragment<Announcement,
 
     @Override
     protected List<Announcement> fetchContents() {
-        return new NetworkingService().fetchAnnouncements();
+        List<String> paths = new ArrayList<>();
+        paths.add("announcement");
+        return new NetworkingService<Announcement>().fetchData(NetworkingService.ANNOUNCEMENT, paths, null);
     }
 
     @Override

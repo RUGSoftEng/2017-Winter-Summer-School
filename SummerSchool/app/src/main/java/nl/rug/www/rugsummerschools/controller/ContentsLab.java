@@ -22,6 +22,7 @@ public class ContentsLab {
     /** unique instance of ContentsLab */
     private static ContentsLab sContentsLab;
 
+    private String mSchoolId;
     private ArrayList<Announcement> mAnnouncements;
     private ArrayList<GeneralInfo> mGeneralInfos;
     private ArrayList<EventsPerDay> mPreviousWeekEvents;
@@ -49,6 +50,10 @@ public class ContentsLab {
         mForumThreads = new ArrayList<>();
         mLogInCodes = new ArrayList<>();
     }
+
+    public String getSchoolId() { return mSchoolId; }
+
+    public void setSchoolId(String id) { mSchoolId = id; }
 
     public List<GeneralInfo> getGeneralInfos() {
         return mGeneralInfos;

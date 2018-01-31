@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import nl.rug.www.rugsummerschools.R;
@@ -39,7 +40,9 @@ public class LecturerListFragment extends ContentsListFragment<Lecturer, Content
 
     @Override
     protected List<Lecturer> fetchContents() {
-        return new NetworkingService().fetchLecturers();
+        List<String> paths = new ArrayList<>();
+        paths.add("lecturer");
+        return new NetworkingService<Lecturer>().fetchData(NetworkingService.LECTURER, paths, null);
     }
 
     @Override

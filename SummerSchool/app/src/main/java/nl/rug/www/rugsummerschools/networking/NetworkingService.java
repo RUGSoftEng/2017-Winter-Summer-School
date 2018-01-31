@@ -32,6 +32,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -39,6 +40,7 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import nl.rug.www.rugsummerschools.model.Announcement;
+import nl.rug.www.rugsummerschools.model.Content;
 import nl.rug.www.rugsummerschools.model.Event;
 import nl.rug.www.rugsummerschools.model.EventsPerDay;
 import nl.rug.www.rugsummerschools.model.ForumComment;
@@ -54,21 +56,21 @@ import nl.rug.www.rugsummerschools.model.Lecturer;
  */
 
 @Deprecated
-public class NetworkingService {
+public class NetworkingService<T extends Content> {
 
     private static final String TAG = "NetworkingService";
 
-    private static final String URL_DATABASE = "turing13.housing.rug.nl:8800/API";
+    private static final String HTTP_URL = "turing13.housing.rug.nl:8800";
 
-    private static final int ANNOUNCEMENT = 0;
-    private static final int GENERAL_INFO = 1;
-    private static final int LECTURER = 2;
-    private static final int FORUM = 3;
-    private static final int LOGIN_CODE = 4;
+    public static final int LOGIN_CODE = 0;
+    public static final int ANNOUNCEMENT = 1;
+    public static final int GENERAL_INFO = 2;
+    public static final int LECTURER = 3;
+    public static final int TIMETABLE = 4;
+    public static final int FORUM = 5;
 
     public interface VolleyCallback {
-        void onSuccess(String result);
-        void onFail(String result);
+        void onResponse(String result);
         void onError(String result);
     }
 
@@ -99,139 +101,62 @@ public class NetworkingService {
         return new String(getUrlBytes(urlSpec));
     }
 
-    private JSONArray buildJSONArray(int type) {
+    private String buildURL(List<String> paths, Map<String, String> queryParams) {
         Uri.Builder builder = new Uri.Builder();
-        builder.scheme("http").encodedAuthority(URL_DATABASE);
-        switch (type) {
-            case ANNOUNCEMENT :
-                builder.appendPath("announcement");
-                break;
-            case GENERAL_INFO :
-                builder.appendPath("generalinfo");
-                break;
-            case LECTURER :
-                builder.appendPath("lecturer");
-                break;
-            case FORUM :
-                builder.appendPath("forum").appendPath("thread");
-                break;
-            case LOGIN_CODE :
-                builder.appendPath("loginCode").appendQueryParameter("code", "11111111");
-                break;
+        builder
+                .scheme("http")
+                .encodedAuthority(HTTP_URL)
+                .appendPath("API");
+
+        if (paths != null) {
+            for (String s : paths) {
+                builder.appendPath(s);
+            }
         }
-        String jsonString;
+
+        if (queryParams != null) {
+            Iterator it = queryParams.keySet().iterator();
+            while(it.hasNext()) {
+                String key = (String)it.next();
+                builder.appendQueryParameter(key, queryParams.get(key));
+                it.remove();
+            }
+        }
+
+        String url = builder.toString();
+        Log.d(TAG, "url : " + url);
+        return url;
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<T> fetchData(int type, List<String> paths, Map<String, String> queries) {
+        List<T> data = new ArrayList<>();
+        String jsonString = buildURL(paths, queries);
         try {
-            jsonString = getUrlString(builder.toString());
-            return new JSONArray(jsonString);
+            switch (type) {
+                case LOGIN_CODE :
+                    paths.add("");
+                    break;
+                case ANNOUNCEMENT :
+                    parseAnnouncements((List<Announcement>)data, new JSONArray(jsonString));
+                    break;
+                case GENERAL_INFO :
+                    parseGeneralInfos((List<GeneralInfo>)data, new JSONArray(jsonString));
+                    break;
+                case LECTURER :
+                    parseLecturers((List<Lecturer>)data, new JSONArray(jsonString));
+                    break;
+                case TIMETABLE :
+//                    parseTimeTables((List<EventsPerDay>)data, new JSONObject(jsonString));
+                    break;
+                case FORUM :
+                    parseForumThreads((List<ForumThread>)data, new JSONArray(jsonString));
+                    break;
+            }
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
-        return null;
-    }
-
-    private JSONObject buildJSONObject(int week) {
-        Uri.Builder builder = new Uri.Builder();
-        builder.scheme("http").encodedAuthority(URL_DATABASE).appendPath("calendar").appendPath("event")
-                .appendQueryParameter("week", week + "");
-        try {
-            String jsonString = getUrlString(builder.toString());
-            return new JSONObject(jsonString);
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public List<String> fetchLoginCodes() {
-        List<String> loginCodes = new ArrayList<>();
-        try {
-            parseLoginCodes(loginCodes, buildJSONArray(LOGIN_CODE));
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
-        }
-
-        return loginCodes;
-    }
-
-    public List<Announcement> fetchAnnouncements() {
-        List<Announcement> announcements = new ArrayList<>();
-        try {
-            parseAnnouncements(announcements, buildJSONArray(ANNOUNCEMENT));
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
-        }
-
-        return announcements;
-    }
-
-    public List<GeneralInfo> fetchGeneralInfos() {
-
-        List<GeneralInfo> generalInfos = new ArrayList<>();
-
-        try {
-            parseGeneralInfos(generalInfos, buildJSONArray(GENERAL_INFO));
-        } catch (IOException ioe) {
-            Log.e(TAG, "Failed to fetch GeneralInfos", ioe);
-        } catch (JSONException je) {
-            Log.e(TAG, "Failed to parse GeneralInfo JSON", je);
-        }
-
-        return generalInfos;
-    }
-
-    public List<EventsPerDay> fetchTimeTables(int week) {
-
-        List<EventsPerDay> timeTables = new ArrayList<>();
-
-        try {
-            parseTimeTables(timeTables, buildJSONObject(week));
-        } catch (IOException ioe) {
-            Log.e(TAG, "Failed to fetch TimeTables", ioe);
-        } catch (JSONException je) {
-            Log.e(TAG, "Failed to parse Event JSON", je);
-        }
-
-        return timeTables;
-    }
-
-    public List<Lecturer> fetchLecturers() {
-
-        List<Lecturer> lecturers = new ArrayList<>();
-
-        try {
-            parseLecturers(lecturers, buildJSONArray(LECTURER));
-        } catch (IOException ioe) {
-            Log.e(TAG, "Failed to fetch Lecturers", ioe);
-        } catch (JSONException je) {
-            Log.e(TAG, "Failed to parse Lecturers JSON", je);
-        }
-
-        return lecturers;
-    }
-
-    public List<ForumThread> fetchForumThreads() {
-
-        List<ForumThread> forumThreads = new ArrayList<>();
-
-        try {
-            parseForumThreads(forumThreads, buildJSONArray(FORUM));
-        } catch (IOException ioe) {
-            Log.e(TAG, "Failed to fetch Lecturers", ioe);
-        } catch (JSONException je) {
-            Log.e(TAG, "Failed to parse Lecturers JSON", je);
-        }
-
-        return forumThreads;
-    }
-
-    private void parseLoginCodes(List<String> items, JSONArray jsonBody)
-            throws IOException, JSONException {
-        if (jsonBody == null) return;
-
-        for (int i = 0; i < jsonBody.length(); i++) {
-            JSONObject contentJsonObject = jsonBody.getJSONObject(i);
-            items.add(contentJsonObject.getString("code"));
-        }
+        return data;
     }
 
     private void parseAnnouncements(List<Announcement> items, JSONArray jsonBody)
@@ -329,7 +254,7 @@ public class NetworkingService {
             lecturer.setWebsite(contentJsonObject.getString("website"));
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("http")
-                    .encodedAuthority(URL_DATABASE)
+                    .encodedAuthority(HTTP_URL)
                     .appendPath(contentJsonObject.getString("imagepath"));
             Log.d(TAG, "URL string :" + builder.toString());
             lecturer.setImgurl(builder.toString());
@@ -372,144 +297,191 @@ public class NetworkingService {
         }
     }
 
-    public void putRequestForumThread(Context context, final String forumPath, Map<String, String> valuePairs, final VolleyCallback volleyCallback) {
-        Uri.Builder builder = new Uri.Builder();
-        builder.scheme("http").encodedAuthority(URL_DATABASE);
-        builder.appendPath("forum").appendPath(forumPath)
-                .appendQueryParameter("threadID", valuePairs.get("threadID"));
-        switch (forumPath) {
-            case "thread" :
-                builder.appendQueryParameter("title", valuePairs.get("title"))
-                        .appendQueryParameter("description", valuePairs.get("description"));
-                break;
-            case "comment" :
-                builder.appendQueryParameter("commentID", valuePairs.get("commentID"))
-                        .appendQueryParameter("text", valuePairs.get("text"));
-                break;
-        }
-
-        String url = builder.toString();
-
+    public void getDeleteRequest(Context context, int method, List<String> paths, Map<String, String> queryParams, final Map<String, String> valuePairs, final VolleyCallback callback) {
+        String url = buildURL(paths, queryParams);
         RequestQueue queue = Volley.newRequestQueue(context);
-        StringRequest stringRequest = new StringRequest(Request.Method.PUT, url,
+        StringRequest request = new StringRequest(method, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d(TAG, "On response result (PUT Request) : " + response);
-                        if ("OK".equals(response) || "200".equals(response))
-                            volleyCallback.onSuccess(response);
-                        else
-                            volleyCallback.onFail(response);
+                        Log.d("Response", response);
+                        callback.onResponse(response);
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d(TAG, "Error message (PUT Request): " + error.toString());
-                volleyCallback.onError(error.toString());
-            }
-        });
-
-        queue.add(stringRequest);
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Error.Response", error.toString());
+                    }
+                });
+        queue.add(request);
     }
 
-    public void deleteRequestForumThread(Context context, String forumPath, Map<String, String> valuePairs, final VolleyCallback volleyCallback) {
-        Uri.Builder builder = new Uri.Builder();
-        builder.scheme("http").encodedAuthority(URL_DATABASE);
-        builder.appendPath("forum").appendPath(forumPath)
-                .appendQueryParameter("threadID", valuePairs.get("threadID"));
-        if (forumPath.equals("comment")) builder.appendQueryParameter("commentID", valuePairs.get("commentID"));
-
-        String url = builder.toString();
-
+    public void postPutRequest(Context context, int method, List<String> paths, Map<String, String> queryParams, final Map<String, String> valuePairs, final VolleyCallback callback) {
         RequestQueue queue = Volley.newRequestQueue(context);
-        StringRequest stringRequest = new StringRequest(Request.Method.DELETE, url,
+        String url = buildURL(paths, queryParams);
+        StringRequest request = new StringRequest(method, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d(TAG, "On response result (DELETE Request): " + response);
-                        if ("OK".equals(response) || "200".equals(response))
-                            volleyCallback.onSuccess(response);
-                        else
-                            volleyCallback.onFail(response);
+                        Log.d("Response", response);
+                        callback.onResponse(response);
                     }
-                }, new Response.ErrorListener() {
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", error.toString());
+                    }
+                }
+        ) {
             @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d(TAG, "Error message : (DELETE Request)" + error.toString());
-                volleyCallback.onError(error.toString());
+            protected Map<String, String> getParams() {
+                return valuePairs;
             }
-        });
-
-        queue.add(stringRequest);
+        };
+        queue.add(request);
     }
 
-    public void postRequestForumThread(Context context, final String forumPath, Map<String, String> valuePairs, final VolleyCallback volleyCallback) {
-        try {
-            Uri.Builder builder = new Uri.Builder();
-            builder.scheme("http").encodedAuthority(URL_DATABASE)
-                    .appendPath("forum").appendPath(forumPath);
-            String url = builder.toString();
-
-            RequestQueue queue = Volley.newRequestQueue(context);
-            JSONObject jsonBody = new JSONObject();
-            Iterator it = valuePairs.keySet().iterator();
-            while(it.hasNext()) {
-                String key = (String)it.next();
-                jsonBody.put(key, valuePairs.get(key));
-                it.remove();
-            }
-
-            final String requestBody = jsonBody.toString();
-
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            Log.d(TAG, "On response result (POST Request): " + response);
-                            if ("OK".equals(response) || "200".equals(response))
-                                volleyCallback.onSuccess(response);
-                            else
-                                volleyCallback.onFail(response);
-                        }
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.d(TAG, "Error message : (POST Request)" + error.toString());
-                    volleyCallback.onError(error.toString());
-                }
-            }) {
-                @Override
-                public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-                }
-
-                @Override
-                public byte[] getBody() throws AuthFailureError {
-                    try {
-                        return requestBody == null ? null : requestBody.getBytes("utf-8");
-                    } catch (UnsupportedEncodingException uee) {
-                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
-                        return null;
-                    }
-                }
-
-                @Override
-                protected Response<String> parseNetworkResponse(NetworkResponse response) {
-                    String responseString = String.valueOf(response.statusCode);
-                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
-                }
-            };
-
-            queue.add(stringRequest);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
+//    public void putRequestForumThread(Context context, final String forumPath, Map<String, String> valuePairs, final VolleyCallback volleyCallback) {
+//        Uri.Builder builder = new Uri.Builder();
+//        builder.scheme("http").encodedAuthority(URL_DATABASE);
+//        builder.appendPath("forum").appendPath(forumPath)
+//                .appendQueryParameter("threadID", valuePairs.get("threadID"));
+//        switch (forumPath) {
+//            case "thread" :
+//                builder.appendQueryParameter("title", valuePairs.get("title"))
+//                        .appendQueryParameter("description", valuePairs.get("description"));
+//                break;
+//            case "comment" :
+//                builder.appendQueryParameter("commentID", valuePairs.get("commentID"))
+//                        .appendQueryParameter("text", valuePairs.get("text"));
+//                break;
+//        }
+//
+//        String url = builder.toString();
+//
+//        RequestQueue queue = Volley.newRequestQueue(context);
+//        StringRequest stringRequest = new StringRequest(Request.Method.PUT, url,
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//                        Log.d(TAG, "On response result (PUT Request) : " + response);
+//                        if ("OK".equals(response) || "200".equals(response))
+//                            volleyCallback.onSuccess(response);
+//                        else
+//                            volleyCallback.onFail(response);
+//                    }
+//                }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Log.d(TAG, "Error message (PUT Request): " + error.toString());
+//                volleyCallback.onError(error.toString());
+//            }
+//        });
+//
+//        queue.add(stringRequest);
+//    }
+//
+//    public void deleteRequestForumThread(Context context, String forumPath, Map<String, String> valuePairs, final VolleyCallback volleyCallback) {
+//        Uri.Builder builder = new Uri.Builder();
+//        builder.scheme("http").encodedAuthority(URL_DATABASE);
+//        builder.appendPath("forum").appendPath(forumPath)
+//                .appendQueryParameter("threadID", valuePairs.get("threadID"));
+//        if (forumPath.equals("comment")) builder.appendQueryParameter("commentID", valuePairs.get("commentID"));
+//
+//        String url = builder.toString();
+//
+//        RequestQueue queue = Volley.newRequestQueue(context);
+//        StringRequest stringRequest = new StringRequest(Request.Method.DELETE, url,
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//                        Log.d(TAG, "On response result (DELETE Request): " + response);
+//                        if ("OK".equals(response) || "200".equals(response))
+//                            volleyCallback.onSuccess(response);
+//                        else
+//                            volleyCallback.onFail(response);
+//                    }
+//                }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Log.d(TAG, "Error message : (DELETE Request)" + error.toString());
+//                volleyCallback.onError(error.toString());
+//            }
+//        });
+//
+//        queue.add(stringRequest);
+//    }
+//
+//    public void postRequestForumThread(Context context, final String forumPath, Map<String, String> valuePairs, final VolleyCallback volleyCallback) {
+//        try {
+//            Uri.Builder builder = new Uri.Builder();
+//            builder.scheme("http").encodedAuthority(URL_DATABASE)
+//                    .appendPath("forum").appendPath(forumPath);
+//            String url = builder.toString();
+//
+//            RequestQueue queue = Volley.newRequestQueue(context);
+//            JSONObject jsonBody = new JSONObject();
+//            Iterator it = valuePairs.keySet().iterator();
+//            while(it.hasNext()) {
+//                String key = (String)it.next();
+//                jsonBody.put(key, valuePairs.get(key));
+//                it.remove();
+//            }
+//
+//            final String requestBody = jsonBody.toString();
+//
+//            StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+//                    new Response.Listener<String>() {
+//                        @Override
+//                        public void onResponse(String response) {
+//                            Log.d(TAG, "On response result (POST Request): " + response);
+//                            if ("OK".equals(response) || "200".equals(response))
+//                                volleyCallback.onSuccess(response);
+//                            else
+//                                volleyCallback.onFail(response);
+//                        }
+//                    }, new Response.ErrorListener() {
+//                @Override
+//                public void onErrorResponse(VolleyError error) {
+//                    Log.d(TAG, "Error message : (POST Request)" + error.toString());
+//                    volleyCallback.onError(error.toString());
+//                }
+//            }) {
+//                @Override
+//                public String getBodyContentType() {
+//                    return "application/json; charset=utf-8";
+//                }
+//
+//                @Override
+//                public byte[] getBody() throws AuthFailureError {
+//                    try {
+//                        return requestBody == null ? null : requestBody.getBytes("utf-8");
+//                    } catch (UnsupportedEncodingException uee) {
+//                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+//                        return null;
+//                    }
+//                }
+//
+//                @Override
+//                protected Response<String> parseNetworkResponse(NetworkResponse response) {
+//                    String responseString = String.valueOf(response.statusCode);
+//                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
+//                }
+//            };
+//
+//            queue.add(stringRequest);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     public void postRequestFCMID(Context context, String Token){
         try{
             Uri.Builder builder = new Uri.Builder();
-            builder.scheme("http").encodedAuthority(URL_DATABASE);
+            builder.scheme("http").encodedAuthority(HTTP_URL);
             builder.appendPath("token").appendQueryParameter("id", Token);
             String url = builder.toString();
 

@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.android.volley.NetworkResponse;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ import nl.rug.www.rugsummerschools.networking.NetworkingService;
  * @author Jeongkyun Oh
  */
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements Networking.VolleyCallback<JSONObject> {
 
     private static final String TAG = "LoginActivity";
 
@@ -44,6 +45,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button mLoginButton;
     private ProgressBar mProgressBar;
     private SharedPreferences mSharedPreferences;
+    private String mCode;
 
     private static final String IS_STORED = "is_stored";
     private static final String CODE = "code";
@@ -65,46 +67,8 @@ public class LoginActivity extends AppCompatActivity {
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                final String code = mPasswordEditText.getText().toString();
-                new Networking(LoginActivity.this)
-                        .getJSONObjectRequest(createPaths(), createQueries(code), new Networking.VolleyCallback<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject result) {
-                                if (!mSharedPreferences.getBoolean(IS_STORED, false)) {
-                                    Log.d(TAG, "code is not stored!");
-                                    SharedPreferences.Editor editor = mSharedPreferences.edit();
-                                    editor.putBoolean(IS_STORED, true);
-                                    editor.putString(CODE, code);
-                                    editor.apply();
-                                }
-                                Toast.makeText(LoginActivity.this, "Log in Success", Toast.LENGTH_LONG).show();
-                                runMainPagerActivity();
-                            }
-
-                            @Override
-                            public void onError(NetworkResponse result) {
-                                String errorString;
-                                if (result != null) {
-                                    switch (result.statusCode) {
-                                        case 400 :
-                                            errorString = "Code is not correct! Please try again";
-                                            break;
-                                            // TODO : implement more error handling code
-                                        default:
-                                            errorString = "Authentication error! Error code :" + result.statusCode;
-                                    }
-                                } else {
-                                    errorString = "Unexpected error happened";
-                                }
-                                Toast.makeText(LoginActivity.this, errorString, Toast.LENGTH_LONG).show();
-                                if (mSharedPreferences.getBoolean(IS_STORED, true)) {
-                                    SharedPreferences.Editor editor = mSharedPreferences.edit();
-                                    editor.clear();
-                                    editor.apply();
-                                }
-                            }
-                        });
+                mCode = mPasswordEditText.getText().toString();
+                new Networking(LoginActivity.this).getJSONObjectRequest(createPaths(), createQueries(mCode), LoginActivity.this);
             }
         });
 
@@ -133,5 +97,48 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void onResponse(JSONObject result) {
+        if (!mSharedPreferences.getBoolean(IS_STORED, false)) {
+            Log.d(TAG, "code is not stored!");
+            SharedPreferences.Editor editor = mSharedPreferences.edit();
+            editor.putBoolean(IS_STORED, true);
+            editor.putString(CODE, mCode);
+            editor.apply();
+        }
+        try {
+            String schoolId = result.getString("school");
+            ContentsLab.get().setSchoolId(schoolId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Toast.makeText(LoginActivity.this, "Log in Success", Toast.LENGTH_LONG).show();
+        runMainPagerActivity();
+    }
+
+    @Override
+    public void onError(NetworkResponse result) {
+        String errorString;
+        if (result != null) {
+            switch (result.statusCode) {
+                case 400 :
+                    errorString = "Code is not correct! Please try again";
+                    break;
+                // TODO : implement more error handling code
+                default:
+                    errorString = "Authentication error! Error code :" + result.statusCode;
+            }
+        } else {
+            errorString = "Unexpected error happened";
+        }
+        Toast.makeText(LoginActivity.this, errorString, Toast.LENGTH_LONG).show();
+        if (mSharedPreferences.getBoolean(IS_STORED, true)) {
+            SharedPreferences.Editor editor = mSharedPreferences.edit();
+            editor.clear();
+            editor.apply();
+        }
     }
 }

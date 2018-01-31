@@ -50,7 +50,9 @@ public class GeneralInfoListFragment extends ContentsListFragment<GeneralInfo, C
 
     @Override
     protected List<GeneralInfo> fetchContents() {
-        return new NetworkingService().fetchGeneralInfos();
+        List<String> paths = new ArrayList<>();
+        paths.add("generalinfo");
+        return new NetworkingService<GeneralInfo>().fetchData(NetworkingService.GENERAL_INFO, paths, null);
     }
 
     @Override
