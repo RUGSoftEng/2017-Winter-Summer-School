@@ -23,7 +23,7 @@ import java.util.Map;
 public class Networking {
 
     private static final String TAG = "Networking";
-    private static final String HTTPURL = "turing13.housing.rug.nl:8800";
+    private static final String HTTP_URL = "turing13.housing.rug.nl:8800";
 
     private RequestQueue mRequestQueue;
 
@@ -40,8 +40,8 @@ public class Networking {
         Uri.Builder builder = new Uri.Builder();
         builder
                 .scheme("http")
-                .encodedAuthority(HTTPURL);
-//                .appendPath("API"); // Calendar API not included
+                .encodedAuthority(HTTP_URL)
+                .appendPath("API"); // Calendar API not included
 
         if (paths != null) {
             for (String s : paths) {
