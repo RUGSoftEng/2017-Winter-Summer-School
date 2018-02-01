@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import nl.rug.www.rugsummerschools.R;
+import nl.rug.www.rugsummerschools.model.LoginInfo;
 import nl.rug.www.rugsummerschools.networking.Networking;
 import nl.rug.www.rugsummerschools.networking.NetworkingService;
 
@@ -36,7 +37,7 @@ import nl.rug.www.rugsummerschools.networking.NetworkingService;
  * @author Jeongkyun Oh
  */
 
-public class LoginActivity extends AppCompatActivity implements Networking.VolleyCallback<JSONObject> {
+public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
 
@@ -56,41 +57,25 @@ public class LoginActivity extends AppCompatActivity implements Networking.Volle
         setContentView(R.layout.activity_login);
 
         mProgressBar = (ProgressBar)findViewById(R.id.progress_bar_login);
-        mProgressBar.setVisibility(View.GONE); // TODO : Customize progress bar implementation.
+        mProgressBar.setVisibility(View.GONE);
+        // TODO : Customize progress bar implementation.
         mLoginButton = (Button)findViewById(R.id.login_button);
-//        mLoginButton.setEnabled(false);
         mPasswordEditText = (EditText)findViewById(R.id.codeText);
-//        mPasswordEditText.setEnabled(false);
 
         mSharedPreferences = getSharedPreferences("ActivityPreference", Context.MODE_PRIVATE);
+
+        if (mSharedPreferences.getBoolean(IS_STORED, true)) {
+            mCode = mSharedPreferences.getString(CODE, null);
+            new FetchLogInCodes().execute();
+        }
 
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mCode = mPasswordEditText.getText().toString();
-                new Networking(LoginActivity.this).getJSONObjectRequest(createPaths(), createQueries(mCode), LoginActivity.this);
+                new FetchLogInCodes().execute();
             }
         });
-
-        if (mSharedPreferences.getBoolean(IS_STORED, false)) {
-            String code = mSharedPreferences.getString(CODE, null);
-            Log.d(TAG, "Stored code : " + code);
-            mPasswordEditText.setText(code);
-            mLoginButton.performClick();
-        }
-
-    }
-
-    private List<String> createPaths() {
-        List<String> paths = new ArrayList<>();
-        paths.add("logincode");
-        return paths;
-    }
-
-    private Map<String, String> createQueries(String code) {
-        Map<String, String> queries = new HashMap<>();
-        queries.put("code", code);
-        return queries;
     }
 
     private void runMainPagerActivity() {
@@ -99,46 +84,40 @@ public class LoginActivity extends AppCompatActivity implements Networking.Volle
         finish();
     }
 
-    @Override
-    public void onResponse(JSONObject result) {
-        if (!mSharedPreferences.getBoolean(IS_STORED, false)) {
-            Log.d(TAG, "code is not stored!");
-            SharedPreferences.Editor editor = mSharedPreferences.edit();
-            editor.putBoolean(IS_STORED, true);
-            editor.putString(CODE, mCode);
-            editor.apply();
-        }
-        try {
-            String schoolId = result.getString("school");
-            ContentsLab.get().setSchoolId(schoolId);
-        } catch (JSONException e) {
-            e.printStackTrace();
+    private class FetchLogInCodes extends AsyncTask<Void, Void, List<LoginInfo>> {
+
+        @Override
+        protected void onPreExecute() {
+            mProgressBar.setVisibility(View.VISIBLE);
+            mLoginButton.setEnabled(false);
+            mPasswordEditText.setEnabled(false);
         }
 
-        Toast.makeText(LoginActivity.this, "Log in Success", Toast.LENGTH_LONG).show();
-        runMainPagerActivity();
-    }
+        @Override
+        protected List<LoginInfo> doInBackground(Void... params) {
+            return new NetworkingService<LoginInfo>().fetchData(NetworkingService.LOGIN_CODE, mCode);
+        }
 
-    @Override
-    public void onError(NetworkResponse result) {
-        String errorString;
-        if (result != null) {
-            switch (result.statusCode) {
-                case 400 :
-                    errorString = "Code is not correct! Please try again";
-                    break;
-                // TODO : implement more error handling code
-                default:
-                    errorString = "Authentication error! Error code :" + result.statusCode;
+        @Override
+        protected void onPostExecute(List<LoginInfo> loginInfos) {
+            mProgressBar.setVisibility(View.GONE);
+            mLoginButton.setEnabled(true);
+            mPasswordEditText.setEnabled(true);
+            if (loginInfos.size() == 0) {
+                Toast.makeText(LoginActivity.this, "Please check your code.", Toast.LENGTH_SHORT).show();
+                SharedPreferences.Editor ed = mSharedPreferences.edit();
+                ed.clear();
+                ed.apply();
+            } else {
+                ContentsLab.get().setSchoolId(loginInfos.get(0).getSchoolId());
+                if (!mSharedPreferences.getBoolean(IS_STORED, false)) {
+                    SharedPreferences.Editor ed = mSharedPreferences.edit();
+                    ed.putBoolean(IS_STORED, true);
+                    ed.putString(CODE, mCode);
+                    ed.apply();
+                }
+                runMainPagerActivity();
             }
-        } else {
-            errorString = "Unexpected error happened";
-        }
-        Toast.makeText(LoginActivity.this, errorString, Toast.LENGTH_LONG).show();
-        if (mSharedPreferences.getBoolean(IS_STORED, true)) {
-            SharedPreferences.Editor editor = mSharedPreferences.edit();
-            editor.clear();
-            editor.apply();
         }
     }
 }

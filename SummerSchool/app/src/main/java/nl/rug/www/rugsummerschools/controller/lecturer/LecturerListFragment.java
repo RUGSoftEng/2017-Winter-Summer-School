@@ -40,9 +40,7 @@ public class LecturerListFragment extends ContentsListFragment<Lecturer, Content
 
     @Override
     protected List<Lecturer> fetchContents() {
-        List<String> paths = new ArrayList<>();
-        paths.add("lecturer");
-        return new NetworkingService<Lecturer>().fetchData(NetworkingService.LECTURER, paths, null);
+        return new NetworkingService<Lecturer>().fetchData(NetworkingService.LECTURER, null);
     }
 
     @Override

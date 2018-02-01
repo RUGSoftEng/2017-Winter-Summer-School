@@ -64,10 +64,7 @@ public class ForumThreadListFragment extends ContentsListFragment<ForumThread, C
 
     @Override
     protected List<ForumThread> fetchContents() {
-        List<String> paths = new ArrayList<>();
-        paths.add("forum");
-        paths.add("thread");
-        return new NetworkingService<ForumThread>().fetchData(NetworkingService.FORUM, paths, null);
+        return new NetworkingService<ForumThread>().fetchData(NetworkingService.FORUM, null);
     }
 
     @Override

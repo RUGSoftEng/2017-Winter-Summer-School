@@ -47,6 +47,7 @@ import nl.rug.www.rugsummerschools.model.ForumComment;
 import nl.rug.www.rugsummerschools.model.ForumThread;
 import nl.rug.www.rugsummerschools.model.GeneralInfo;
 import nl.rug.www.rugsummerschools.model.Lecturer;
+import nl.rug.www.rugsummerschools.model.LoginInfo;
 
 /**
  * This class is to deal with all process for fetching data from server.
@@ -129,27 +130,42 @@ public class NetworkingService<T extends Content> {
     }
 
     @SuppressWarnings("unchecked")
-    public List<T> fetchData(int type, List<String> paths, Map<String, String> queries) {
+    public List<T> fetchData(int type, String code) {
         List<T> data = new ArrayList<>();
+        List<String> paths = new ArrayList<>();
+        Map<String, String> queries = new HashMap<>();
         try {
-            String jsonString = getUrlString(buildURL(paths, queries));
+            String jsonString;
             switch (type) {
                 case LOGIN_CODE :
-                    paths.add("");
+                    paths.add("logincode");
+                    queries.put("code", code);
+                    jsonString = getUrlString(buildURL(paths, queries));
+                    parseLoginCode((List<LoginInfo>)data, new JSONObject(jsonString));
                     break;
                 case ANNOUNCEMENT :
+                    paths.add("announcement");
+                    jsonString = getUrlString(buildURL(paths, null));
                     parseAnnouncements((List<Announcement>)data, new JSONArray(jsonString));
                     break;
                 case GENERAL_INFO :
+                    paths.add("generalinfo");
+                    jsonString = getUrlString(buildURL(paths, null));
                     parseGeneralInfos((List<GeneralInfo>)data, new JSONArray(jsonString));
                     break;
                 case LECTURER :
+                    paths.add("lecturer");
+                    jsonString = getUrlString(buildURL(paths, null));
                     parseLecturers((List<Lecturer>)data, new JSONArray(jsonString));
                     break;
                 case TIMETABLE :
-//                    parseTimeTables((List<EventsPerDay>)data, new JSONObject(jsonString));
+                    paths.add("event");
+                    jsonString = getUrlString(buildURL(paths, null));
                     break;
                 case FORUM :
+                    paths.add("forum");
+                    paths.add("thread");
+                    jsonString = getUrlString(buildURL(paths, null));
                     parseForumThreads((List<ForumThread>)data, new JSONArray(jsonString));
                     break;
             }
@@ -157,6 +173,15 @@ public class NetworkingService<T extends Content> {
             e.printStackTrace();
         }
         return data;
+    }
+
+    private void parseLoginCode(List<LoginInfo> items, JSONObject jsonObject) throws JSONException {
+        if (jsonObject == null) return;
+
+        LoginInfo info = new LoginInfo();
+        info.setId(jsonObject.getString("_id"));
+        info.setSchoolId(jsonObject.getString("school"));
+        items.add(info);
     }
 
     private void parseAnnouncements(List<Announcement> items, JSONArray jsonBody)
@@ -281,16 +306,17 @@ public class NetworkingService<T extends Content> {
             List<ForumComment> comments = new ArrayList<>();
             JSONArray jsonComments = contentJsonObject.getJSONArray("comments");
             for (int j = 0; j < jsonComments.length(); ++j) {
-                ForumComment comment = new ForumComment();
-                JSONObject jsonObject = jsonComments.getJSONObject(j);
-                if (jsonObject == null) break;
-                comment.setCommentId(jsonObject.getString("commentID"));
-                comment.setPosterId(jsonObject.getString("posterID"));
-                comment.setPoster(jsonObject.getString("author"));
-                comment.setText(jsonObject.getString("text"));
-                comment.setDate(jsonObject.getString("date"));
-                comment.setImgUrl(jsonObject.getString("imgurl"));
-                comments.add(comment);
+                Log.d(TAG, jsonComments.get(j).toString());
+//                ForumComment comment = new ForumComment();
+//                JSONObject jsonObject = jsonComments.getJSONObject(j);
+//                if (jsonObject == null) break;
+//                comment.setCommentId(jsonObject.getString("commentID"));
+//                comment.setPosterId(jsonObject.getString("posterID"));
+//                comment.setPoster(jsonObject.getString("author"));
+//                comment.setText(jsonObject.getString("text"));
+//                comment.setDate(jsonObject.getString("date"));
+//                comment.setImgUrl(jsonObject.getString("imgurl"));
+//                comments.add(comment);
             }
             forumThread.setForumCommentList(comments);
             items.add(forumThread);
