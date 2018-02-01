@@ -20,12 +20,15 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import org.joda.time.DateTime;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -39,7 +42,7 @@ import nl.rug.www.rugsummerschools.model.ForumComment;
 import nl.rug.www.rugsummerschools.model.ForumThread;
 import nl.rug.www.rugsummerschools.networking.NetworkingService;
 
-public class ForumThreadDetailActivity extends AppCompatActivity implements View.OnClickListener {
+public class ForumThreadDetailActivity extends AppCompatActivity implements View.OnClickListener, NetworkingService.VolleyCallback, PopupMenu.OnMenuItemClickListener, NestedScrollView.OnScrollChangeListener {
 
     private static final String TAG = "ThreadDetailActivity";
     private static final String EXTRA_FORUM_THREAD_ID =
@@ -53,6 +56,7 @@ public class ForumThreadDetailActivity extends AppCompatActivity implements View
     private ImageView mPosterPhotoView;
     private TextView mRelativeTimeView;
     private EditText mCommentEditText;
+    private LinearLayout mCommentPostView;
 
     public static Intent newIntent(Context context, String threadId) {
         Intent intent = new Intent(context, ForumThreadDetailActivity.class);
@@ -66,44 +70,13 @@ public class ForumThreadDetailActivity extends AppCompatActivity implements View
         setContentView(R.layout.activity_forum_thread_detail);
         String threadId = getIntent().getStringExtra(EXTRA_FORUM_THREAD_ID);
 
-        final LinearLayout commentPostView = findViewById(R.id.comment_form);
+        mCommentPostView = findViewById(R.id.comment_form);
         NestedScrollView nestedScrollView = findViewById(R.id.nsv_forum_detail);
         nestedScrollView.requestFocus();
-        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                if (scrollY - oldScrollY > 0) {
-                    commentPostView.setVisibility(View.GONE);
-                } else {
-                    commentPostView.setVisibility(View.VISIBLE);
-                }
-            }
-        });
+        nestedScrollView.setOnScrollChangeListener(this);
         ImageView commentPostImageView = findViewById(R.id.comment_post_photo);
         ImageView moreButton = findViewById(R.id.btn_more_post);
-        moreButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PopupMenu popupMenu = new PopupMenu(ForumThreadDetailActivity.this, v);
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.edit_menu :
-                                Toast.makeText(getApplicationContext(), "edit", Toast.LENGTH_LONG).show();
-                                break;
-                            case R.id.delete_menu :
-                                Toast.makeText(getApplicationContext(), "delete", Toast.LENGTH_LONG).show();
-                                break;
-                        }
-                        return true;
-                    }
-                });
-                MenuInflater inflater = popupMenu.getMenuInflater();
-                inflater.inflate(R.menu.menu_edit_delete, popupMenu.getMenu());
-                popupMenu.show();
-            }
-        });
+        moreButton.setOnClickListener(this);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         Glide.with(this).load(user.getPhotoUrl()).into(commentPostImageView);
         mForumThread = ContentsLab.get().getForumThread(threadId);
@@ -141,23 +114,62 @@ public class ForumThreadDetailActivity extends AppCompatActivity implements View
                 map.put("posterID", user.getUid());
                 map.put("text", mCommentEditText.getText().toString());
                 map.put("imgurl", user.getPhotoUrl().toString());
-                new NetworkingService().postRequestForumThread(this, "comment", map, new NetworkingService.VolleyCallback() {
-                    @Override
-                    public void onSuccess(String result) {
-                        finish();
-                    }
 
-                    @Override
-                    public void onFail(String result) {
-                        Toast.makeText(ForumThreadDetailActivity.this, "It fails to post your forum thread.\nPlease try again.", Toast.LENGTH_SHORT).show();
-                    }
+                List<String> paths = new ArrayList<>();
+                paths.add("forum");
+                paths.add("thread");
 
-                    @Override
-                    public void onError(String result) {
-                        Toast.makeText(ForumThreadDetailActivity.this, "Error:" + result, Toast.LENGTH_SHORT).show();
-                    }
-                });
+                new NetworkingService<>().postPutRequest(ForumThreadDetailActivity.this, Request.Method.POST, paths, null, map, ForumThreadDetailActivity.this);
                 break;
+            case R.id.btn_more_post :
+                PopupMenu popupMenu = new PopupMenu(ForumThreadDetailActivity.this, v);
+                popupMenu.setOnMenuItemClickListener(ForumThreadDetailActivity.this);
+                MenuInflater inflater = popupMenu.getMenuInflater();
+                inflater.inflate(R.menu.menu_edit_delete, popupMenu.getMenu());
+                popupMenu.show();
+                break;
+        }
+    }
+
+    @Override
+    public void onResponse(String result) {
+        Toast.makeText(this, result, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onError(NetworkResponse result) {
+        if (result != null) {
+            switch (result.statusCode) {
+                case 400 :
+                    Toast.makeText(this, "Post forum thread is failed!", Toast.LENGTH_LONG).show();
+                    break;
+                default:
+                    Toast.makeText(this, "Error : " + result.statusCode, Toast.LENGTH_LONG).show();
+            }
+        } else {
+            Toast.makeText(this, "Unexpected error happened!", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.edit_menu :
+                Toast.makeText(getApplicationContext(), "edit", Toast.LENGTH_LONG).show();
+                break;
+            case R.id.delete_menu :
+                Toast.makeText(getApplicationContext(), "delete", Toast.LENGTH_LONG).show();
+                break;
+        }
+        return true;
+    }
+
+    @Override
+    public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+        if (scrollY - oldScrollY > 0) {
+            mCommentPostView.setVisibility(View.GONE);
+        } else {
+            mCommentPostView.setVisibility(View.VISIBLE);
         }
     }
 

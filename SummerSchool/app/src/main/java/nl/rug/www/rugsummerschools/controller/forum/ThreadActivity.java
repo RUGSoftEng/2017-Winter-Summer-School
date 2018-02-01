@@ -9,18 +9,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import nl.rug.www.rugsummerschools.R;
 import nl.rug.www.rugsummerschools.controller.ContentsLab;
 import nl.rug.www.rugsummerschools.networking.NetworkingService;
-
-import static nl.rug.www.rugsummerschools.controller.forum.ForumFragment.INT_ADD;
-import static nl.rug.www.rugsummerschools.controller.forum.ForumFragment.INT_EDIT;
 
 /**
  * This is an Activity class to post or edit a forum thread.
@@ -29,7 +30,10 @@ import static nl.rug.www.rugsummerschools.controller.forum.ForumFragment.INT_EDI
  * @author Jeongkyun Oh
  */
 
-public class ThreadActivity extends AppCompatActivity {
+public class ThreadActivity extends AppCompatActivity implements View.OnClickListener, NetworkingService.VolleyCallback {
+
+    public static final int INT_ADD = 0;
+    public static final int INT_EDIT = 1;
 
     public static final String ARG_ADD_OR_EDIT = "add_or_edit";
     public static final String ARG_EDITABLE_DATA = "editable_data";
@@ -37,6 +41,8 @@ public class ThreadActivity extends AppCompatActivity {
     private static final String TAG = "ThreadActivity";
     private EditText mTitleEditText;
     private EditText mContentsEditText;
+    private int mFlag;
+    private String[] mData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,90 +53,62 @@ public class ThreadActivity extends AppCompatActivity {
         mContentsEditText = (EditText)findViewById(R.id.contents_edit_text);
         Button postButton = (Button) findViewById(R.id.post_button);
         final Bundle bundle = getIntent().getExtras();
-        int addOrEdit = bundle.getInt(ARG_ADD_OR_EDIT);
-        switch (addOrEdit) {
-            case INT_ADD :
-                postButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String title = mTitleEditText.getText().toString();
-                        String description = mContentsEditText.getText().toString();
-                        if (title.equals("") || description.equals("")) {
-                            Toast.makeText(ThreadActivity.this, "Title or description cannot be empty.", Toast.LENGTH_SHORT).show();
-                        } else {
+        mFlag = bundle.getInt(ARG_ADD_OR_EDIT);
+        if (mFlag == INT_EDIT) {
+            mData = bundle.getStringArray(ARG_EDITABLE_DATA);
+            mTitleEditText.setText(mData[1]);
+            mContentsEditText.setText(mData[2]);
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.post_button :
+                String title = mTitleEditText.getText().toString();
+                String description = mContentsEditText.getText().toString();
+
+                List<String> paths = new ArrayList<>();
+                paths.add("forum");
+                paths.add("thread");
+
+                if (title.equals("") || description.equals("")) {
+                    Toast.makeText(ThreadActivity.this, "Title or description cannot be empty.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Map<String, String> map = new HashMap<>();
+                    map.put("title", title);
+                    map.put("description", description);
+                    switch (mFlag) {
+                        case INT_ADD :
                             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                            Map<String, String> map = new HashMap<>();
-                            map.put("title", title);
-                            map.put("description", description);
                             map.put("author", user.getDisplayName());
                             map.put("posterID", user.getUid());
                             map.put("imgurl", user.getPhotoUrl().toString());
-
-                            new NetworkingService().postRequestForumThread(ThreadActivity.this, "thread", map, new NetworkingService.VolleyCallback() {
-                                @Override
-                                public void onSuccess(String result) {
-                                    setResult(Activity.RESULT_OK);
-                                    finish();
-                                }
-
-                                @Override
-                                public void onFail(String result) {
-                                    setResult(Activity.RESULT_CANCELED);
-                                    Toast.makeText(ThreadActivity.this, "It fails to post forum thread.", Toast.LENGTH_SHORT).show();
-                                    finish();
-                                }
-
-                                @Override
-                                public void onError(String result) {
-                                    Toast.makeText(ThreadActivity.this, "Error:" + result, Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
+                            new NetworkingService<>().postPutRequest(this, Request.Method.POST, paths, null, map, this);
+                            break;
+                        case INT_EDIT :
+                            map.put("threadID", mData[0]);
+                            new NetworkingService<>().postPutRequest(this, Request.Method.PUT, paths, null, map, this);
+                            break;
                     }
-                });
-                break;
-            case INT_EDIT :
-                final String[] data = bundle.getStringArray(ARG_EDITABLE_DATA);
-                mTitleEditText.setText(data[1]);
-                mContentsEditText.setText(data[2]);
-                postButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String title = mTitleEditText.getText().toString();
-                        String description = mContentsEditText.getText().toString();
-                        if (title.equals("") || description.equals("")) {
-                            Toast.makeText(ThreadActivity.this, "Title or description cannot be empty.", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Map<String, String> map = new HashMap<>();
-                            map.put("threadID", data[0]);
-                            map.put("title", title);
-                            map.put("description", description);
 
-                            new NetworkingService().putRequestForumThread(ThreadActivity.this, "thread", map, new NetworkingService.VolleyCallback() {
-                                @Override
-                                public void onSuccess(String result) {
-                                    setResult(Activity.RESULT_OK);
-                                    finish();
-                                }
-
-                                @Override
-                                public void onFail(String result) {
-                                    Toast.makeText(ThreadActivity.this, "It fails to edit forum thread.", Toast.LENGTH_SHORT).show();
-                                    setResult(Activity.RESULT_CANCELED);
-                                    finish();
-                                }
-
-                                @Override
-                                public void onError(String result) {
-                                    Toast.makeText(ThreadActivity.this, "Error:" + result, Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    }
-                });
+                }
                 break;
         }
+    }
 
+    @Override
+    public void onResponse(String result) {
+        Toast.makeText(this, result, Toast.LENGTH_SHORT).show();
+        if ("OK".equals(result) || "200".equals(result))
+            setResult(Activity.RESULT_OK);
+        else
+            setResult(Activity.RESULT_CANCELED);
+        finish();
+    }
 
+    @Override
+    public void onError(NetworkResponse result) {
+        Toast.makeText(this, "Error:" + result, Toast.LENGTH_SHORT).show();
     }
 }

@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import nl.rug.www.rugsummerschools.R;
@@ -63,7 +64,10 @@ public class ForumThreadListFragment extends ContentsListFragment<ForumThread, C
 
     @Override
     protected List<ForumThread> fetchContents() {
-        return new NetworkingService().fetchForumThreads();
+        List<String> paths = new ArrayList<>();
+        paths.add("forum");
+        paths.add("thread");
+        return new NetworkingService<ForumThread>().fetchData(NetworkingService.FORUM, paths, null);
     }
 
     @Override

@@ -238,7 +238,8 @@ public class TimeTableFragment extends Fragment {
 
         @Override
         protected List<EventsPerDay> doInBackground(Void... params) {
-            return new NetworkingService().fetchTimeTables(this.week);
+//            return new NetworkingService().fetchTimeTables(this.week);
+            return null;
         }
 
         @Override

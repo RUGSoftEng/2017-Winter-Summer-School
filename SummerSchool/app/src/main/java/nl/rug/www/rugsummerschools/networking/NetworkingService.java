@@ -71,7 +71,7 @@ public class NetworkingService<T extends Content> {
 
     public interface VolleyCallback {
         void onResponse(String result);
-        void onError(String result);
+        void onError(NetworkResponse result);
     }
 
     private byte[] getUrlBytes(String urlSpec) throws IOException {
@@ -131,8 +131,8 @@ public class NetworkingService<T extends Content> {
     @SuppressWarnings("unchecked")
     public List<T> fetchData(int type, List<String> paths, Map<String, String> queries) {
         List<T> data = new ArrayList<>();
-        String jsonString = buildURL(paths, queries);
         try {
+            String jsonString = getUrlString(buildURL(paths, queries));
             switch (type) {
                 case LOGIN_CODE :
                     paths.add("");
@@ -312,6 +312,7 @@ public class NetworkingService<T extends Content> {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d("Error.Response", error.toString());
+                        callback.onError(error.networkResponse);
                     }
                 });
         queue.add(request);
@@ -331,8 +332,8 @@ public class NetworkingService<T extends Content> {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // error
                         Log.d("Error.Response", error.toString());
+                        callback.onError(error.networkResponse);
                     }
                 }
         ) {
@@ -343,140 +344,6 @@ public class NetworkingService<T extends Content> {
         };
         queue.add(request);
     }
-
-//    public void putRequestForumThread(Context context, final String forumPath, Map<String, String> valuePairs, final VolleyCallback volleyCallback) {
-//        Uri.Builder builder = new Uri.Builder();
-//        builder.scheme("http").encodedAuthority(URL_DATABASE);
-//        builder.appendPath("forum").appendPath(forumPath)
-//                .appendQueryParameter("threadID", valuePairs.get("threadID"));
-//        switch (forumPath) {
-//            case "thread" :
-//                builder.appendQueryParameter("title", valuePairs.get("title"))
-//                        .appendQueryParameter("description", valuePairs.get("description"));
-//                break;
-//            case "comment" :
-//                builder.appendQueryParameter("commentID", valuePairs.get("commentID"))
-//                        .appendQueryParameter("text", valuePairs.get("text"));
-//                break;
-//        }
-//
-//        String url = builder.toString();
-//
-//        RequestQueue queue = Volley.newRequestQueue(context);
-//        StringRequest stringRequest = new StringRequest(Request.Method.PUT, url,
-//                new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String response) {
-//                        Log.d(TAG, "On response result (PUT Request) : " + response);
-//                        if ("OK".equals(response) || "200".equals(response))
-//                            volleyCallback.onSuccess(response);
-//                        else
-//                            volleyCallback.onFail(response);
-//                    }
-//                }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Log.d(TAG, "Error message (PUT Request): " + error.toString());
-//                volleyCallback.onError(error.toString());
-//            }
-//        });
-//
-//        queue.add(stringRequest);
-//    }
-//
-//    public void deleteRequestForumThread(Context context, String forumPath, Map<String, String> valuePairs, final VolleyCallback volleyCallback) {
-//        Uri.Builder builder = new Uri.Builder();
-//        builder.scheme("http").encodedAuthority(URL_DATABASE);
-//        builder.appendPath("forum").appendPath(forumPath)
-//                .appendQueryParameter("threadID", valuePairs.get("threadID"));
-//        if (forumPath.equals("comment")) builder.appendQueryParameter("commentID", valuePairs.get("commentID"));
-//
-//        String url = builder.toString();
-//
-//        RequestQueue queue = Volley.newRequestQueue(context);
-//        StringRequest stringRequest = new StringRequest(Request.Method.DELETE, url,
-//                new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String response) {
-//                        Log.d(TAG, "On response result (DELETE Request): " + response);
-//                        if ("OK".equals(response) || "200".equals(response))
-//                            volleyCallback.onSuccess(response);
-//                        else
-//                            volleyCallback.onFail(response);
-//                    }
-//                }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Log.d(TAG, "Error message : (DELETE Request)" + error.toString());
-//                volleyCallback.onError(error.toString());
-//            }
-//        });
-//
-//        queue.add(stringRequest);
-//    }
-//
-//    public void postRequestForumThread(Context context, final String forumPath, Map<String, String> valuePairs, final VolleyCallback volleyCallback) {
-//        try {
-//            Uri.Builder builder = new Uri.Builder();
-//            builder.scheme("http").encodedAuthority(URL_DATABASE)
-//                    .appendPath("forum").appendPath(forumPath);
-//            String url = builder.toString();
-//
-//            RequestQueue queue = Volley.newRequestQueue(context);
-//            JSONObject jsonBody = new JSONObject();
-//            Iterator it = valuePairs.keySet().iterator();
-//            while(it.hasNext()) {
-//                String key = (String)it.next();
-//                jsonBody.put(key, valuePairs.get(key));
-//                it.remove();
-//            }
-//
-//            final String requestBody = jsonBody.toString();
-//
-//            StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-//                    new Response.Listener<String>() {
-//                        @Override
-//                        public void onResponse(String response) {
-//                            Log.d(TAG, "On response result (POST Request): " + response);
-//                            if ("OK".equals(response) || "200".equals(response))
-//                                volleyCallback.onSuccess(response);
-//                            else
-//                                volleyCallback.onFail(response);
-//                        }
-//                    }, new Response.ErrorListener() {
-//                @Override
-//                public void onErrorResponse(VolleyError error) {
-//                    Log.d(TAG, "Error message : (POST Request)" + error.toString());
-//                    volleyCallback.onError(error.toString());
-//                }
-//            }) {
-//                @Override
-//                public String getBodyContentType() {
-//                    return "application/json; charset=utf-8";
-//                }
-//
-//                @Override
-//                public byte[] getBody() throws AuthFailureError {
-//                    try {
-//                        return requestBody == null ? null : requestBody.getBytes("utf-8");
-//                    } catch (UnsupportedEncodingException uee) {
-//                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
-//                        return null;
-//                    }
-//                }
-//
-//                @Override
-//                protected Response<String> parseNetworkResponse(NetworkResponse response) {
-//                    String responseString = String.valueOf(response.statusCode);
-//                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
-//                }
-//            };
-//
-//            queue.add(stringRequest);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
     public void postRequestFCMID(Context context, String Token){
         try{
