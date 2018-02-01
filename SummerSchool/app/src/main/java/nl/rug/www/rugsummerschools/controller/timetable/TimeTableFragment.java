@@ -45,6 +45,7 @@ import nl.rug.www.rugsummerschools.networking.NetworkingService;
  * @author Jeongkyun Oh
  */
 
+@Deprecated
 public class TimeTableFragment extends Fragment {
 
     private RecyclerView mTimeTableRecyclerView;
@@ -80,31 +81,31 @@ public class TimeTableFragment extends Fragment {
             }
         });
 
-        Button previousWeekButton = (Button)view.findViewById(R.id.previous_week_button);
-        previousWeekButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mWeek--;
-                ContentsLab contentsLab = ContentsLab.get();
-                contentsLab.updateNextWeekTimeTable(contentsLab.getCurrentWeekEvents());
-                contentsLab.updateTimeTableWeeks(contentsLab.getPreviousWeekEvents());
-                new FetchTimeTablesTask(PREVIOUS, mWeek-1).execute();
-                setupAdapter();
-            }
-        });
+//        Button previousWeekButton = (Button)view.findViewById(R.id.previous_week_button);
+//        previousWeekButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mWeek--;
+//                ContentsLab contentsLab = ContentsLab.get();
+//                contentsLab.updateNextWeekTimeTable(contentsLab.getCurrentWeekEvents());
+//                contentsLab.updateTimeTableWeeks(contentsLab.getPreviousWeekEvents());
+//                new FetchTimeTablesTask(PREVIOUS, mWeek-1).execute();
+//                setupAdapter();
+//            }
+//        });
 
-        Button nextWeekButton = (Button)view.findViewById(R.id.next_week_button);
-        nextWeekButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mWeek++;
-                ContentsLab contentsLab = ContentsLab.get();
-                contentsLab.updatePreviousWeekTimeTable(contentsLab.getCurrentWeekEvents());
-                contentsLab.updateTimeTableWeeks(contentsLab.getNextWeekEvents());
-                new FetchTimeTablesTask(NEXT, mWeek+1).execute();
-                setupAdapter();
-            }
-        });
+//        Button nextWeekButton = (Button)view.findViewById(R.id.next_week_button);
+//        nextWeekButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mWeek++;
+//                ContentsLab contentsLab = ContentsLab.get();
+//                contentsLab.updatePreviousWeekTimeTable(contentsLab.getCurrentWeekEvents());
+//                contentsLab.updateTimeTableWeeks(contentsLab.getNextWeekEvents());
+//                new FetchTimeTablesTask(NEXT, mWeek+1).execute();
+//                setupAdapter();
+//            }
+//        });
 
         mTimeTableRecyclerView = (RecyclerView)view.findViewById(R.id.recycler_view);
         mTimeTableRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -173,7 +174,7 @@ public class TimeTableFragment extends Fragment {
         @Override
         public void onBindParentViewHolder(TimeTableParentViewHolder timeTableParentViewHolder, int i, Object o) {
             EventsPerDay eventsPerDay = (EventsPerDay)o;
-            timeTableParentViewHolder.mTimeTableTitleTextView.setText(eventsPerDay.getDayOfWeek());
+//            timeTableParentViewHolder.mTimeTableTitleTextView.setText(eventsPerDay.getDayOfWeek());
         }
 
         @Override

@@ -3,6 +3,7 @@ package nl.rug.www.rugsummerschools.model;
 import com.bignerdranch.expandablerecyclerview.Model.ParentObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -14,15 +15,15 @@ import java.util.List;
 
 public class EventsPerDay implements ParentObject {
 
-    private String mDayOfWeek;
+    private Date mDayOfWeek;
     private List<Object> mChildrenList;
 
-    public EventsPerDay(String dayOfWeek) {
+    public EventsPerDay(Date dayOfWeek) {
         mDayOfWeek = dayOfWeek;
         mChildrenList = new ArrayList<>();
     }
 
-    public String getDayOfWeek() {
+    public Date getDayOfWeek() {
         return mDayOfWeek;
     }
 

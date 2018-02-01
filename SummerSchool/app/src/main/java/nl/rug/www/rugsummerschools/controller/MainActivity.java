@@ -47,6 +47,7 @@ import nl.rug.www.rugsummerschools.controller.forum.ForumThreadListFragment;
 import nl.rug.www.rugsummerschools.controller.generalinfo.GeneralInfoListFragment;
 import nl.rug.www.rugsummerschools.controller.lecturer.LecturerListFragment;
 import nl.rug.www.rugsummerschools.controller.timetable.TimeTableFragment;
+import nl.rug.www.rugsummerschools.controller.timetable.TimeTableFragment2;
 
 /**
  * This class is main activity that contains basic layout of the app.
@@ -79,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements ForumLoginFragmen
             new AnnouncementListFragment(),
             new GeneralInfoListFragment(),
             new LecturerListFragment(),
-            new TimeTableFragment(),
+            new TimeTableFragment2(),
             new ForumLoginFragment(),
             new ForumThreadListFragment()
     };

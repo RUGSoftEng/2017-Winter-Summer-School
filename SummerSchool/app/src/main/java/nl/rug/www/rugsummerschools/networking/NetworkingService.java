@@ -201,43 +201,43 @@ public class NetworkingService<T extends Content> {
 
     private void parseTimeTables(List<EventsPerDay> items, JSONObject jsonBody)
             throws IOException, JSONException {
-        if (jsonBody == null) return;
-
-        String data = jsonBody.getString("data");
-        JSONArray array = new JSONArray(data);
-        Log.d(TAG, array.toString());
-        for (int i = 0; i < array.length(); ++i) {
-            JSONArray dataArray = array.getJSONArray(i);
-            Date date = new DateTime(dataArray.getString(0), DateTimeZone.UTC).toDate();
-            JSONArray eventsArray = dataArray.getJSONArray(1);
-            SimpleDateFormat format2 = new SimpleDateFormat("(MMM-dd)", Locale.getDefault());
-            format2.setTimeZone(TimeZone.getTimeZone("UTC"));
-            SimpleDateFormat dayOfWeek = new SimpleDateFormat("EEEE", Locale.getDefault());
-            dayOfWeek.setTimeZone(TimeZone.getTimeZone("UTC"));
-            String title = dayOfWeek.format(date) + format2.format(date);
-            EventsPerDay timeTablePerDay = new EventsPerDay(title);
-            Log.d(TAG, date.toString());
-            Log.d(TAG, new Date().toString());
-            List<Object> childTimeTables = new ArrayList<>();
-
-            for (int j = 0; j < eventsArray.length(); ++j) {
-                Event event = new Event();
-                JSONObject object = new JSONObject(eventsArray.getString(j));
-                event.setId(object.getString("id"));
-                event.setTitle(object.getString("summary"));
-                event.setDescription(object.getString("description"));
-                event.setLocation(object.getString("location"));
-                JSONObject startDate = object.getJSONObject("start");
-                JSONObject endDate = object.getJSONObject("end");
-                event.setStartDate(startDate.getString("dateTime"));
-                Log.d(TAG, "startdate -- "+event.getStartDate());
-                event.setEndDate(endDate.getString("dateTime"));
-                Log.d(TAG, "enddate -- "+event.getEndDate());
-                childTimeTables.add(event);
-            }
-            timeTablePerDay.setChildObjectList(childTimeTables);
-            items.add(timeTablePerDay);
-        }
+//        if (jsonBody == null) return;
+//
+//        String data = jsonBody.getString("data");
+//        JSONArray array = new JSONArray(data);
+//        Log.d(TAG, array.toString());
+//        for (int i = 0; i < array.length(); ++i) {
+//            JSONArray dataArray = array.getJSONArray(i);
+//            Date date = new DateTime(dataArray.getString(0), DateTimeZone.UTC).toDate();
+//            JSONArray eventsArray = dataArray.getJSONArray(1);
+//            SimpleDateFormat format2 = new SimpleDateFormat("(MMM-dd)", Locale.getDefault());
+//            format2.setTimeZone(TimeZone.getTimeZone("UTC"));
+//            SimpleDateFormat dayOfWeek = new SimpleDateFormat("EEEE", Locale.getDefault());
+//            dayOfWeek.setTimeZone(TimeZone.getTimeZone("UTC"));
+//            String title = dayOfWeek.format(date) + format2.format(date);
+//            EventsPerDay timeTablePerDay = new EventsPerDay(title);
+//            Log.d(TAG, date.toString());
+//            Log.d(TAG, new Date().toString());
+//            List<Object> childTimeTables = new ArrayList<>();
+//
+//            for (int j = 0; j < eventsArray.length(); ++j) {
+//                Event event = new Event();
+//                JSONObject object = new JSONObject(eventsArray.getString(j));
+//                event.setId(object.getString("id"));
+//                event.setTitle(object.getString("summary"));
+//                event.setDescription(object.getString("description"));
+//                event.setLocation(object.getString("location"));
+//                JSONObject startDate = object.getJSONObject("start");
+//                JSONObject endDate = object.getJSONObject("end");
+//                event.setStartDate(startDate.getString("dateTime"));
+//                Log.d(TAG, "startdate -- "+event.getStartDate());
+//                event.setEndDate(endDate.getString("dateTime"));
+//                Log.d(TAG, "enddate -- "+event.getEndDate());
+//                childTimeTables.add(event);
+//            }
+//            timeTablePerDay.setChildObjectList(childTimeTables);
+//            items.add(timeTablePerDay);
+//        }
     }
 
     private void parseLecturers(List<Lecturer> items, JSONArray jsonBody)

@@ -1,5 +1,7 @@
 package nl.rug.www.rugsummerschools.model;
 
+import java.util.Date;
+
 /**
  * This class is a model of time table.
  *
@@ -9,23 +11,23 @@ package nl.rug.www.rugsummerschools.model;
 
 public class Event extends Content {
 
-    private String mStartDate;
-    private String mEndDate;
+    private Date mStartDate;
+    private Date mEndDate;
     private String mLocation;
 
-    public String getStartDate() {
+    public Date getStartDate() {
         return mStartDate;
     }
 
-    public void setStartDate(String startDate) {
+    public void setStartDate(Date startDate) {
         mStartDate = startDate;
     }
 
-    public String getEndDate() {
+    public Date getEndDate() {
         return mEndDate;
     }
 
-    public void setEndDate(String endDate) {
+    public void setEndDate(Date endDate) {
         mEndDate = endDate;
     }
 
