@@ -16,12 +16,23 @@ import java.util.List;
 public class EventsPerDay implements ParentObject {
 
     private Date mDayOfWeek;
-    private List<Object> mChildrenList;
+    private List<Event> mEvents;
 
-    public EventsPerDay(Date dayOfWeek) {
-        mDayOfWeek = dayOfWeek;
+    public EventsPerDay(Date date) {
+        mDayOfWeek = date;
+        mEvents = new ArrayList<>();
         mChildrenList = new ArrayList<>();
     }
+
+    public List<Event> getEvents() {
+        return mEvents;
+    }
+
+    public void setEvents(List<Event> events) {
+        mEvents = events;
+    }
+
+    private List<Object> mChildrenList;
 
     public Date getDayOfWeek() {
         return mDayOfWeek;

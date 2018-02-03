@@ -56,7 +56,6 @@ import nl.rug.www.rugsummerschools.model.LoginInfo;
  * @author Jeongkyun Oh
  */
 
-@Deprecated
 public class NetworkingService<T extends Content> {
 
     private static final String TAG = "NetworkingService";
@@ -67,7 +66,7 @@ public class NetworkingService<T extends Content> {
     public static final int ANNOUNCEMENT = 1;
     public static final int GENERAL_INFO = 2;
     public static final int LECTURER = 3;
-    public static final int TIMETABLE = 4;
+    public static final int EVENT = 4;
     public static final int FORUM = 5;
 
     public interface VolleyCallback {
@@ -130,7 +129,7 @@ public class NetworkingService<T extends Content> {
     }
 
     @SuppressWarnings("unchecked")
-    public List<T> fetchData(int type, String code) {
+    public List<T> fetchData(int type, String extra) {
         List<T> data = new ArrayList<>();
         List<String> paths = new ArrayList<>();
         Map<String, String> queries = new HashMap<>();
@@ -139,7 +138,7 @@ public class NetworkingService<T extends Content> {
             switch (type) {
                 case LOGIN_CODE :
                     paths.add("logincode");
-                    queries.put("code", code);
+                    queries.put("code", extra);
                     jsonString = getUrlString(buildURL(paths, queries));
                     parseLoginCode((List<LoginInfo>)data, new JSONObject(jsonString));
                     break;
@@ -158,9 +157,11 @@ public class NetworkingService<T extends Content> {
                     jsonString = getUrlString(buildURL(paths, null));
                     parseLecturers((List<Lecturer>)data, new JSONArray(jsonString));
                     break;
-                case TIMETABLE :
+                case EVENT :
                     paths.add("event");
-                    jsonString = getUrlString(buildURL(paths, null));
+                    queries.put("school", extra);
+                    jsonString = getUrlString(buildURL(paths, queries));
+                    parseTimeTable((List<Event>)data, new JSONArray(jsonString));
                     break;
                 case FORUM :
                     paths.add("forum");
@@ -190,6 +191,7 @@ public class NetworkingService<T extends Content> {
 
         for (int i = 0; i < jsonBody.length(); i++) {
             JSONObject contentJsonObject = jsonBody.getJSONObject(i);
+            Log.d(TAG, contentJsonObject.toString());
 
             Announcement announcement = new Announcement();
             announcement.setId(contentJsonObject.getString("_id"));
@@ -214,6 +216,7 @@ public class NetworkingService<T extends Content> {
 
         for (int i = 0; i < jsonBody.length(); i++) {
             JSONObject contentJsonObject = jsonBody.getJSONObject(i);
+            Log.d(TAG, contentJsonObject.toString());
 
             GeneralInfo generalInfo = new GeneralInfo();
             generalInfo.setId(contentJsonObject.getString("_id"));
@@ -224,53 +227,33 @@ public class NetworkingService<T extends Content> {
         }
     }
 
-    private void parseTimeTables(List<EventsPerDay> items, JSONObject jsonBody)
-            throws IOException, JSONException {
-//        if (jsonBody == null) return;
-//
-//        String data = jsonBody.getString("data");
-//        JSONArray array = new JSONArray(data);
-//        Log.d(TAG, array.toString());
-//        for (int i = 0; i < array.length(); ++i) {
-//            JSONArray dataArray = array.getJSONArray(i);
-//            Date date = new DateTime(dataArray.getString(0), DateTimeZone.UTC).toDate();
-//            JSONArray eventsArray = dataArray.getJSONArray(1);
-//            SimpleDateFormat format2 = new SimpleDateFormat("(MMM-dd)", Locale.getDefault());
-//            format2.setTimeZone(TimeZone.getTimeZone("UTC"));
-//            SimpleDateFormat dayOfWeek = new SimpleDateFormat("EEEE", Locale.getDefault());
-//            dayOfWeek.setTimeZone(TimeZone.getTimeZone("UTC"));
-//            String title = dayOfWeek.format(date) + format2.format(date);
-//            EventsPerDay timeTablePerDay = new EventsPerDay(title);
-//            Log.d(TAG, date.toString());
-//            Log.d(TAG, new Date().toString());
-//            List<Object> childTimeTables = new ArrayList<>();
-//
-//            for (int j = 0; j < eventsArray.length(); ++j) {
-//                Event event = new Event();
-//                JSONObject object = new JSONObject(eventsArray.getString(j));
-//                event.setId(object.getString("id"));
-//                event.setTitle(object.getString("summary"));
-//                event.setDescription(object.getString("description"));
-//                event.setLocation(object.getString("location"));
-//                JSONObject startDate = object.getJSONObject("start");
-//                JSONObject endDate = object.getJSONObject("end");
-//                event.setStartDate(startDate.getString("dateTime"));
-//                Log.d(TAG, "startdate -- "+event.getStartDate());
-//                event.setEndDate(endDate.getString("dateTime"));
-//                Log.d(TAG, "enddate -- "+event.getEndDate());
-//                childTimeTables.add(event);
-//            }
-//            timeTablePerDay.setChildObjectList(childTimeTables);
-//            items.add(timeTablePerDay);
-//        }
+    private void parseTimeTable(List<Event> items, JSONArray jsonBody) throws JSONException {
+        if (jsonBody == null) return;
+
+        for (int i = 0; i < jsonBody.length(); ++i) {
+            JSONObject contents = jsonBody.getJSONObject(i);
+            Log.d(TAG, contents.toString());
+
+            Event event = new Event();
+            event.setId(contents.getString("_id"));
+            event.setTitle(contents.getString("title"));
+            event.setLocation(contents.getString("location"));
+            event.setDescription(contents.getString("details"));
+            Date startDate = new DateTime(contents.getString("startDate"), DateTimeZone.UTC).toDate();
+            Date endDate = new DateTime(contents.getString("endDate"), DateTimeZone.UTC).toDate();
+            event.setStartDate(startDate);
+            event.setEndDate(endDate);
+            items.add(event);
+        }
     }
 
     private void parseLecturers(List<Lecturer> items, JSONArray jsonBody)
-            throws IOException, JSONException {
+            throws JSONException {
         if (jsonBody == null) return;
 
         for (int i = 0; i < jsonBody.length(); i++) {
             JSONObject contentJsonObject = jsonBody.getJSONObject(i);
+            Log.d(TAG, contentJsonObject.toString());
 
             Lecturer lecturer = new Lecturer();
             lecturer.setId(contentJsonObject.getString("_id"));
@@ -289,7 +272,7 @@ public class NetworkingService<T extends Content> {
     }
 
     private void parseForumThreads(List<ForumThread> items, JSONArray jsonBody)
-            throws IOException, JSONException {
+            throws JSONException {
         if (jsonBody == null) return;
 
         for (int i = 0; i < jsonBody.length(); i++) {

@@ -11,9 +11,18 @@ import java.util.Date;
 
 public class Event extends Content {
 
+    private String mSchool;
     private Date mStartDate;
     private Date mEndDate;
     private String mLocation;
+
+    public String getSchool() {
+        return mSchool;
+    }
+
+    public void setSchool(String school) {
+        mSchool = school;
+    }
 
     public Date getStartDate() {
         return mStartDate;

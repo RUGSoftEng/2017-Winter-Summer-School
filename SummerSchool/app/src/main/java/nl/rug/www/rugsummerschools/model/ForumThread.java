@@ -15,6 +15,7 @@ public class ForumThread extends Content implements ParentObject {
     private String mPosterId;
     private String mPoster;
     private String mImgUrl;
+    private List<String> mForumComments;
     private List<ForumComment> mForumCommentList;
 
     public String getImgUrl() {
@@ -47,6 +48,14 @@ public class ForumThread extends Content implements ParentObject {
 
     public void setPoster(String poster) {
         mPoster = poster;
+    }
+
+    public List<String> getForumComments() {
+        return mForumComments;
+    }
+
+    public void setForumComments(List<String> forumComments) {
+        mForumComments = forumComments;
     }
 
     public List<ForumComment> getForumCommentList() {

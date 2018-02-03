@@ -95,8 +95,8 @@ public class TimeTableHolder extends RecyclerView.ViewHolder{
         mDayTextView.setText(sdf.format(date));
 
         // TODO : remove fake data and hook with real data
-        createFakeData();
+//        createFakeData();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        mRecyclerView.setAdapter(new EventAdapter(fakeData, mContext));
+        mRecyclerView.setAdapter(new EventAdapter(mEventsPerDay.getEvents(), mContext));
     }
 }

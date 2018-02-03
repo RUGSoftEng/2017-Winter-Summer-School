@@ -26,6 +26,7 @@ import java.util.Map;
 
 import nl.rug.www.rugsummerschools.controller.ContentsLab;
 
+@Deprecated
 public class Networking {
 
     private static final String TAG = "Networking";
