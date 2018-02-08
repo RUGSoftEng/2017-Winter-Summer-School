@@ -10,6 +10,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -48,6 +51,12 @@ public class TimeTableFragment2 extends Fragment {
 
     private RecyclerView mRecyclerView;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -61,18 +70,41 @@ public class TimeTableFragment2 extends Fragment {
         return view;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_today, menu);
+        Log.i(TAG, "Today manu is inflated");
+    }
+
+    private void scrollToToday() {
+        Calendar startDay = Calendar.getInstance();
+        startDay.set(Calendar.DAY_OF_MONTH, 1);
+        startDay.set(Calendar.MONTH, 0);
+        startDay.set(Calendar.YEAR, 2010);
+        Calendar today = Calendar.getInstance();
+
+        long diff = (today.getTimeInMillis() - startDay.getTimeInMillis()) / (24 * 60 * 60 * 1000);
+        Log.d(TAG, diff + "," + (int)diff);
+        mRecyclerView.scrollToPosition((int) diff);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.today_menu :
+                scrollToToday();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     private void setupAdapter() {
         if (isAdded()) {
             mRecyclerView.setAdapter(new TimeTableAdapter(mEventsPerDayList, getActivity()));
-            Calendar mStartDay = Calendar.getInstance();
-            mStartDay.set(Calendar.DAY_OF_MONTH, 1);
-            mStartDay.set(Calendar.MONTH, 0);
-            mStartDay.set(Calendar.YEAR, 2010);
-
-            Calendar today = Calendar.getInstance();
-
-            long diff = (today.getTimeInMillis() - mStartDay.getTimeInMillis()) / (24 * 60 * 60 * 1000);
-            mRecyclerView.scrollToPosition((int) diff);
+            scrollToToday();
         }
     }
 
@@ -86,14 +118,13 @@ public class TimeTableFragment2 extends Fragment {
         mEventsPerDayList = new ArrayList<>();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Date startDate = formatter.parse("2010-01-01");
-        Date endDate = formatter.parse("2020-01-01");
+        Date endDate = formatter.parse("2030-01-01");
         Calendar start = Calendar.getInstance();
         start.setTime(startDate);
         Calendar end = Calendar.getInstance();
         end.setTime(endDate);
 
         int idx = 0;
-        Event e;
         for (Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime() ) {
 
             EventsPerDay newEventsPerDay = new EventsPerDay(date);
