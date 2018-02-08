@@ -9,14 +9,13 @@ import java.util.List;
  * Created by jk on 5/14/17.
  */
 
-public class ForumThread extends Content implements ParentObject {
+public class ForumThread extends Content {
 
     private String mDate;
     private String mPosterId;
     private String mPoster;
     private String mImgUrl;
     private List<String> mForumComments;
-    private List<ForumComment> mForumCommentList;
 
     public String getImgUrl() {
         return mImgUrl;
@@ -56,30 +55,5 @@ public class ForumThread extends Content implements ParentObject {
 
     public void setForumComments(List<String> forumComments) {
         mForumComments = forumComments;
-    }
-
-    public List<ForumComment> getForumCommentList() {
-        return mForumCommentList;
-    }
-
-    public void setForumCommentList(List<ForumComment> forumCommentList) {
-        mForumCommentList = forumCommentList;
-    }
-
-    private List<Object> commentToObject(List<ForumComment> comments) {
-        List<Object> objects = new ArrayList<>();
-        for (ForumComment fc : comments) {
-            objects.add(fc);
-        }
-        return objects;
-    }
-
-    @Override
-    public List<Object> getChildObjectList() {
-        return commentToObject(mForumCommentList);
-    }
-
-    @Override
-    public void setChildObjectList(List<Object> list) {
     }
 }

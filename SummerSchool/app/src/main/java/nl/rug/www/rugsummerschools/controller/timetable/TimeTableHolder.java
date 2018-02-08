@@ -3,7 +3,6 @@ package nl.rug.www.rugsummerschools.controller.timetable;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,7 +68,7 @@ public class TimeTableHolder extends RecyclerView.ViewHolder{
     public void bind(EventsPerDay eventsPerDay) {
         mEventsPerDay = eventsPerDay;
         Calendar calendar = Calendar.getInstance();
-        Date date = mEventsPerDay.getDayOfWeek();
+        Date date = mEventsPerDay.getDate();
         calendar.setTime(date);
         mYearTextView.setVisibility(View.GONE);
         mWeekTextView.setVisibility(View.GONE);

@@ -174,7 +174,7 @@ public class TimeTableFragment extends Fragment {
         @Override
         public void onBindParentViewHolder(TimeTableParentViewHolder timeTableParentViewHolder, int i, Object o) {
             EventsPerDay eventsPerDay = (EventsPerDay)o;
-//            timeTableParentViewHolder.mTimeTableTitleTextView.setText(eventsPerDay.getDayOfWeek());
+//            timeTableParentViewHolder.mTimeTableTitleTextView.setText(eventsPerDay.getDate());
         }
 
         @Override
@@ -221,7 +221,7 @@ public class TimeTableFragment extends Fragment {
         ArrayList<ParentObject> parentObjects = new ArrayList<>();
         List<EventsPerDay> eventsPerDays = contentsLab.getCurrentWeekEvents();
         for (EventsPerDay t : eventsPerDays) {
-            parentObjects.add(t);
+//            parentObjects.add(t);
         }
         return parentObjects;
     }

@@ -1,5 +1,6 @@
 package nl.rug.www.rugsummerschools.controller.forum;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,6 +25,8 @@ import nl.rug.www.rugsummerschools.controller.ContentsLab;
 import nl.rug.www.rugsummerschools.controller.ContentsListFragment;
 import nl.rug.www.rugsummerschools.model.ForumThread;
 import nl.rug.www.rugsummerschools.networking.NetworkingService;
+
+import static nl.rug.www.rugsummerschools.controller.forum.ThreadActivity.INT_ADD;
 
 /**
  * Created by jk on 17. 12. 8.
@@ -64,7 +67,7 @@ public class ForumThreadListFragment extends ContentsListFragment<ForumThread, C
 
     @Override
     protected List<ForumThread> fetchContents() {
-        return new NetworkingService<ForumThread>().fetchData(NetworkingService.FORUM, null);
+        return new NetworkingService<ForumThread>().fetchData(NetworkingService.FORUM_THREAD, null);
     }
 
     @Override

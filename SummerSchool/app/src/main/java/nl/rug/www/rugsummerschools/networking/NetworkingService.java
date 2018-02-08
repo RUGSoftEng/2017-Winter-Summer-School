@@ -67,7 +67,8 @@ public class NetworkingService<T extends Content> {
     public static final int GENERAL_INFO = 2;
     public static final int LECTURER = 3;
     public static final int EVENT = 4;
-    public static final int FORUM = 5;
+    public static final int FORUM_THREAD = 5;
+    public static final int FORUM_COMMENT = 6;
 
     public interface VolleyCallback {
         void onResponse(String result);
@@ -144,6 +145,7 @@ public class NetworkingService<T extends Content> {
                     break;
                 case ANNOUNCEMENT :
                     paths.add("announcement");
+                    queries.put("school", extra);
                     jsonString = getUrlString(buildURL(paths, null));
                     parseAnnouncements((List<Announcement>)data, new JSONArray(jsonString));
                     break;
@@ -163,11 +165,18 @@ public class NetworkingService<T extends Content> {
                     jsonString = getUrlString(buildURL(paths, queries));
                     parseTimeTable((List<Event>)data, new JSONArray(jsonString));
                     break;
-                case FORUM :
+                case FORUM_THREAD :
                     paths.add("forum");
                     paths.add("thread");
                     jsonString = getUrlString(buildURL(paths, null));
                     parseForumThreads((List<ForumThread>)data, new JSONArray(jsonString));
+                    break;
+                case FORUM_COMMENT :
+                    paths.add("forum");
+                    paths.add("comment");
+                    queries.put("parentThread", extra);
+                    jsonString = getUrlString(buildURL(paths, queries));
+                    parseForumComments((List<ForumComment>)data, new JSONArray(jsonString));
                     break;
             }
         } catch (IOException | JSONException e) {
@@ -186,7 +195,7 @@ public class NetworkingService<T extends Content> {
     }
 
     private void parseAnnouncements(List<Announcement> items, JSONArray jsonBody)
-            throws IOException, JSONException {
+            throws JSONException {
         if (jsonBody == null) return;
 
         for (int i = 0; i < jsonBody.length(); i++) {
@@ -211,7 +220,7 @@ public class NetworkingService<T extends Content> {
     }
 
     private void parseGeneralInfos(List<GeneralInfo> items, JSONArray jsonBody)
-            throws IOException, JSONException {
+            throws JSONException {
         if (jsonBody == null) return;
 
         for (int i = 0; i < jsonBody.length(); i++) {
@@ -286,23 +295,30 @@ public class NetworkingService<T extends Content> {
             forumThread.setDate(contentJsonObject.getString("created"));
             forumThread.setPosterId(contentJsonObject.getString("posterID"));
             forumThread.setImgUrl(contentJsonObject.getString("imgURL"));
-            List<ForumComment> comments = new ArrayList<>();
             JSONArray jsonComments = contentJsonObject.getJSONArray("comments");
+            List<String> commentIds = new ArrayList<>();
             for (int j = 0; j < jsonComments.length(); ++j) {
-                Log.d(TAG, jsonComments.get(j).toString());
-//                ForumComment comment = new ForumComment();
-//                JSONObject jsonObject = jsonComments.getJSONObject(j);
-//                if (jsonObject == null) break;
-//                comment.setCommentId(jsonObject.getString("commentID"));
-//                comment.setPosterId(jsonObject.getString("posterID"));
-//                comment.setPoster(jsonObject.getString("author"));
-//                comment.setText(jsonObject.getString("text"));
-//                comment.setDate(jsonObject.getString("date"));
-//                comment.setImgUrl(jsonObject.getString("imgurl"));
-//                comments.add(comment);
+                commentIds.add((String)jsonComments.get(j));
             }
-            forumThread.setForumCommentList(comments);
+            forumThread.setForumComments(commentIds);
             items.add(forumThread);
+        }
+    }
+
+    private void parseForumComments(List<ForumComment> items, JSONArray jsonBody) throws JSONException {
+        if (jsonBody == null) return;
+
+        for (int i = 0; i < jsonBody.length(); ++i) {
+            JSONObject contentJsonObject = jsonBody.getJSONObject(i);
+
+            ForumComment forumComment = new ForumComment();
+            forumComment.setId(contentJsonObject.getString("_id"));
+            forumComment.setDate(contentJsonObject.getString("created"));
+            forumComment.setImgUrl(contentJsonObject.getString("imgURL"));
+            forumComment.setPoster(contentJsonObject.getString("author"));
+            forumComment.setPosterId(contentJsonObject.getString("posterID"));
+            forumComment.setDescription(contentJsonObject.getString("text"));
+            items.add(forumComment);
         }
     }
 
@@ -377,7 +393,7 @@ public class NetworkingService<T extends Content> {
 
             queue.add(stringRequest);
 
-        }catch (Exception e){
+        } catch (Exception e){
             e.printStackTrace();
         }
     }

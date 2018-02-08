@@ -5,6 +5,7 @@ import java.util.List;
 
 import nl.rug.www.rugsummerschools.model.Announcement;
 import nl.rug.www.rugsummerschools.model.EventsPerDay;
+import nl.rug.www.rugsummerschools.model.ForumComment;
 import nl.rug.www.rugsummerschools.model.ForumThread;
 import nl.rug.www.rugsummerschools.model.GeneralInfo;
 import nl.rug.www.rugsummerschools.model.Lecturer;
@@ -30,6 +31,7 @@ public class ContentsLab {
     private ArrayList<EventsPerDay> mNextWeekEvents;
     private ArrayList<Lecturer> mLecturers;
     private ArrayList<ForumThread> mForumThreads;
+    private ArrayList<ForumComment> mForumComments;
     private ArrayList<String> mLogInData;
     private ArrayList<String> mLogInCodes;
 
@@ -105,6 +107,14 @@ public class ContentsLab {
         return null;
     }
 
+    public ArrayList<ForumComment> getForumComments() {
+        return mForumComments;
+    }
+
+    public void updateForumComments(List<ForumComment> forumComments) {
+        mForumComments = (ArrayList<ForumComment>)forumComments;
+    }
+
     public void updateAnnouncements(List<Announcement> announcements) {
         mAnnouncements = (ArrayList<Announcement>) announcements;
     }
@@ -131,17 +141,5 @@ public class ContentsLab {
 
     public void updateForumThreads(List<ForumThread> forumThreads) {
         mForumThreads = (ArrayList<ForumThread>) forumThreads;
-    }
-
-    public void updateLogInCodes(List<String> logInCodes) {
-        mLogInCodes = (ArrayList<String>) logInCodes;
-    }
-
-    public ArrayList<String> getmLogInData() {
-        return mLogInData;
-    }
-
-    public void setmLogInData(ArrayList<String> mLogInData) {
-        this.mLogInData = mLogInData;
     }
 }

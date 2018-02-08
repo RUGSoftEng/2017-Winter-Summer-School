@@ -42,6 +42,7 @@
     </LinearLayout>
 
     <ImageView
+        android:background="?android:attr/selectableItemBackground"
         android:id="@+id/btn_more_post"
         android:layout_gravity="center"
         android:layout_width="24dp"

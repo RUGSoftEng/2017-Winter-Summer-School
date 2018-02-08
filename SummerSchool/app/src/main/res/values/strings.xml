@@ -152,5 +152,8 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="action_settings">Settings</string>
+    <string name="edit">EDIT</string>
+    <string name="cancel">CANCEL</string>
+    <string name="edit_your_comment">Edit your comment</string>
 
 </resources>

@@ -1,7 +1,5 @@
 package nl.rug.www.rugsummerschools.model;
 
-import com.bignerdranch.expandablerecyclerview.Model.ParentObject;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,15 +11,14 @@ import java.util.List;
  * @author Jeongkyun Oh
  */
 
-public class EventsPerDay implements ParentObject {
+public class EventsPerDay {
 
-    private Date mDayOfWeek;
+    private Date mDate;
     private List<Event> mEvents;
 
     public EventsPerDay(Date date) {
-        mDayOfWeek = date;
+        mDate = date;
         mEvents = new ArrayList<>();
-        mChildrenList = new ArrayList<>();
     }
 
     public List<Event> getEvents() {
@@ -32,19 +29,8 @@ public class EventsPerDay implements ParentObject {
         mEvents = events;
     }
 
-    private List<Object> mChildrenList;
-
-    public Date getDayOfWeek() {
-        return mDayOfWeek;
+    public Date getDate() {
+        return mDate;
     }
 
-    @Override
-    public List<Object> getChildObjectList() {
-        return mChildrenList;
-    }
-
-    @Override
-    public void setChildObjectList(List<Object> list) {
-        mChildrenList = list;
-    }
 }

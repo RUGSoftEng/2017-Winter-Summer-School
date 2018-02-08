@@ -50,7 +50,7 @@ public abstract class ForumThreadHolder extends ContentHolder<ForumThread> imple
         mTitleView.setText(mContent.getTitle());
         mAuthorView.setText(mContent.getPoster());
         mBodyView.setText(mContent.getDescription());
-        String numComments = mContent.getForumCommentList().size() + " comments";
+        String numComments = mContent.getForumComments().size() + " comments";
         mNumCommentView.setText(numComments);
         Date date = new DateTime(mContent.getDate()).toDate();
         mRelativeTimeView.setText(DateUtils.getRelativeTimeSpanString(date.getTime(), System.currentTimeMillis(), DateUtils.DAY_IN_MILLIS));

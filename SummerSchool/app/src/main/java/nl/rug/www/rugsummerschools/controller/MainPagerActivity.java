@@ -67,7 +67,7 @@ public class MainPagerActivity extends AppCompatActivity {
             mlogInData.add(user.getDisplayName());
             mlogInData.add(user.getEmail());
             mlogInData.add(user.getUid());
-            ContentsLab.get().setmLogInData(mlogInData);
+//            ContentsLab.get().setmLogInData(mlogInData);
         }
 
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
