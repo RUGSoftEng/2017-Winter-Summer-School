@@ -58,7 +58,7 @@ import nl.rug.www.rugsummerschools.controller.timetable.TimeTableFragment2;
  * @author Jeongkyun Oh
  */
 
-public class MainActivity extends AppCompatActivity implements ForumLoginFragment.OnSignInListener, ForumThreadListFragment.OnSignOutListener {
+public class MainActivity extends BaseActivity implements ForumLoginFragment.OnSignInListener, ForumThreadListFragment.OnSignOutListener {
 
     private static final String TAG = "MainActivity";
     private static final int PAGE_ACCOUNCEMENT = 0;
@@ -240,6 +240,7 @@ public class MainActivity extends AppCompatActivity implements ForumLoginFragmen
     private void handleFacebookAccessToken(AccessToken token) {
         Log.d(TAG, "handleFacebookAccessToken:" + token);
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        showProgressDialog();
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -256,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements ForumLoginFragmen
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }
-
+                        hideProgressDialog();
                         // ...
                     }
                 });
@@ -300,7 +301,7 @@ public class MainActivity extends AppCompatActivity implements ForumLoginFragmen
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
         // [START_EXCLUDE silent]
-//        showProgressDialog();
+        showProgressDialog();
         // [END_EXCLUDE]
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
@@ -322,7 +323,7 @@ public class MainActivity extends AppCompatActivity implements ForumLoginFragmen
                         }
 
                         // [START_EXCLUDE]
-//                        hideProgressDialog();
+                        hideProgressDialog();
                         // [END_EXCLUDE]
                     }
                 });

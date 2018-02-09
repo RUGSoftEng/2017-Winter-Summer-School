@@ -101,6 +101,7 @@
             android:name=".controller.forum.ForumThreadDetailActivity"
             android:parentActivityName=".controller.MainActivity">
         </activity>
+        <activity android:name=".controller.BaseActivity"/>
     </application>
 
 </manifest>

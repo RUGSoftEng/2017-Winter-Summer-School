@@ -10,13 +10,13 @@ package nl.rug.www.rugsummerschools.model;
 
 public class GeneralInfo extends Content {
 
-    private int mCategory;
+    private String mCategory;
 
-    public int getCategory() {
+    public String getCategory() {
         return mCategory;
     }
 
-    public void setCategory(int category) {
+    public void setCategory(String category) {
         mCategory = category;
     }
 }

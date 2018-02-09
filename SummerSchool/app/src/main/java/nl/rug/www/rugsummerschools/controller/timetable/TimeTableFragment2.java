@@ -1,11 +1,13 @@
 package nl.rug.www.rugsummerschools.controller.timetable;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -36,6 +38,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.SimpleFormatter;
 
 import nl.rug.www.rugsummerschools.R;
+import nl.rug.www.rugsummerschools.controller.BaseActivity;
 import nl.rug.www.rugsummerschools.controller.ContentsLab;
 import nl.rug.www.rugsummerschools.model.Content;
 import nl.rug.www.rugsummerschools.model.Event;
@@ -48,8 +51,9 @@ public class TimeTableFragment2 extends Fragment {
     private static final String TAG = "TimeTableFragment";
 
     private List<EventsPerDay> mEventsPerDayList;
-
     private RecyclerView mRecyclerView;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private int mTodayOffset;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,6 +69,7 @@ public class TimeTableFragment2 extends Fragment {
         sectionName.setText(R.string.time_table);
         mRecyclerView = view.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mSwipeRefreshLayout = view.findViewById(R.id.refresh_layout);
         new FetchEvents().execute();
 
         return view;
@@ -73,21 +78,12 @@ public class TimeTableFragment2 extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_today, menu);
+        inflater.inflate(R.menu.menu_timetable, menu);
         Log.i(TAG, "Today manu is inflated");
     }
 
     private void scrollToToday() {
-        Calendar startDay = Calendar.getInstance();
-        startDay.set(Calendar.DAY_OF_MONTH, 1);
-        startDay.set(Calendar.MONTH, 0);
-        startDay.set(Calendar.YEAR, 2010);
-        Calendar today = Calendar.getInstance();
-
-        long diff = (today.getTimeInMillis() - startDay.getTimeInMillis()) / (24 * 60 * 60 * 1000);
-        Log.d(TAG, diff + "," + (int)diff);
-        mRecyclerView.scrollToPosition((int) diff);
-
+        ((LinearLayoutManager)mRecyclerView.getLayoutManager()).scrollToPositionWithOffset(mTodayOffset, 0);
     }
 
     @Override
@@ -96,6 +92,8 @@ public class TimeTableFragment2 extends Fragment {
             case R.id.today_menu :
                 scrollToToday();
                 return true;
+            case R.id.refresh_menu :
+                new FetchEvents().execute();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -115,6 +113,7 @@ public class TimeTableFragment2 extends Fragment {
                 return event.getStartDate().compareTo(t1.getStartDate());
             }
         });
+        Log.d(TAG, events.toString());
         mEventsPerDayList = new ArrayList<>();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Date startDate = formatter.parse("2010-01-01");
@@ -123,6 +122,9 @@ public class TimeTableFragment2 extends Fragment {
         start.setTime(startDate);
         Calendar end = Calendar.getInstance();
         end.setTime(endDate);
+        Calendar today = Calendar.getInstance();
+        today.set(Calendar.HOUR, 0);
+        today.set(Calendar.MINUTE, 0);
 
         int idx = 0;
         for (Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime() ) {
@@ -134,29 +136,60 @@ public class TimeTableFragment2 extends Fragment {
                 idx++;
             }
 
-            if (eventList.size() != 0)
-                mEventsPerDayList.get(mEventsPerDayList.size() - 1).setEvents(eventList);
-            mEventsPerDayList.add(newEventsPerDay);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            if (calendar.get(Calendar.DATE) == 1 || Calendar.MONDAY == calendar.get(Calendar.DAY_OF_WEEK)) {
+                mEventsPerDayList.add(newEventsPerDay);
+                if (today.after(calendar))
+                    mTodayOffset++;
+            } else if (eventList.size() != 0) {
+                newEventsPerDay.setEvents(eventList);
+                mEventsPerDayList.add(newEventsPerDay);
+                if (today.after(calendar))
+                    mTodayOffset++;
+            }
         }
     }
 
     private class FetchEvents extends AsyncTask<Void, Void, List<Event>> {
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mSwipeRefreshLayout.setRefreshing(true);
+        }
+
+        @Override
         protected List<Event> doInBackground(Void... voids) {
+            mTodayOffset = -1;
             String school = ContentsLab.get().getSchoolId();
             return new NetworkingService<Event>().fetchData(NetworkingService.EVENT, school);
         }
 
+        @SuppressLint("StaticFieldLeak")
         @Override
-        protected void onPostExecute(List<Event> events) {
+        protected void onPostExecute(final List<Event> events) {
             super.onPostExecute(events);
-            try {
-                initializeCalendar(events);
-                setupAdapter();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... voids) {
+                    try {
+                        initializeCalendar(events);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    super.onPostExecute(aVoid);
+                    setupAdapter();
+                    if (mSwipeRefreshLayout.isRefreshing()) {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                }
+            }.execute();
         }
     }
 }

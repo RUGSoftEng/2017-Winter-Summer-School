@@ -51,22 +51,17 @@ public class GeneralInfoScrollingActivity extends AppCompatActivity {
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(mGeneralInfo.getTitle());
-        switch (mGeneralInfo.getCategory()) {
-            case 0 :
-                backgroudView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.bg_food));
-                break;
-            case 1:
-                backgroudView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.bg_map));
-                break;
-            case 2:
-                backgroudView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.bg_internet));
-                break;
-            case 3:
-                backgroudView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.bg_accomodation));
-                break;
-            case 4:
-                backgroudView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.bg_info));
-                break;
+        String category = mGeneralInfo.getCategory();
+        if ("Food".equals(category)) {
+            Glide.with(this).load(R.drawable.bg_food).into(backgroudView);
+        } else if ("Location".equals(category)) {
+            Glide.with(this).load(R.drawable.bg_map).into(backgroudView);
+        } else if ("Internet".equals(category)) {
+            Glide.with(this).load(R.drawable.bg_internet).into(backgroudView);
+        } else if ("Accommodation".equals(category)) {
+            Glide.with(this).load(R.drawable.bg_accomodation).into(backgroudView);
+        } else {
+            Glide.with(this).load(R.drawable.bg_info).into(backgroudView);
         }
         backgroudView.setColorFilter(Color.DKGRAY, PorterDuff.Mode.LIGHTEN);
         setSupportActionBar(toolbar);

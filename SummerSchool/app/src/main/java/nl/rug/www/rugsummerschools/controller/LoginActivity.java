@@ -26,7 +26,7 @@ import nl.rug.www.rugsummerschools.networking.NetworkingService;
  * @author Jeongkyun Oh
  */
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
 
     private static final String TAG = "LoginActivity";
 
@@ -80,6 +80,7 @@ public class LoginActivity extends AppCompatActivity {
             mProgressBar.setVisibility(View.VISIBLE);
             mLoginButton.setEnabled(false);
             mPasswordEditText.setEnabled(false);
+            showProgressDialog();
         }
 
         @Override
@@ -107,6 +108,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 runMainPagerActivity();
             }
+            hideProgressDialog();
         }
     }
 }

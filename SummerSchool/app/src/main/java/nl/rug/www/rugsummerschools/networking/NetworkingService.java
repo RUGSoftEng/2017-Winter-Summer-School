@@ -231,7 +231,7 @@ public class NetworkingService<T extends Content> {
             generalInfo.setId(contentJsonObject.getString("_id"));
             generalInfo.setTitle(contentJsonObject.getString("title"));
             generalInfo.setDescription(contentJsonObject.getString("description"));
-//            generalInfo.setCategory(contentJsonObject.getString("category"));
+            generalInfo.setCategory(contentJsonObject.getString("category"));
             items.add(generalInfo);
         }
     }
@@ -248,8 +248,10 @@ public class NetworkingService<T extends Content> {
             event.setTitle(contents.getString("title"));
             event.setLocation(contents.getString("location"));
             event.setDescription(contents.getString("details"));
-            Date startDate = new DateTime(contents.getString("startDate"), DateTimeZone.UTC).toDate();
-            Date endDate = new DateTime(contents.getString("endDate"), DateTimeZone.UTC).toDate();
+            Date startDate = new DateTime(contents.getString("startDate"), DateTimeZone.getDefault()).toDate();
+            Date endDate = new DateTime(contents.getString("endDate"), DateTimeZone.getDefault()).toDate();
+            Log.d(TAG, "StartDate: " + startDate.toString());
+            Log.d(TAG, "EndDate: " + endDate.toString());
             event.setStartDate(startDate);
             event.setEndDate(endDate);
             items.add(event);
