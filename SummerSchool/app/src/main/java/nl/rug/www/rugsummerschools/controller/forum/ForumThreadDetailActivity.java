@@ -108,7 +108,8 @@ public class ForumThreadDetailActivity extends AppCompatActivity implements View
         mBodyView.setText(mForumThread.getDescription());
         Date date = new DateTime(mForumThread.getDate()).toDate();
         mRelativeTimeView.setText(DateUtils.getRelativeTimeSpanString(date.getTime(), System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS));
-        Glide.with(this).load(mForumThread.getImgUrl()).into(mPosterPhotoView);
+        if (mForumThread.getImgUrl() != null || !"".equals(mForumThread.getImgUrl()))
+            Glide.with(this).load(mForumThread.getImgUrl()).into(mPosterPhotoView);
         findViewById(R.id.button_post_comment).setOnClickListener(this);
         mCommentRecyclerView = findViewById(R.id.recycler_comments);
         mCommentRecyclerView.setFocusable(false);
@@ -280,7 +281,8 @@ public class ForumThreadDetailActivity extends AppCompatActivity implements View
             mCommentView.setText(mForumComment.getDescription());
             Date date = new DateTime(mForumComment.getDate()).toDate();
             mCommentTimeView.setText(DateUtils.getRelativeTimeSpanString(date.getTime(), System.currentTimeMillis(), DateUtils.YEAR_IN_MILLIS));
-            Glide.with(ForumThreadDetailActivity.this).load(mForumComment.getImgUrl()).into(mAuthorPhotoView);
+            if (mForumComment.getImgUrl() != null || !"".equals(mForumComment.getImgUrl()))
+                Glide.with(ForumThreadDetailActivity.this).load(mForumComment.getImgUrl()).into(mAuthorPhotoView);
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user.getUid().equals(mForumComment.getPosterId()))
                 mMoreButton.setVisibility(View.VISIBLE);

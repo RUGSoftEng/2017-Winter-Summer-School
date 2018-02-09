@@ -2,6 +2,7 @@ package nl.rug.www.rugsummerschools.controller;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
@@ -20,6 +21,8 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -36,8 +39,16 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.UserProfileChangeRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.reflect.Field;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import nl.rug.www.rugsummerschools.R;
@@ -237,10 +248,10 @@ public class MainActivity extends BaseActivity implements ForumLoginFragment.OnS
         }
     }
 
-    private void handleFacebookAccessToken(AccessToken token) {
+    private void handleFacebookAccessToken(final AccessToken token) {
         Log.d(TAG, "handleFacebookAccessToken:" + token);
-        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         showProgressDialog();
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -249,6 +260,7 @@ public class MainActivity extends BaseActivity implements ForumLoginFragment.OnS
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            handleProfilePicture(token, user);
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -261,6 +273,32 @@ public class MainActivity extends BaseActivity implements ForumLoginFragment.OnS
                         // ...
                     }
                 });
+    }
+
+    private void handleProfilePicture(AccessToken token, final FirebaseUser user) {
+        GraphRequest request = GraphRequest.newMeRequest(token, new GraphRequest.GraphJSONObjectCallback() {
+            @Override
+            public void onCompleted(JSONObject object, GraphResponse response) {
+                Log.d(TAG, object.toString());
+                Log.d(TAG, response.toString());
+
+                Uri profilePicture;
+                try {
+                    profilePicture = Uri.parse("https://graph.facebook.com/" + object.getString("id") + "/picture?width=500&height=500");
+                    Log.d(TAG, "profile picture : profilePicture");
+                    UserProfileChangeRequest.Builder builder = new UserProfileChangeRequest.Builder();
+                    user.updateProfile(builder.setPhotoUri(profilePicture).build());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+        //Here we put the requested fields to be returned from the JSONObject
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id, picture");
+        request.setParameters(parameters);
+        request.executeAsync();
     }
 
 
