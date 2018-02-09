@@ -147,6 +147,7 @@ public class ForumThreadDetailActivity extends AppCompatActivity implements View
                             if (imm != null && view != null) {
                                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                             }
+                            mCommentEditText.setText(null);
                         } else {
                             Toast.makeText(ForumThreadDetailActivity.this, "Post failed!", Toast.LENGTH_LONG).show();
                         }

@@ -170,6 +170,7 @@ public class TimeTableFragment2 extends Fragment {
         @Override
         protected void onPostExecute(final List<Event> events) {
             super.onPostExecute(events);
+            ContentsLab.get().updateEvents(events);
             new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... voids) {

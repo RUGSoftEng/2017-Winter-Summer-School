@@ -74,8 +74,8 @@
         -->
         <activity
             android:name=".controller.forum.ThreadActivity"
-            android:windowSoftInputMode="adjustResize"
-            android:parentActivityName=".controller.MainActivity">
+            android:parentActivityName=".controller.MainActivity"
+            android:windowSoftInputMode="adjustResize">
         </activity>
         <activity
             android:name=".controller.MainActivity"
@@ -102,6 +102,11 @@
             android:parentActivityName=".controller.MainActivity">
         </activity>
         <activity android:name=".controller.BaseActivity"/>
+        <activity
+            android:name=".controller.timetable.TimetableDetailActivity"
+            android:parentActivityName=".controller.MainActivity"
+            android:theme="@style/RugTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

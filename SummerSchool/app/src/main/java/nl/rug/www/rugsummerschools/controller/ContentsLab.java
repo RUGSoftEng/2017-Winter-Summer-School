@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nl.rug.www.rugsummerschools.model.Announcement;
+import nl.rug.www.rugsummerschools.model.Event;
 import nl.rug.www.rugsummerschools.model.EventsPerDay;
 import nl.rug.www.rugsummerschools.model.ForumComment;
 import nl.rug.www.rugsummerschools.model.ForumThread;
@@ -30,6 +31,7 @@ public class ContentsLab {
     private ArrayList<EventsPerDay> mCurrentWeekEvents;
     private ArrayList<EventsPerDay> mNextWeekEvents;
     private ArrayList<Lecturer> mLecturers;
+    private ArrayList<Event> mEvents;
     private ArrayList<ForumThread> mForumThreads;
     private ArrayList<ForumComment> mForumComments;
     private ArrayList<String> mLogInData;
@@ -51,6 +53,7 @@ public class ContentsLab {
         mLecturers = new ArrayList<>();
         mForumThreads = new ArrayList<>();
         mLogInCodes = new ArrayList<>();
+        mEvents = new ArrayList<>();
     }
 
     public String getSchoolId() { return mSchoolId; }
@@ -92,6 +95,15 @@ public class ContentsLab {
         return null;
     }
 
+    public List<Event> getEvents() { return mEvents; }
+
+    public Event getEvent(String id) {
+        for (Event e : mEvents) {
+            if (e.getId().equals(id)) return e;
+        }
+        return null;
+    }
+
     public boolean checkLogInCode(String logInCode) {
         for(int i = 0; i < mLogInCodes.size(); ++i) {
             if (mLogInCodes.get(i).equals(logInCode)) return true;
@@ -125,6 +137,10 @@ public class ContentsLab {
 
     public void updateLecturers(List<Lecturer> lecturers) {
         mLecturers = (ArrayList<Lecturer>) lecturers;
+    }
+
+    public void updateEvents(List<Event> events) {
+        mEvents = (ArrayList<Event>) events;
     }
 
     public void updatePreviousWeekTimeTable(List<EventsPerDay> eventsPerDays) {
