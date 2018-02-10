@@ -11,15 +11,17 @@ import java.util.List;
 import nl.rug.www.rugsummerschools.model.Content;
 
 /**
- * Created by jk on 17. 12. 6.
+ * This class is general contents adapter for recycler view of contents for main activity.
+ *
+ * @since 06/12/2017
+ * @author Jeongkyun Oh
+ * @version 2.0.0
  */
 
 public abstract class ContentAdapter<T extends Content, K extends ContentHolder<T>> extends RecyclerView.Adapter<K> {
 
     private Context mContext;
     private List<T> mContents;
-//    TODO: where to get thumbnaildownloader
-//    private ThumbnailDownloader mThumbnailDownloader;
     protected abstract K createHolder(LayoutInflater layoutInflater, ViewGroup parent);
 
     public ContentAdapter(List<T> contents, Context context) {
@@ -36,8 +38,6 @@ public abstract class ContentAdapter<T extends Content, K extends ContentHolder<
     @Override
     public void onBindViewHolder(K holder, int position) {
         T content = mContents.get(position);
-//        TODO: url is wrong so that it needs to be changed
-//        mThumbnailDownloader.queueThumbnail(holder, "url");
         holder.bind(content);
     }
 

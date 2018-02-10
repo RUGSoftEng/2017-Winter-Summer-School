@@ -50,7 +50,7 @@ import nl.rug.www.rugsummerschools.model.Lecturer;
 import nl.rug.www.rugsummerschools.model.LoginInfo;
 
 /**
- * This class is to deal with all process for fetching data from server.
+ * This class is to deal with all networking process with the server.
  *
  * @since 13/04/2017
  * @author Jeongkyun Oh
@@ -104,8 +104,7 @@ public class NetworkingService<T extends Content> {
 
     private String buildURL(List<String> paths, Map<String, String> queryParams) {
         Uri.Builder builder = new Uri.Builder();
-        builder
-                .scheme("http")
+        builder.scheme("http")
                 .encodedAuthority(HTTP_URL)
                 .appendPath("API");
 
@@ -322,6 +321,61 @@ public class NetworkingService<T extends Content> {
             forumComment.setDescription(contentJsonObject.getString("text"));
             items.add(forumComment);
         }
+    }
+
+    public static List<String> getThreadPath() {
+        List<String> paths = new ArrayList<>();
+        paths.add("forum");
+        paths.add("thread");
+        return paths;
+    }
+
+    public static List<String> getCommentPath() {
+        List<String> paths = new ArrayList<>();
+        paths.add("forum");
+        paths.add("comment");
+        return paths;
+    }
+
+    public static Map<String, String> getPostThreadQuery(String title, String description, String author, String posterID, String imgURL) {
+        Map<String, String> map = new HashMap<>();
+        map.put("title", title);
+        map.put("description", description);
+        map.put("author", author);
+        map.put("posterID", posterID);
+        map.put("imgURL", imgURL);
+        return map;
+    }
+
+    public static Map<String, String> getPostCommentQuery(String text, String author, String posterID, String parentThread, String imgURL) {
+        Map<String, String> map = new HashMap<>();
+        map.put("text", text);
+        map.put("author", author);
+        map.put("posterID", posterID);
+        map.put("parentThread", parentThread);
+        map.put("imgURL", imgURL);
+        return map;
+    }
+
+    public static Map<String, String> getPutThreadQuery(String id, String title, String description) {
+        Map<String, String> map = new HashMap<>();
+        map.put("id", id);
+        map.put("title", title);
+        map.put("description", description);
+        return map;
+    }
+
+    public static Map<String, String> getPutCommentQuery(String id, String text) {
+        Map<String, String> map = new HashMap<>();
+        map.put("id", id);
+        map.put("text", text);
+        return map;
+    }
+
+    public static Map<String, String> getDeleteQuery(String id) {
+        Map<String, String> map = new HashMap<>();
+        map.put("id", id);
+        return map;
     }
 
     public void getDeleteRequest(Context context, int method, List<String> paths, Map<String, String> queryParams, final Map<String, String> valuePairs, final VolleyCallback callback) {

@@ -7,7 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import nl.rug.www.rugsummerschools.controller.LoginActivity;
 
 /**
- * Created by jk on 17. 12. 7.
+ * Splash activity with University of Groningen logo.
+ *
+ * @author Jeongkyun Oh
+ * @since 07/12/17
+ * @version 2.0.0
  */
 
 public class SplashActivity extends AppCompatActivity {

@@ -5,11 +5,12 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * This class is a model of time table for a week
+ * This class is a model of events per day
  *
  * @since 13/04/2017
  * @author Jeongkyun Oh
- */
+ * @version 2.0.0
+ **/
 
 public class EventsPerDay {
 

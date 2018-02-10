@@ -14,10 +14,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,28 +33,28 @@ import com.google.firebase.auth.FirebaseUser;
 
 import org.joda.time.DateTime;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import nl.rug.www.rugsummerschools.R;
 import nl.rug.www.rugsummerschools.controller.ContentsLab;
-import nl.rug.www.rugsummerschools.databinding.ActivityForumThreadDetailBinding;
 import nl.rug.www.rugsummerschools.model.ForumComment;
 import nl.rug.www.rugsummerschools.model.ForumThread;
 import nl.rug.www.rugsummerschools.networking.NetworkingService;
 
 import static com.android.volley.Request.Method.DELETE;
-import static com.android.volley.Request.Method.PUT;
-import static nl.rug.www.rugsummerschools.controller.forum.ThreadActivity.ARG_ADD_OR_EDIT;
-import static nl.rug.www.rugsummerschools.controller.forum.ThreadActivity.ARG_EDITABLE_DATA;
-import static nl.rug.www.rugsummerschools.controller.forum.ThreadActivity.INT_ADD;
-import static nl.rug.www.rugsummerschools.controller.forum.ThreadActivity.INT_EDIT;
 
-public class ForumThreadDetailActivity extends AppCompatActivity implements View.OnClickListener, PopupMenu.OnMenuItemClickListener, NestedScrollView.OnScrollChangeListener {
+/**
+ * This is detail activity of a forum thread.
+ * It shows information about the contents of forum and comments.
+ *
+ * @author Jeongkyun Oh
+ * @since 09/02/2018
+ * @version 2.0.0
+ */
+
+public class ForumThreadDetailActivity extends AppCompatActivity implements View.OnClickListener, PopupMenu.OnMenuItemClickListener, NestedScrollView.OnScrollChangeListener, View.OnTouchListener {
 
     private static final String TAG = "ThreadDetailActivity";
     private static final String EXTRA_FORUM_THREAD_ID =
@@ -63,7 +63,6 @@ public class ForumThreadDetailActivity extends AppCompatActivity implements View
 
     private ForumThread mForumThread;
     private List<ForumComment> mForumComments;
-    private ActivityForumThreadDetailBinding mActivityForumThreadDetailBinding;
     private TextView mTitleView;
     private TextView mAuthorView;
     private TextView mBodyView;
@@ -72,6 +71,7 @@ public class ForumThreadDetailActivity extends AppCompatActivity implements View
     private EditText mCommentEditText;
     private LinearLayout mCommentPostView;
     private RecyclerView mCommentRecyclerView;
+    private int mPostViewTop = 0;
 
     public static Intent newIntent(Context context, String threadId) {
         Intent intent = new Intent(context, ForumThreadDetailActivity.class);
@@ -82,13 +82,14 @@ public class ForumThreadDetailActivity extends AppCompatActivity implements View
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_forum_thread_detail);
+        setContentView(R.layout.activity_thd_dtl);
         String threadId = getIntent().getStringExtra(EXTRA_FORUM_THREAD_ID);
-
+        setTitle("Forum");
         mCommentPostView = findViewById(R.id.comment_form);
         NestedScrollView nestedScrollView = findViewById(R.id.nsv_forum_detail);
         nestedScrollView.requestFocus();
         nestedScrollView.setOnScrollChangeListener(this);
+        nestedScrollView.setOnTouchListener(this);
         ImageView commentPostImageView = findViewById(R.id.comment_post_photo);
         ImageView moreButton = findViewById(R.id.btn_more_post);
         moreButton.setOnClickListener(this);
@@ -117,27 +118,47 @@ public class ForumThreadDetailActivity extends AppCompatActivity implements View
         new FetchForumComments().execute();
     }
 
-    void setupAdapter() {
-        mCommentRecyclerView.setAdapter(new ThreadDetailAdapter(mForumComments));
+    private void setupAdapter() {
+        mCommentRecyclerView.setAdapter(newAdapter());
+    }
+
+    private CommentAdapter newAdapter() {
+        return new CommentAdapter(mForumComments, this) {
+            @Override
+            public CommentHolder createHolder(LayoutInflater inflater, ViewGroup parent, Context context) {
+                return newHolder(inflater, parent, context);
+            }
+        };
+    }
+
+    private CommentHolder newHolder(LayoutInflater inflater, ViewGroup parent, Context context) {
+        return new CommentHolder(inflater, parent, context) {
+            @Override
+            public void fetchComment() {
+                new FetchForumComments().execute();
+            }
+
+            @Override
+            public void hideCommentView() {
+                mCommentPostView.setVisibility(View.GONE);
+            }
+        };
+    }
+
+    private List<String> createCommentPaths() {
+        return NetworkingService.getCommentPath();
+    }
+
+    private Map<String, String> createPostQuery() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        return NetworkingService.getPostCommentQuery(mCommentEditText.getText().toString(), user.getDisplayName(), user.getUid(), mForumThread.getId(), user.getPhotoUrl().toString());
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_post_comment :
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                Map<String, String> map = new HashMap<>();
-                map.put("parentThread", mForumThread.getId());
-                map.put("author", user.getDisplayName());
-                map.put("posterID", user.getUid());
-                map.put("text", mCommentEditText.getText().toString());
-                map.put("imgURL", user.getPhotoUrl().toString());
-
-                List<String> paths = new ArrayList<>();
-                paths.add("forum");
-                paths.add("comment");
-
-                new NetworkingService<>().postPutRequest(ForumThreadDetailActivity.this, Request.Method.POST, paths, null, map, new NetworkingService.VolleyCallback() {
+                new NetworkingService<>().postPutRequest(ForumThreadDetailActivity.this, Request.Method.POST, createCommentPaths(), null, createPostQuery(), new NetworkingService.VolleyCallback() {
                     @Override
                     public void onResponse(String result) {
                         if ("OK".equals(result) || "200".equals(result)) {
@@ -170,26 +191,33 @@ public class ForumThreadDetailActivity extends AppCompatActivity implements View
         }
     }
 
+    private String[] createForumData() {
+        return new String[] {
+                mForumThread.getId(),
+                mForumThread.getTitle(),
+                mForumThread.getDescription()
+        };
+    }
+
+    private List<String> createThreadPaths() {
+        return NetworkingService.getThreadPath();
+    }
+
+    private Map<String, String> createDeleteQuery() {
+        return NetworkingService.getDeleteQuery(mForumThread.getId());
+    }
+
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
         Intent intent;
         switch (menuItem.getItemId()) {
             case R.id.edit_menu :
-                String[] data = new String[] {
-                        mForumThread.getId(),
-                        mForumThread.getTitle(),
-                        mForumThread.getDescription()
-                };
-                intent = ThreadActivity.newIntent(this, data);
+                intent = ThreadActivity.newIntent(this, createForumData());
                 startActivityForResult(intent, REQUEST_CODE_EDIT_THREAD);
                 break;
             case R.id.delete_menu :
-                List<String> paths = new ArrayList<>();
-                paths.add("forum");
-                paths.add("thread");
-                Map<String, String> map = new HashMap<>();
-                map.put("id", mForumThread.getId());
-                new NetworkingService<>().getDeleteRequest(this, DELETE, paths, map, null, new NetworkingService.VolleyCallback() {
+                new NetworkingService<>().getDeleteRequest(
+                        this, DELETE, createThreadPaths(), createDeleteQuery(), null, new NetworkingService.VolleyCallback() {
                     @Override
                     public void onResponse(String result) {
                         if ("OK".equals(result) || "200".equals(result)) {
@@ -241,169 +269,34 @@ public class ForumThreadDetailActivity extends AppCompatActivity implements View
 
     @Override
     public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-        if (scrollY - oldScrollY > 0) {
-            mCommentPostView.setVisibility(View.GONE);
-        } else {
-            mCommentPostView.setVisibility(View.VISIBLE);
+        Log.d(TAG, "top : " + mPostViewTop);
+        int height = -mCommentPostView.getHeight();
+        if (mPostViewTop <= 0 && mPostViewTop >= height) {
+            mPostViewTop += (oldScrollY - scrollY);
+            if (mPostViewTop > 0){
+                mPostViewTop = 0;
+            } else if (mPostViewTop < height) {
+                mPostViewTop = height;
+            }
+            mCommentPostView.scrollTo(0, mPostViewTop);
         }
     }
 
-    private class ThreadDetailHolder extends RecyclerView.ViewHolder implements View.OnClickListener, PopupMenu.OnMenuItemClickListener{
-
-        private ForumComment mForumComment;
-        private ImageView mAuthorPhotoView;
-        private TextView mAuthorView;
-        private TextView mCommentView;
-        private TextView mCommentTimeView;
-        private ImageView mMoreButton;
-
-        private EditText mBodyEditTextView;
-        private Button mBodyEditButton;
-        private Button mBodyEditCancelButton;
-
-        public ThreadDetailHolder(LayoutInflater inflater, ViewGroup parent) {
-            super(inflater.inflate(R.layout.item_comment, parent, false));
-
-            mAuthorPhotoView = itemView.findViewById(R.id.comment_photo);
-            mAuthorView = itemView.findViewById(R.id.comment_author);
-            mCommentView = itemView.findViewById(R.id.comment_body);
-            mCommentTimeView = itemView.findViewById(R.id.comment_time_view);
-            mMoreButton = itemView.findViewById(R.id.btn_more_comment);
-
-            mBodyEditTextView = itemView.findViewById(R.id.comment_body_edit_text);
-            mBodyEditButton = itemView.findViewById(R.id.comment_body_edit_button);
-            mBodyEditCancelButton = itemView.findViewById(R.id.comment_body_cancel_button);
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        switch (motionEvent.getAction()) {
+            case MotionEvent.ACTION_UP :
+                int height = -mCommentPostView.getHeight();
+                if (mPostViewTop >= height/2) {
+                    mCommentPostView.scrollTo(0, 0);
+                    mPostViewTop = 0;
+                } else {
+                    mCommentPostView.scrollTo(0, height);
+                    mPostViewTop = height;
+                }
+                return true;
         }
-
-        public void bind(ForumComment forumComment) {
-            mForumComment = forumComment;
-            mAuthorView.setText(mForumComment.getPoster());
-            mCommentView.setText(mForumComment.getDescription());
-            Date date = new DateTime(mForumComment.getDate()).toDate();
-            mCommentTimeView.setText(DateUtils.getRelativeTimeSpanString(date.getTime(), System.currentTimeMillis(), DateUtils.YEAR_IN_MILLIS));
-            if (mForumComment.getImgUrl() != null || !"".equals(mForumComment.getImgUrl()))
-                Glide.with(ForumThreadDetailActivity.this).load(mForumComment.getImgUrl()).into(mAuthorPhotoView);
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            if (user.getUid().equals(mForumComment.getPosterId()))
-                mMoreButton.setVisibility(View.VISIBLE);
-            mMoreButton.setOnClickListener(this);
-            mBodyEditCancelButton.setOnClickListener(this);
-            mBodyEditButton.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View view) {
-            switch (view.getId()) {
-                case R.id.btn_more_comment :
-                    PopupMenu popupMenu = new PopupMenu(ForumThreadDetailActivity.this, view);
-                    popupMenu.setOnMenuItemClickListener(this);
-                    MenuInflater inflater = popupMenu.getMenuInflater();
-                    inflater.inflate(R.menu.menu_edit_delete, popupMenu.getMenu());
-                    popupMenu.show();
-                    break;
-                case R.id.comment_body_edit_button :
-                    List<String> paths = new ArrayList<>();
-                    paths.add("forum");
-                    paths.add("comment");
-                    Map<String, String> map = new HashMap<>();
-                    map.put("id", mForumComment.getId());
-                    map.put("text", mBodyEditTextView.getText().toString());
-                    new NetworkingService<>().postPutRequest(ForumThreadDetailActivity.this, PUT, paths, map, null, new NetworkingService.VolleyCallback() {
-                        @Override
-                        public void onResponse(String result) {
-                            if ("OK".equals(result) || "200".equals(result)) {
-                                mCommentView.setText(mBodyEditTextView.getText().toString());
-                            }
-                            mCommentView.setVisibility(View.VISIBLE);
-                            mCommentView.setVisibility(View.VISIBLE);
-                            mBodyEditTextView.setVisibility(View.GONE);
-                            mBodyEditButton.setVisibility(View.GONE);
-                            mBodyEditCancelButton.setVisibility(View.GONE);
-                        }
-
-                        @Override
-                        public void onError(NetworkResponse result) {
-                            Toast.makeText(ForumThreadDetailActivity.this, "Unexpected Error", Toast.LENGTH_SHORT).show();
-                            mCommentView.setVisibility(View.VISIBLE);
-                            mCommentView.setVisibility(View.VISIBLE);
-                            mBodyEditTextView.setVisibility(View.GONE);
-                            mBodyEditButton.setVisibility(View.GONE);
-                            mBodyEditCancelButton.setVisibility(View.GONE);
-                        }
-                    });
-                    break;
-                case R.id.comment_body_cancel_button :
-                    mCommentView.setVisibility(View.VISIBLE);
-                    mCommentView.setVisibility(View.VISIBLE);
-                    mBodyEditTextView.setVisibility(View.GONE);
-                    mBodyEditButton.setVisibility(View.GONE);
-                    mBodyEditCancelButton.setVisibility(View.GONE);
-                    break;
-            }
-        }
-
-        @Override
-        public boolean onMenuItemClick(MenuItem menuItem) {
-            switch (menuItem.getItemId()) {
-                case R.id.edit_menu :
-                    mCommentPostView.setVisibility(View.GONE);
-                    mCommentView.setVisibility(View.GONE);
-                    mBodyEditTextView.setVisibility(View.VISIBLE);
-                    mBodyEditButton.setVisibility(View.VISIBLE);
-                    mBodyEditCancelButton.setVisibility(View.VISIBLE);
-                    mBodyEditTextView.setText(mCommentView.getText().toString());
-                    break;
-                case R.id.delete_menu :
-                    List<String> paths = new ArrayList<>();
-                    paths.add("forum");
-                    paths.add("comment");
-                    Map<String, String> map = new HashMap<>();
-                    map.put("id", mForumComment.getId());
-                    new NetworkingService<>().getDeleteRequest(ForumThreadDetailActivity.this, DELETE, paths, map, null, new NetworkingService.VolleyCallback() {
-                        @Override
-                        public void onResponse(String result) {
-                            if ("OK".equals(result) || "200".equals(result)) {
-                                Toast.makeText(ForumThreadDetailActivity.this, "Deletion succeeded", Toast.LENGTH_SHORT).show();
-                                new FetchForumComments().execute();
-                            } else {
-                                Toast.makeText(ForumThreadDetailActivity.this, "Deletion failed", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                        @Override
-                        public void onError(NetworkResponse result) {
-                            Toast.makeText(ForumThreadDetailActivity.this, "Unexpected error happened!", Toast.LENGTH_LONG).show();
-                        }
-                    });
-                    break;
-            }
-            return true;
-        }
-    }
-
-    private class ThreadDetailAdapter extends RecyclerView.Adapter<ThreadDetailHolder> {
-
-        private List<ForumComment> mForumComments;
-
-        public ThreadDetailAdapter(List<ForumComment> forumComments) {
-            mForumComments = forumComments;
-        }
-
-        @Override
-        public ThreadDetailHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater inflater = LayoutInflater.from(ForumThreadDetailActivity.this);
-            return new ThreadDetailHolder(inflater, parent);
-        }
-
-        @Override
-        public void onBindViewHolder(ThreadDetailHolder holder, int position) {
-            holder.bind(mForumComments.get(position));
-        }
-
-        @Override
-        public int getItemCount() {
-            return mForumComments.size();
-        }
+        return false;
     }
 
     private class FetchForumComments extends AsyncTask<Void, Void, List<ForumComment>> {

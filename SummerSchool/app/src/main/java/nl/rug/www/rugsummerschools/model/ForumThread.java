@@ -1,13 +1,14 @@
 package nl.rug.www.rugsummerschools.model;
 
-import com.bignerdranch.expandablerecyclerview.Model.ParentObject;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by jk on 5/14/17.
- */
+ * Forum thread model
+ *
+ * @since 14/05/2017
+ * @author Jeongkyun Oh
+ * @version 2.0.0
+ **/
 
 public class ForumThread extends Content {
 

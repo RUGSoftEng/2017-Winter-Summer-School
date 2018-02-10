@@ -9,6 +9,15 @@ import java.util.List;
 
 import nl.rug.www.rugsummerschools.model.EventsPerDay;
 
+/**
+ * ViewAdapter class for timetable recycler view.
+ * Timetable consists of list of events per day which has list of events.
+ * It binds list of events per day to the view holder.
+ *
+ * @since 10/02/2018
+ * @author Jeongkyun Oh
+ * @version 2.0.0
+ */
 
 public class TimeTableAdapter extends RecyclerView.Adapter<TimeTableHolder> {
 

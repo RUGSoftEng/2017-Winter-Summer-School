@@ -33,7 +33,6 @@ public class LoginActivity extends BaseActivity {
     /** temporary correct code to enter main activity */
     private EditText mPasswordEditText;
     private Button mLoginButton;
-    private ProgressBar mProgressBar;
     private SharedPreferences mSharedPreferences;
     private String mCode;
 
@@ -45,11 +44,8 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        mProgressBar = (ProgressBar)findViewById(R.id.progress_bar_login);
-        mProgressBar.setVisibility(View.GONE);
-        // TODO : Customize progress bar implementation.
-        mLoginButton = (Button)findViewById(R.id.login_button);
-        mPasswordEditText = (EditText)findViewById(R.id.codeText);
+        mLoginButton = findViewById(R.id.login_button);
+        mPasswordEditText = findViewById(R.id.codeText);
 
         mSharedPreferences = getSharedPreferences("ActivityPreference", Context.MODE_PRIVATE);
 
@@ -77,10 +73,9 @@ public class LoginActivity extends BaseActivity {
 
         @Override
         protected void onPreExecute() {
-            mProgressBar.setVisibility(View.VISIBLE);
+            showProgressDialog();
             mLoginButton.setEnabled(false);
             mPasswordEditText.setEnabled(false);
-            showProgressDialog();
         }
 
         @Override
@@ -90,7 +85,6 @@ public class LoginActivity extends BaseActivity {
 
         @Override
         protected void onPostExecute(List<LoginInfo> loginInfos) {
-            mProgressBar.setVisibility(View.GONE);
             mLoginButton.setEnabled(true);
             mPasswordEditText.setEnabled(true);
             if (loginInfos.size() == 0) {

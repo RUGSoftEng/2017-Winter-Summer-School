@@ -13,7 +13,12 @@ import nl.rug.www.rugsummerschools.R;
 import nl.rug.www.rugsummerschools.model.Content;
 
 /**
- * Created by jk on 17. 11. 27.
+ * This is base pager activity which is able to slide by each page by page.
+ * It applies to announcement only currently.
+ *
+ * @since 27/11/2017
+ * @author Jeongkyun Oh
+ * @version 2.0.0
  */
 
 public abstract class BasePagerActivity<T extends Content> extends AppCompatActivity {
@@ -32,7 +37,7 @@ public abstract class BasePagerActivity<T extends Content> extends AppCompatActi
 
         String contentId = (String) getIntent().getSerializableExtra(EXTRA_CONTENT_ID);
 
-        final ViewPager mViewPager = (ViewPager) findViewById(R.id.content_view_pager);
+        final ViewPager mViewPager = findViewById(R.id.content_view_pager);
 
         mContents = getContents();
 

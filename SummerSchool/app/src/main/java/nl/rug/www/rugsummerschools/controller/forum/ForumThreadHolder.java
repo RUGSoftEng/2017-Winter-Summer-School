@@ -19,7 +19,12 @@ import org.joda.time.DateTime;
 import java.util.Date;
 
 /**
- * Created by jk on 17. 12. 9.
+ * This is view holder class for forum thread recycler view on forum thread list fragment.
+ * It binds the model of each forum to the associated views.
+ *
+ * @author Jeongkyun Oh
+ * @since 09/12/2017
+ * @version 2.0.0
  */
 
 public abstract class ForumThreadHolder extends ContentHolder<ForumThread> implements View.OnClickListener {

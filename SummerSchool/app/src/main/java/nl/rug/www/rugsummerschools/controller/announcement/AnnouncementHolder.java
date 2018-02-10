@@ -23,7 +23,12 @@ import nl.rug.www.rugsummerschools.model.Announcement;
 import static org.joda.time.DateTimeConstants.MILLIS_PER_DAY;
 
 /**
- * Created by jk on 17. 12. 6.
+ * ViewHolder class for announcement recycler view.
+ * Its role is to hook up model with view
+ *
+ * @author Jeongkyun Oh
+ * @since 06/12/17
+ * @version 2.0.0
  */
 
 public abstract class AnnouncementHolder extends ContentHolder<Announcement> implements View.OnClickListener{
@@ -31,17 +36,15 @@ public abstract class AnnouncementHolder extends ContentHolder<Announcement> imp
     private TextView mInitialView;
     private TextView mTitleTextView;
     private TextView mAuthorTextView;
-    private TextView mNewTextView;
     private TextView mRelativeTimeView;
 
     public AnnouncementHolder(LayoutInflater inflater, ViewGroup parent) {
         super(inflater.inflate(R.layout.list_item_announcement, parent, false));
 
-        mInitialView = (TextView)itemView.findViewById(R.id.initial_text_view);
-        mTitleTextView = (TextView)itemView.findViewById(R.id.content_title);
-        mAuthorTextView = (TextView)itemView.findViewById(R.id.author_text_view);
-        mNewTextView = (TextView)itemView.findViewById(R.id.new_image_view);
-        mRelativeTimeView = (TextView)itemView.findViewById(R.id.time_stamp);
+        mInitialView = itemView.findViewById(R.id.initial_text_view);
+        mTitleTextView = itemView.findViewById(R.id.content_title);
+        mAuthorTextView = itemView.findViewById(R.id.author_text_view);
+        mRelativeTimeView = itemView.findViewById(R.id.time_stamp);
         itemView.setOnClickListener(this);
     }
 

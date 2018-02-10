@@ -2,7 +2,6 @@ package nl.rug.www.rugsummerschools.controller.timetable;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +14,14 @@ import nl.rug.www.rugsummerschools.R;
 import nl.rug.www.rugsummerschools.controller.ContentHolder;
 import nl.rug.www.rugsummerschools.model.Event;
 
+/**
+ * ViewHolder class for event recycler view.
+ * It binds a event to the associated view.
+ *
+ * @since 10/02/2018
+ * @author Jeongkyun Oh
+ * @version 2.0.0
+ */
 
 public class EventHolder extends ContentHolder<Event> implements View.OnClickListener{
 
@@ -44,7 +51,7 @@ public class EventHolder extends ContentHolder<Event> implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
-        Intent intent = TimetableDetailActivity.newIntent(mContext, mEvent.getId());
+        Intent intent = EventDetailActivity.newIntent(mContext, mEvent.getId());
         mContext.startActivity(intent);
     }
 }

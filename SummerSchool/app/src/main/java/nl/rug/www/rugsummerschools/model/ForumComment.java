@@ -1,8 +1,13 @@
 package nl.rug.www.rugsummerschools.model;
 
 /**
- * Created by jk on 5/14/17.
- */
+ * Forum comment model
+ *
+ * @since 14/05/2017
+ * @author Jeongkyun Oh
+ * @version 2.0.0
+ **/
+
 
 public class ForumComment extends Content {
 

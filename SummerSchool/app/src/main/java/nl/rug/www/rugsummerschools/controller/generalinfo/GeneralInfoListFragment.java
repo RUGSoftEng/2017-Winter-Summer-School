@@ -1,22 +1,12 @@
 package nl.rug.www.rugsummerschools.controller.generalinfo;
 
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Bundle;
 import android.support.annotation.StringRes;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import nl.rug.www.rugsummerschools.R;
@@ -28,11 +18,12 @@ import nl.rug.www.rugsummerschools.model.GeneralInfo;
 import nl.rug.www.rugsummerschools.networking.NetworkingService;
 
 /**
- * This class is a fragment on main pager activity.
- * It shows a list of titles of all general infomation in database.
+ * This class is a fragment on main activity.
+ * It shows a list of titles of all general information fetched from server.
  *
  * @since 13/04/2017
  * @author Jeongkyun Oh
+ * @version 2.0.0
  */
 
 public class GeneralInfoListFragment extends ContentsListFragment<GeneralInfo, ContentHolder<GeneralInfo>> {
@@ -61,19 +52,26 @@ public class GeneralInfoListFragment extends ContentsListFragment<GeneralInfo, C
     @Override
     protected void setupAdatper() {
         if (isAdded()) {
-            mBinding.recyclerView.setAdapter(new ContentAdapter<GeneralInfo, GeneralInfoHolder>(mItems, getActivity()) {
-                @Override
-                protected GeneralInfoHolder createHolder(LayoutInflater layoutInflater, ViewGroup parent) {
-                    return new GeneralInfoHolder(layoutInflater, parent, getActivity()) {
-
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = GeneralInfoScrollingActivity.newIntent(getActivity(), mContent.getId());
-                            startActivity(intent);
-                        }
-                    };
-                }
-            });
+            mBinding.recyclerView.setAdapter(newAdapter(mItems));
         }
+    }
+
+    private ContentAdapter<GeneralInfo, GeneralInfoHolder> newAdapter(List<GeneralInfo> item) {
+        return new ContentAdapter<GeneralInfo, GeneralInfoHolder>(item, getActivity()) {
+            @Override
+            protected GeneralInfoHolder createHolder(LayoutInflater layoutInflater, ViewGroup parent) {
+                return newHolder(layoutInflater, parent);
+            }
+        };
+    }
+
+    private GeneralInfoHolder newHolder(LayoutInflater layoutInflater, ViewGroup parent) {
+        return new GeneralInfoHolder(layoutInflater, parent, getActivity()) {
+            @Override
+            public void onClick(View view) {
+                Intent intent = GeneralInfoScrollingActivity.newIntent(getActivity(), mContent.getId());
+                startActivity(intent);
+            }
+        };
     }
 }

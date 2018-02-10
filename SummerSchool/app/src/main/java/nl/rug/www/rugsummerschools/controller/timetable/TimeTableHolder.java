@@ -27,12 +27,18 @@ import java.util.Locale;
 import nl.rug.www.rugsummerschools.R;
 import nl.rug.www.rugsummerschools.model.EventsPerDay;
 
+/**
+ * ViewHolder class for timetable recycler view.
+ * It binds a eventsPerDay to the associated view.
+ *
+ * @since 10/02/2018
+ * @author Jeongkyun Oh
+ * @version 2.0.0
+ */
 
 public class TimeTableHolder extends RecyclerView.ViewHolder{
 
     private static final String TAG = "TimeTableHolder";
-
-    // TODO : Recyclerview with events
 
     private EventsPerDay mEventsPerDay;
     private FrameLayout mFrameLayout;
@@ -59,14 +65,7 @@ public class TimeTableHolder extends RecyclerView.ViewHolder{
         mRecyclerView = itemView.findViewById(R.id.date_recycler_view);
     }
 
-    public void bind(EventsPerDay eventsPerDay) {
-        mEventsPerDay = eventsPerDay;
-        Calendar calendar = Calendar.getInstance();
-        Date date = mEventsPerDay.getDate();
-        calendar.setTime(date);
-        mFrameLayout.setVisibility(View.GONE);
-        mWeekTextView.setVisibility(View.GONE);
-        mLinearLayout.setVisibility(View.GONE);
+    private void restrictFirstday(Calendar calendar, Date date) {
         if (calendar.get(Calendar.DATE) == 1) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy - MMM", Locale.getDefault());
             SimpleDateFormat month = new SimpleDateFormat("MM", Locale.getDefault());
@@ -74,6 +73,9 @@ public class TimeTableHolder extends RecyclerView.ViewHolder{
             mYearTextView.setText(sdf.format(date));
             mFrameLayout.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void restrictStartOfWeek(Calendar calendar, Date date) {
         if (Calendar.MONDAY == calendar.get(Calendar.DAY_OF_WEEK)) {
             String week = "";
             SimpleDateFormat sdf = new SimpleDateFormat("MMM d", Locale.getDefault());
@@ -84,6 +86,9 @@ public class TimeTableHolder extends RecyclerView.ViewHolder{
             mWeekTextView.setText(week);
             mWeekTextView.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void restrictNoItem(Calendar calendar, Date date) {
         if (mEventsPerDay.getEvents().size() != 0) {
             mLinearLayout.setVisibility(View.VISIBLE);
             calendar.setTime(date);
@@ -93,6 +98,19 @@ public class TimeTableHolder extends RecyclerView.ViewHolder{
             mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
             mRecyclerView.setAdapter(new EventAdapter(mEventsPerDay.getEvents(), mContext));
         }
+    }
+
+    public void bind(EventsPerDay eventsPerDay) {
+        mEventsPerDay = eventsPerDay;
+        Calendar calendar = Calendar.getInstance();
+        Date date = mEventsPerDay.getDate();
+        calendar.setTime(date);
+        mFrameLayout.setVisibility(View.GONE);
+        mWeekTextView.setVisibility(View.GONE);
+        mLinearLayout.setVisibility(View.GONE);
+        restrictFirstday(calendar, date);
+        restrictStartOfWeek(calendar, date);
+        restrictNoItem(calendar, date);
     }
 
     private void setMonthBackground(int month) {

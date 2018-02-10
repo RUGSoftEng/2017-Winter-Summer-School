@@ -24,6 +24,7 @@ import nl.rug.www.rugsummerschools.networking.NetworkingService;
  *
  * @since 13/04/2017
  * @author Jeongkyun Oh
+ * @version 2.0.0
  */
 public class LecturerListFragment extends ContentsListFragment<Lecturer, ContentHolder<Lecturer>> {
 
@@ -51,20 +52,27 @@ public class LecturerListFragment extends ContentsListFragment<Lecturer, Content
     @Override
     protected void setupAdatper() {
         if (isAdded()) {
-            mBinding.recyclerView.setAdapter(new ContentAdapter<Lecturer, LecturerHolder>(mItems, getActivity()) {
-                @Override
-                protected LecturerHolder createHolder(LayoutInflater layoutInflater, ViewGroup parent) {
-                    return new LecturerHolder(layoutInflater, parent, getActivity()) {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = LecturerScrollingActivity.newIntent(getActivity(), mContent.getId());
-//                            Intent intent = LecturerActivity.newIntent(getActivity(), mContent.getId());
-                            startActivity(intent);
-                        }
-                    };
-                }
-            });
+            mBinding.recyclerView.setAdapter(newAdapter());
         }
+    }
+
+    private ContentAdapter<Lecturer, LecturerHolder> newAdapter() {
+        return new ContentAdapter<Lecturer, LecturerHolder>(mItems, getActivity()) {
+            @Override
+            protected LecturerHolder createHolder(LayoutInflater layoutInflater, ViewGroup parent) {
+                return newHolder(layoutInflater, parent);
+            }
+        };
+    }
+
+    private LecturerHolder newHolder(LayoutInflater inflater, ViewGroup parent) {
+        return new LecturerHolder(inflater, parent, getActivity()) {
+            @Override
+            public void onClick(View view) {
+                Intent intent = LecturerScrollingActivity.newIntent(getActivity(), mContent.getId());
+                startActivity(intent);
+            }
+        };
     }
 
 }

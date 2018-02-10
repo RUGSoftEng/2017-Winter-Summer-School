@@ -1,5 +1,6 @@
 package nl.rug.www.rugsummerschools.controller.announcement;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -15,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.TextView;
 
 import com.dgreenhalgh.android.simpleitemdecoration.linear.DividerItemDecoration;
@@ -38,11 +40,12 @@ import nl.rug.www.rugsummerschools.networking.NetworkingService;
 import static org.joda.time.DateTimeConstants.MILLIS_PER_DAY;
 
 /**
- * This class is a fragment on main pager activity.
- * It shows a list of titles of all announcements fetched from server.
+ * This class is a list fragment on main activity.
+ * It shows a list of fetched announcements from server filtered with school id.
  *
- * @since 13/04/2017
  * @author Jeongkyun Oh
+ * @since 13/04/2017
+ * @version 2.0.0
  */
 
 public class AnnouncementListFragment extends ContentsListFragment<Announcement, ContentHolder<Announcement>> {
@@ -74,18 +77,26 @@ public class AnnouncementListFragment extends ContentsListFragment<Announcement,
     @Override
     protected void setupAdatper() {
         if (isAdded()) {
-            mBinding.recyclerView.setAdapter(new ContentAdapter<Announcement, AnnouncementHolder>(mItems, getActivity()) {
-                @Override
-                protected AnnouncementHolder createHolder(LayoutInflater layoutInflater, ViewGroup parent) {
-                    return new AnnouncementHolder(layoutInflater, parent) {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = AnnouncementPagerActivity.newIntent(getActivity(), mContent.getId());
-                            startActivity(intent);
-                        }
-                    };
-                }
-            });
+            mBinding.recyclerView.setAdapter(newAdapter(mItems, getActivity()));
         }
+    }
+
+    private ContentAdapter<Announcement, AnnouncementHolder> newAdapter(List<Announcement> items, Context context) {
+        return new ContentAdapter<Announcement, AnnouncementHolder>(items, context) {
+            @Override
+            protected AnnouncementHolder createHolder(LayoutInflater layoutInflater, ViewGroup parent) {
+                return newHolder(layoutInflater, parent);
+            }
+        };
+    }
+
+    private AnnouncementHolder newHolder(LayoutInflater layoutInflater, ViewGroup parent) {
+        return new AnnouncementHolder(layoutInflater, parent) {
+            @Override
+            public void onClick(View view) {
+                Intent intent = AnnouncementPagerActivity.newIntent(getActivity(), mContent.getId());
+                startActivity(intent);
+            }
+        };
     }
 }

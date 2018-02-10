@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,23 +34,26 @@ import nl.rug.www.rugsummerschools.networking.NetworkingService;
  *
  * @since 05/06/2017
  * @author Jeongkyun Oh
+ * @version 2.0.0
  */
 
-public class ThreadActivity extends AppCompatActivity implements View.OnClickListener, NetworkingService.VolleyCallback {
+public class ThreadActivity extends AppCompatActivity implements NetworkingService.VolleyCallback {
+
+    private static final String TAG = "ThreadActivity";
 
     private static final String EXTRA_EDIT_THREAD_DATA = "nl.rug.www.extra_edit_thread_data";
     private static final String EXTRA_EDITED_TREAD_DATA = "nl.rug.www.extra_edited_thread_data";
 
+    public static final int INDEX_ID = 0;
+    public static final int INDEX_TITLE = 1;
+    public static final int INDEX_DETAIL = 2;
+
     public static final int INT_ADD = 0;
     public static final int INT_EDIT = 1;
 
-    public static final String ARG_ADD_OR_EDIT = "add_or_edit";
-    public static final String ARG_EDITABLE_DATA = "editable_data";
-
-    private static final String TAG = "ThreadActivity";
+    private int mFlag = INT_ADD;
     private EditText mTitleEditText;
     private EditText mContentsEditText;
-    private int mFlag = INT_ADD;
     private String[] mData;
 
     public static Intent newIntent(Context packageContext, String[] data) {
@@ -57,7 +63,7 @@ public class ThreadActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     public static String[] getForumThread(Intent data) {
-        String[] editedData = new String[2];
+        String[] editedData = new String[3];
         try {
             editedData = data.getStringArrayExtra(EXTRA_EDITED_TREAD_DATA);
         } catch (NullPointerException e) {
@@ -71,55 +77,70 @@ public class ThreadActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_thread);
 
-        mTitleEditText = (EditText)findViewById(R.id.title_edit_text);
-        mContentsEditText = (EditText)findViewById(R.id.contents_edit_text);
-        Button postButton = (Button) findViewById(R.id.post_button);
-        postButton.setOnClickListener(this);
+        if (mFlag == INT_ADD) {
+            setTitle("Add Forum Thread");
+        } else {
+            setTitle("Edit Forum Thread");
+        }
+        mTitleEditText = findViewById(R.id.title_edit_text);
+        mContentsEditText = findViewById(R.id.contents_edit_text);
 
         mData = getIntent().getStringArrayExtra(EXTRA_EDIT_THREAD_DATA);
 
         if (mData != null) {
             mFlag = INT_EDIT;
-            mTitleEditText.setText(mData[1]);
-            mContentsEditText.setText(mData[2]);
-            postButton.setText(R.string.edit);
+            mTitleEditText.setText(mData[INDEX_TITLE]);
+            mContentsEditText.setText(mData[INDEX_DETAIL]);
         }
     }
 
     @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.post_button :
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_send, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.post_menu :
                 String title = mTitleEditText.getText().toString();
                 String description = mContentsEditText.getText().toString();
-
-                List<String> paths = new ArrayList<>();
-                paths.add("forum");
-                paths.add("thread");
 
                 if (title.equals("") || description.equals("")) {
                     Toast.makeText(ThreadActivity.this, "Title or description cannot be empty.", Toast.LENGTH_SHORT).show();
                 } else {
-                    Map<String, String> map = new HashMap<>();
-                    map.put("title", title);
-                    map.put("description", description);
                     switch (mFlag) {
                         case INT_ADD :
-                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                            map.put("author", user.getDisplayName());
-                            map.put("posterID", user.getUid());
-                            map.put("imgURL", user.getPhotoUrl().toString());
-                            new NetworkingService<>().postPutRequest(this, Request.Method.POST, paths, null, map, this);
+                            new NetworkingService<>().postPutRequest(this, Request.Method.POST, NetworkingService.getThreadPath(), null, getPostQuery(), this);
                             break;
                         case INT_EDIT :
-                            map.put("id", mData[0]);
-                            new NetworkingService<>().postPutRequest(this, Request.Method.PUT, paths, map, null, this);
+                            new NetworkingService<>().postPutRequest(this, Request.Method.PUT, NetworkingService.getThreadPath(), getPutQuery(), null, this);
                             break;
                     }
 
                 }
-                break;
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
+    }
+
+    private Map<String, String> getPostQuery() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String title = mTitleEditText.getText().toString();
+        String description = mContentsEditText.getText().toString();
+        String author = user.getDisplayName();
+        String posterID = user.getUid();
+        String imgURL = user.getPhotoUrl().toString();
+        return NetworkingService.getPostThreadQuery(title, description, author, posterID, imgURL);
+    }
+
+    private Map<String, String> getPutQuery() {
+        String id = mData[INDEX_ID];
+        String title = mTitleEditText.getText().toString();
+        String description = mContentsEditText.getText().toString();
+        return NetworkingService.getPutThreadQuery(id, title, description);
     }
 
     @Override

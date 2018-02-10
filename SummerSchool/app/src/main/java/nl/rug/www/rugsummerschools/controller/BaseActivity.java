@@ -1,10 +1,15 @@
 package nl.rug.www.rugsummerschools.controller;
 
 import android.app.ProgressDialog;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
-import nl.rug.www.rugsummerschools.R;
+/**
+ * This class is to show progress dialog while threads working
+ *
+ * @since 10/02/2018
+ * @author Jeongkyun Oh
+ * @version 2.0.0
+ */
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -15,7 +20,6 @@ public class BaseActivity extends AppCompatActivity {
             mProgressDialog = new ProgressDialog(this);
             mProgressDialog.setMessage("Loading...");
             mProgressDialog.setCancelable(false);
-            mProgressDialog.setProgressDrawable(ContextCompat.getDrawable(this, R.drawable.bg_progress_bar_rug));
         }
         mProgressDialog.show();
     }

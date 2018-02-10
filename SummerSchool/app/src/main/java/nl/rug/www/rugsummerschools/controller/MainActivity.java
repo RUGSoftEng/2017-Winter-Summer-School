@@ -11,7 +11,6 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -45,11 +44,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Field;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.ArrayList;
 
 import nl.rug.www.rugsummerschools.R;
 import nl.rug.www.rugsummerschools.controller.announcement.AnnouncementListFragment;
@@ -58,7 +52,6 @@ import nl.rug.www.rugsummerschools.controller.forum.ForumThreadListFragment;
 import nl.rug.www.rugsummerschools.controller.generalinfo.GeneralInfoListFragment;
 import nl.rug.www.rugsummerschools.controller.lecturer.LecturerListFragment;
 import nl.rug.www.rugsummerschools.controller.timetable.TimeTableFragment;
-import nl.rug.www.rugsummerschools.controller.timetable.TimeTableFragment2;
 
 /**
  * This class is main activity that contains basic layout of the app.
@@ -91,7 +84,7 @@ public class MainActivity extends BaseActivity implements ForumLoginFragment.OnS
             new AnnouncementListFragment(),
             new GeneralInfoListFragment(),
             new LecturerListFragment(),
-            new TimeTableFragment2(),
+            new TimeTableFragment(),
             new ForumLoginFragment(),
             new ForumThreadListFragment()
     };
@@ -183,7 +176,7 @@ public class MainActivity extends BaseActivity implements ForumLoginFragment.OnS
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(null);
 
-        mNavigation = (BottomNavigationView) findViewById(R.id.navigation);
+        mNavigation = findViewById(R.id.navigation);
         mNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         disableShiftingNavigationMode();
 
@@ -192,7 +185,7 @@ public class MainActivity extends BaseActivity implements ForumLoginFragment.OnS
 
         mAuth = FirebaseAuth.getInstance();
 
-        mViewPager = (ViewPager)findViewById(R.id.main_view_pager);
+        mViewPager = findViewById(R.id.main_view_pager);
         mViewPager.addOnPageChangeListener(mSimpleOnPageChangeListener);
         mViewPager.setAdapter(mFragmentStatePagerAdapter);
     }
@@ -211,13 +204,13 @@ public class MainActivity extends BaseActivity implements ForumLoginFragment.OnS
             @Override
             public void onCancel() {
                 Log.d(TAG, "facebook:onCancel");
-                // ...
+                Toast.makeText(MainActivity.this, "Facebook login failed", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onError(FacebookException error) {
                 Log.d(TAG, "facebook:onError", error);
-                // ...
+                Toast.makeText(MainActivity.this, "Error:" + error.toString(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -261,16 +254,15 @@ public class MainActivity extends BaseActivity implements ForumLoginFragment.OnS
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             handleProfilePicture(token, user);
-                            updateUI(user);
+                            updateUI();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(MainActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            updateUI(null);
+                            updateUI();
                         }
                         hideProgressDialog();
-                        // ...
                     }
                 });
     }
@@ -306,15 +298,13 @@ public class MainActivity extends BaseActivity implements ForumLoginFragment.OnS
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
+        updateUI();
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
@@ -324,23 +314,19 @@ public class MainActivity extends BaseActivity implements ForumLoginFragment.OnS
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);
-                // [START_EXCLUDE]
-                updateUI(null);
-                // [END_EXCLUDE]
+                updateUI();
             }
         }
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void updateUI(FirebaseUser user) {
+    private void updateUI() {
         mFragmentStatePagerAdapter.notifyDataSetChanged();
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
-        // [START_EXCLUDE silent]
         showProgressDialog();
-        // [END_EXCLUDE]
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
@@ -351,18 +337,15 @@ public class MainActivity extends BaseActivity implements ForumLoginFragment.OnS
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
+                            updateUI();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(MainActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            updateUI(null);
+                            updateUI();
                         }
-
-                        // [START_EXCLUDE]
                         hideProgressDialog();
-                        // [END_EXCLUDE]
                     }
                 });
     }
@@ -370,20 +353,6 @@ public class MainActivity extends BaseActivity implements ForumLoginFragment.OnS
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
-
-    private void signOut() {
-        // Firebase sign out
-        mAuth.signOut();
-
-        // Google sign out
-        mGoogleSignInClient.signOut().addOnCompleteListener(this,
-                new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-//                        updateUI(null);
-                    }
-                });
     }
 
     private void revokeAccess() {
@@ -395,7 +364,7 @@ public class MainActivity extends BaseActivity implements ForumLoginFragment.OnS
                 new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        updateUI(null);
+                        updateUI();
                     }
                 });
 
@@ -412,7 +381,7 @@ public class MainActivity extends BaseActivity implements ForumLoginFragment.OnS
     }
 
     @Override
-    public void signOutGoogle() {
+    public void signOut() {
         revokeAccess();
         LoginManager.getInstance().logOut();
     }

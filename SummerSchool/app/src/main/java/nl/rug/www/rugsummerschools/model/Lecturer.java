@@ -5,6 +5,7 @@ package nl.rug.www.rugsummerschools.model;
  *
  * @since 13/04/2017
  * @author Jeongkyun
+ * @version 2.0.0
  */
 
 public class Lecturer extends Content {

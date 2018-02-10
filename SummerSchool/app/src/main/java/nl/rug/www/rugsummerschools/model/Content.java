@@ -5,6 +5,7 @@ package nl.rug.www.rugsummerschools.model;
  *
  * @since 08/04/2017
  * @author Jeongkyun Oh
+ * @version 2.0.0
  */
 public class Content {
 
