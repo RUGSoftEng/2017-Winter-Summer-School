@@ -18,7 +18,7 @@ import java.util.List;
 import nl.rug.www.rugsummerschools.R;
 import nl.rug.www.rugsummerschools.controller.ContentAdapter;
 import nl.rug.www.rugsummerschools.controller.ContentHolder;
-import nl.rug.www.rugsummerschools.controller.ContentsLab;
+import nl.rug.www.rugsummerschools.model.ContentsLab;
 import nl.rug.www.rugsummerschools.controller.ContentsListFragment;
 import nl.rug.www.rugsummerschools.model.ForumThread;
 import nl.rug.www.rugsummerschools.networking.NetworkingService;

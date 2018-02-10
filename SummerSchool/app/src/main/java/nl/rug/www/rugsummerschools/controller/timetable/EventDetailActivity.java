@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import nl.rug.www.rugsummerschools.R;
-import nl.rug.www.rugsummerschools.controller.ContentsLab;
+import nl.rug.www.rugsummerschools.model.ContentsLab;
 import nl.rug.www.rugsummerschools.model.Event;
 
 /**

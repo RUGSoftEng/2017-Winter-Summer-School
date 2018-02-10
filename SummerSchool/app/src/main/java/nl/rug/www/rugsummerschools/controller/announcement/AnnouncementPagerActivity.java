@@ -7,7 +7,7 @@ import android.support.v4.app.Fragment;
 import java.util.List;
 
 import nl.rug.www.rugsummerschools.controller.BasePagerActivity;
-import nl.rug.www.rugsummerschools.controller.ContentsLab;
+import nl.rug.www.rugsummerschools.model.ContentsLab;
 import nl.rug.www.rugsummerschools.model.Announcement;
 
 /**

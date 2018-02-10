@@ -2,7 +2,6 @@ package nl.rug.www.rugsummerschools.controller.timetable;
 
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,28 +18,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.joda.time.LocalDate;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.SimpleFormatter;
 
 import nl.rug.www.rugsummerschools.R;
-import nl.rug.www.rugsummerschools.controller.BaseActivity;
-import nl.rug.www.rugsummerschools.controller.ContentsLab;
-import nl.rug.www.rugsummerschools.model.Content;
+import nl.rug.www.rugsummerschools.model.ContentsLab;
 import nl.rug.www.rugsummerschools.model.Event;
 import nl.rug.www.rugsummerschools.model.EventsPerDay;
 import nl.rug.www.rugsummerschools.networking.NetworkingService;

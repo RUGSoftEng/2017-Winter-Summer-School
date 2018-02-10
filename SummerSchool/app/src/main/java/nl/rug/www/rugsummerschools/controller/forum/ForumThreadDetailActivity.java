@@ -38,7 +38,7 @@ import java.util.List;
 import java.util.Map;
 
 import nl.rug.www.rugsummerschools.R;
-import nl.rug.www.rugsummerschools.controller.ContentsLab;
+import nl.rug.www.rugsummerschools.model.ContentsLab;
 import nl.rug.www.rugsummerschools.model.ForumComment;
 import nl.rug.www.rugsummerschools.model.ForumThread;
 import nl.rug.www.rugsummerschools.networking.NetworkingService;
