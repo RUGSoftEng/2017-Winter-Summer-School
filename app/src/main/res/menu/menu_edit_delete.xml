@@ -4,15 +4,13 @@
 
     <item
         android:id="@+id/edit_menu"
-        android:iconTint="@color/colorAccent"
         android:icon="@android:drawable/ic_menu_edit"
-        android:title="Edit"
-        app:showAsAction="always|withText"/>
+        android:title="@string/edit"
+        app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/delete_menu"
-        android:iconTint="@color/colorAccent"
         android:icon="@android:drawable/ic_menu_delete"
-        android:title="Delete"
+        android:title="@string/delete"
         app:showAsAction="always|withText"/>
 
 </menu>

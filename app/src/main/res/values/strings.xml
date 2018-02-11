@@ -116,5 +116,6 @@
     <string name="edit_your_comment">Edit your comment</string>
     <string name="title">Title</string>
     <string name="contents">Contents</string>
+    <string name="delete">Delete</string>
 
 </resources>
