@@ -38,6 +38,3 @@ android:
             - $HOME/.android/build-cache
 
     script: ./gradlew build connectedCheck
-
-    before install :
-        cd SummerSchool
