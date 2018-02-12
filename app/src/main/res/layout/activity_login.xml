@@ -7,7 +7,7 @@
                 tools:context="nl.rug.www.rugsummerschools.controller.LoginActivity">
 
     <ImageView
-        android:id="@+id/mainlogo"
+        android:id="@+id/login_rug_logo"
         android:layout_margin="40dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
@@ -20,13 +20,13 @@
         android:id="@+id/welcome_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/mainlogo"
+        android:layout_below="@id/login_rug_logo"
         android:textColor="#ffffff"
         android:textAlignment="center"
         android:text="@string/welcome_to_swapp"/>
 
     <EditText
-        android:id="@+id/codeText"
+        android:id="@+id/code_edit_text"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_centerVertical="true"

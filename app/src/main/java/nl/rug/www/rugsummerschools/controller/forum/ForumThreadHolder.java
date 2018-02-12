@@ -58,7 +58,7 @@ public abstract class ForumThreadHolder extends ContentHolder<ForumThread> imple
         String numComments = mContent.getForumComments().size() + " comments";
         mNumCommentView.setText(numComments);
         Date date = new DateTime(mContent.getDate()).toDate();
-        mRelativeTimeView.setText(DateUtils.getRelativeTimeSpanString(date.getTime(), System.currentTimeMillis(), DateUtils.DAY_IN_MILLIS));
+        mRelativeTimeView.setText(DateUtils.getRelativeTimeSpanString(date.getTime(), System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS));
         Glide.with(mContext).load(forumThread.getImgUrl()).into(mPosterPhotoView);
     }
 }

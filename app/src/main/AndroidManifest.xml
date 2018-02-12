@@ -88,6 +88,7 @@
         <activity android:name=".controller.BaseActivity"/>
         <activity
             android:name=".controller.timetable.EventDetailActivity"
+            android:label="@string/title_activity_scrolling"
             android:parentActivityName=".controller.MainActivity"
             android:theme="@style/RugTheme.NoActionBar">
         </activity>

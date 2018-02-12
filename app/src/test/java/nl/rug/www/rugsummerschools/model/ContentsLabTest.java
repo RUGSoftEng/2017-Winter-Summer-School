@@ -162,7 +162,7 @@ public class ContentsLabTest {
             assertThat("Test-driven development (TDD) is a software development process that relies on the repetition of a very short development cycle: Requirements are turned into very specific test cases, then the software is improved to pass the new tests, only. This is opposed to software development that allows software to be added that is not proven to meet requirements." + i, is(test.getDescription()));
             assertThat("author" + i, is(test.getPoster()));
             assertThat("2018-02-08T15:5" + i +":25.346Z", is(test.getDate()));
-            assertThat("a", is(test.getInitial()));
+            assertThat("A", is(test.getInitial()));
         }
 
         List<Announcement> newAnnouncements = new ArrayList<>();

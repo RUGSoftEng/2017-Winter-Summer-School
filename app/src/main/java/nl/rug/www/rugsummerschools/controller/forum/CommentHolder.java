@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import nl.rug.www.rugsummerschools.R;
+import nl.rug.www.rugsummerschools.controller.BaseActivity;
 import nl.rug.www.rugsummerschools.model.ForumComment;
 import nl.rug.www.rugsummerschools.networking.NetworkingService;
 
@@ -57,6 +58,9 @@ public abstract class CommentHolder extends RecyclerView.ViewHolder implements V
 
     abstract public void fetchComment();
     abstract public void hideCommentView();
+    abstract public void showCommentView();
+    abstract public void showProgress();
+    abstract public void hideProgress();
 
     public CommentHolder(LayoutInflater inflater, ViewGroup parent, Context context) {
         super(inflater.inflate(R.layout.item_comment, parent, false));
@@ -78,7 +82,7 @@ public abstract class CommentHolder extends RecyclerView.ViewHolder implements V
         mAuthorView.setText(mForumComment.getPoster());
         mCommentView.setText(mForumComment.getDescription());
         Date date = new DateTime(mForumComment.getDate()).toDate();
-        mCommentTimeView.setText(DateUtils.getRelativeTimeSpanString(date.getTime(), System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS));
+        mCommentTimeView.setText(DateUtils.getRelativeTimeSpanString(date.getTime(), System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS));
         if (mForumComment.getImgUrl() != null || !"".equals(mForumComment.getImgUrl()))
             Glide.with(mContext).load(mForumComment.getImgUrl()).into(mAuthorPhotoView);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -128,24 +132,30 @@ public abstract class CommentHolder extends RecyclerView.ViewHolder implements V
                 popupMenu.show();
                 break;
             case R.id.comment_body_edit_button :
-                new NetworkingService<>().postPutRequest(mContext, PUT, createCommentPaths(), createPutQuery(), null, new NetworkingService.VolleyCallback() {
+                showProgress();
+                new NetworkingService<>().postPutRequest(mContext, PUT, createCommentPaths(), createPutQuery(), null, new NetworkingService.NetworkCallback() {
                     @Override
                     public void onResponse(String result) {
                         if ("OK".equals(result) || "200".equals(result)) {
                             mCommentView.setText(mBodyEditTextView.getText().toString());
                         }
                         setTextViews();
+                        hideProgress();
+                        showCommentView();
                     }
 
                     @Override
                     public void onError(NetworkResponse result) {
                         Toast.makeText(mContext, "Unexpected Error", Toast.LENGTH_SHORT).show();
                         setTextViews();
+                        hideProgress();
+                        showCommentView();
                     }
                 });
                 break;
             case R.id.comment_body_cancel_button :
                 setTextViews();
+                showCommentView();
                 break;
         }
     }
@@ -158,7 +168,8 @@ public abstract class CommentHolder extends RecyclerView.ViewHolder implements V
                 setModifyingView();
                 break;
             case R.id.delete_menu :
-                new NetworkingService<>().getDeleteRequest(mContext, DELETE, createCommentPaths(), createDeleteQuery(), null, new NetworkingService.VolleyCallback() {
+                showProgress();
+                new NetworkingService<>().getDeleteRequest(mContext, DELETE, createCommentPaths(), createDeleteQuery(), new NetworkingService.NetworkCallback() {
                     @Override
                     public void onResponse(String result) {
                         if ("OK".equals(result) || "200".equals(result)) {
@@ -167,11 +178,13 @@ public abstract class CommentHolder extends RecyclerView.ViewHolder implements V
                         } else {
                             Toast.makeText(mContext, "Deletion failed", Toast.LENGTH_SHORT).show();
                         }
+                        hideProgress();
                     }
 
                     @Override
                     public void onError(NetworkResponse result) {
                         Toast.makeText(mContext, "Unexpected error happened!", Toast.LENGTH_LONG).show();
+                        hideProgress();
                     }
                 });
                 break;

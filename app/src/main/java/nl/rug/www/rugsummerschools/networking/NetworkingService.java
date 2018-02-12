@@ -4,18 +4,13 @@ import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -26,23 +21,18 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
 
 import nl.rug.www.rugsummerschools.model.Announcement;
 import nl.rug.www.rugsummerschools.model.Content;
 import nl.rug.www.rugsummerschools.model.Event;
-import nl.rug.www.rugsummerschools.model.EventsPerDay;
 import nl.rug.www.rugsummerschools.model.ForumComment;
 import nl.rug.www.rugsummerschools.model.ForumThread;
 import nl.rug.www.rugsummerschools.model.GeneralInfo;
@@ -70,7 +60,7 @@ public class NetworkingService<T extends Content> {
     public static final int FORUM_THREAD = 5;
     public static final int FORUM_COMMENT = 6;
 
-    public interface VolleyCallback {
+    public interface NetworkCallback {
         void onResponse(String result);
         void onError(NetworkResponse result);
     }
@@ -82,6 +72,7 @@ public class NetworkingService<T extends Content> {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             InputStream in = connection.getInputStream();
             if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                Log.e(TAG, "Error code: " + connection.getResponseMessage());
                 throw new IOException(connection.getResponseMessage() +
                         ": with " +
                         urlSpec);
@@ -178,6 +169,7 @@ public class NetworkingService<T extends Content> {
                     parseForumComments((List<ForumComment>)data, new JSONArray(jsonString));
                     break;
             }
+//            Log.d(TAG, "JSONString: " + jsonString);
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
@@ -270,12 +262,13 @@ public class NetworkingService<T extends Content> {
             lecturer.setTitle(contentJsonObject.getString("name"));
             lecturer.setDescription(contentJsonObject.getString("description"));
             lecturer.setWebsite(contentJsonObject.getString("website"));
-            Uri.Builder builder = new Uri.Builder();
-            builder.scheme("http")
-                    .encodedAuthority(HTTP_URL)
-                    .appendPath(contentJsonObject.getString("imagepath"));
-            Log.d(TAG, "URL string :" + builder.toString());
-            lecturer.setImgurl(builder.toString());
+//            Uri.Builder builder = new Uri.Builder();
+//            builder.scheme("http")
+//                    .encodedAuthority(HTTP_URL)
+//                    .appendPath(contentJsonObject.getString("imagepath"));
+//            Log.d(TAG, "URL string :" + builder.toString());
+//            lecturer.setImgurl(builder.toString());
+            lecturer.setImgurl("");
 
             items.add(lecturer);
         }
@@ -378,7 +371,7 @@ public class NetworkingService<T extends Content> {
         return map;
     }
 
-    public void getDeleteRequest(Context context, int method, List<String> paths, Map<String, String> queryParams, final Map<String, String> valuePairs, final VolleyCallback callback) {
+    public void getDeleteRequest(Context context, int method, List<String> paths, Map<String, String> queryParams, final NetworkCallback callback) {
         String url = buildURL(paths, queryParams);
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(method, url,
@@ -399,7 +392,7 @@ public class NetworkingService<T extends Content> {
         queue.add(request);
     }
 
-    public void postPutRequest(Context context, int method, List<String> paths, Map<String, String> queryParams, final Map<String, String> valuePairs, final VolleyCallback callback) {
+    public void postPutRequest(Context context, int method, List<String> paths, Map<String, String> queryParams, final Map<String, String> valuePairs, final NetworkCallback callback) {
         RequestQueue queue = Volley.newRequestQueue(context);
         String url = buildURL(paths, queryParams);
         StringRequest request = new StringRequest(method, url,

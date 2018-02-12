@@ -32,7 +32,7 @@ public class Announcement extends Content {
     }
 
     public String getInitial() {
-        return mPoster.charAt(0) + "";
+        return mPoster.toUpperCase().charAt(0) + "";
     }
 
     public int getColor() {

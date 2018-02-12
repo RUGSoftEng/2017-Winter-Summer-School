@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import nl.rug.www.rugsummerschools.R;
 import nl.rug.www.rugsummerschools.model.ContentsLab;
@@ -44,11 +46,11 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.activity_login);
 
         mLoginButton = findViewById(R.id.login_button);
-        mPasswordEditText = findViewById(R.id.codeText);
+        mPasswordEditText = findViewById(R.id.code_edit_text);
 
         mSharedPreferences = getSharedPreferences("ActivityPreference", Context.MODE_PRIVATE);
 
-        if (mSharedPreferences.getBoolean(IS_STORED, true)) {
+        if (mSharedPreferences.getBoolean(IS_STORED, false)) {
             mCode = mSharedPreferences.getString(CODE, null);
             new FetchLogInCodes().execute();
         }
@@ -57,7 +59,13 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 mCode = mPasswordEditText.getText().toString();
-                new FetchLogInCodes().execute();
+                if ("".equals(mCode)) {
+                    Toast.makeText(LoginActivity.this, R.string.passcode_empty_error, Toast.LENGTH_LONG).show();
+                } else if (!Pattern.matches("[a-z0-9]{8}", mCode)) {
+                    Toast.makeText(LoginActivity.this, R.string.passcode_restriction, Toast.LENGTH_LONG).show();
+                } else {
+                    new FetchLogInCodes().execute();
+                }
             }
         });
     }
@@ -84,10 +92,11 @@ public class LoginActivity extends BaseActivity {
 
         @Override
         protected void onPostExecute(List<LoginInfo> loginInfos) {
+            Log.d(TAG, loginInfos.toString());
             mLoginButton.setEnabled(true);
             mPasswordEditText.setEnabled(true);
             if (loginInfos.size() == 0) {
-                Toast.makeText(LoginActivity.this, "Please check your code.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, R.string.login_failed, Toast.LENGTH_SHORT).show();
                 SharedPreferences.Editor ed = mSharedPreferences.edit();
                 ed.clear();
                 ed.apply();
@@ -99,6 +108,7 @@ public class LoginActivity extends BaseActivity {
                     ed.putString(CODE, mCode);
                     ed.apply();
                 }
+                Toast.makeText(LoginActivity.this, R.string.login_success, Toast.LENGTH_SHORT).show();
                 runMainPagerActivity();
             }
             hideProgressDialog();

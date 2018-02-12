@@ -53,8 +53,7 @@ public abstract class AnnouncementHolder extends ContentHolder<Announcement> imp
         mContent = announcement;
         mTitleTextView.setText(mContent.getTitle());
         String poster = mContent.getPoster();
-        String initial = poster.toUpperCase().charAt(0) + "";
-        mInitialView.setText(initial);
+        mInitialView.setText(mContent.getInitial());
         GradientDrawable circle = (GradientDrawable)mInitialView.getBackground();
         circle.setColor(mContent.getColor());
         String byPoster = "By " + poster;

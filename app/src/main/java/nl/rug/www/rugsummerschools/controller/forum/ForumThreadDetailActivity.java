@@ -1,5 +1,6 @@
 package nl.rug.www.rugsummerschools.controller.forum;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -38,6 +39,7 @@ import java.util.List;
 import java.util.Map;
 
 import nl.rug.www.rugsummerschools.R;
+import nl.rug.www.rugsummerschools.controller.BaseActivity;
 import nl.rug.www.rugsummerschools.model.ContentsLab;
 import nl.rug.www.rugsummerschools.model.ForumComment;
 import nl.rug.www.rugsummerschools.model.ForumThread;
@@ -54,7 +56,7 @@ import static com.android.volley.Request.Method.DELETE;
  * @version 2.0.0
  */
 
-public class ForumThreadDetailActivity extends AppCompatActivity implements View.OnClickListener, PopupMenu.OnMenuItemClickListener, NestedScrollView.OnScrollChangeListener, View.OnTouchListener {
+public class ForumThreadDetailActivity extends BaseActivity implements View.OnClickListener, PopupMenu.OnMenuItemClickListener, NestedScrollView.OnScrollChangeListener, View.OnTouchListener {
 
     private static final String TAG = "ThreadDetailActivity";
     private static final String EXTRA_FORUM_THREAD_ID =
@@ -108,13 +110,14 @@ public class ForumThreadDetailActivity extends AppCompatActivity implements View
         mAuthorView.setText(mForumThread.getPoster());
         mBodyView.setText(mForumThread.getDescription());
         Date date = new DateTime(mForumThread.getDate()).toDate();
-        mRelativeTimeView.setText(DateUtils.getRelativeTimeSpanString(date.getTime(), System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS));
+        mRelativeTimeView.setText(DateUtils.getRelativeTimeSpanString(date.getTime(), System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS));
         if (mForumThread.getImgUrl() != null || !"".equals(mForumThread.getImgUrl()))
             Glide.with(this).load(mForumThread.getImgUrl()).into(mPosterPhotoView);
         findViewById(R.id.button_post_comment).setOnClickListener(this);
         mCommentRecyclerView = findViewById(R.id.recycler_comments);
         mCommentRecyclerView.setFocusable(false);
         mCommentRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mCommentRecyclerView.setNestedScrollingEnabled(false);
         new FetchForumComments().execute();
     }
 
@@ -142,6 +145,21 @@ public class ForumThreadDetailActivity extends AppCompatActivity implements View
             public void hideCommentView() {
                 mCommentPostView.setVisibility(View.GONE);
             }
+
+            @Override
+            public void showCommentView() {
+                mCommentPostView.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void showProgress() {
+                showProgressDialog();
+            }
+
+            @Override
+            public void hideProgress() {
+                hideProgressDialog();
+            }
         };
     }
 
@@ -158,9 +176,11 @@ public class ForumThreadDetailActivity extends AppCompatActivity implements View
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_post_comment :
-                new NetworkingService<>().postPutRequest(ForumThreadDetailActivity.this, Request.Method.POST, createCommentPaths(), null, createPostQuery(), new NetworkingService.VolleyCallback() {
+                showProgressDialog();
+                new NetworkingService<>().postPutRequest(ForumThreadDetailActivity.this, Request.Method.POST, createCommentPaths(), null, createPostQuery(), new NetworkingService.NetworkCallback() {
                     @Override
                     public void onResponse(String result) {
+                        hideProgressDialog();
                         if ("OK".equals(result) || "200".equals(result)) {
                             Toast.makeText(ForumThreadDetailActivity.this, "Post succeeded!", Toast.LENGTH_LONG).show();
                             new FetchForumComments().execute();
@@ -216,10 +236,12 @@ public class ForumThreadDetailActivity extends AppCompatActivity implements View
                 startActivityForResult(intent, REQUEST_CODE_EDIT_THREAD);
                 break;
             case R.id.delete_menu :
+                showProgressDialog();
                 new NetworkingService<>().getDeleteRequest(
-                        this, DELETE, createThreadPaths(), createDeleteQuery(), null, new NetworkingService.VolleyCallback() {
+                        this, DELETE, createThreadPaths(), createDeleteQuery(), new NetworkingService.NetworkCallback() {
                     @Override
                     public void onResponse(String result) {
+                        hideProgressDialog();
                         if ("OK".equals(result) || "200".equals(result)) {
                             Toast.makeText(ForumThreadDetailActivity.this, "Deletion succeeded!", Toast.LENGTH_LONG).show();
                             finish();
@@ -230,6 +252,7 @@ public class ForumThreadDetailActivity extends AppCompatActivity implements View
 
                     @Override
                     public void onError(NetworkResponse result) {
+                        hideProgressDialog();
                         errorMessage(result, "Delete forum thread is failed!");
                     }
                 });
@@ -250,6 +273,7 @@ public class ForumThreadDetailActivity extends AppCompatActivity implements View
         } else {
             Toast.makeText(ForumThreadDetailActivity.this, "Unexpected error happened!", Toast.LENGTH_LONG).show();
         }
+        hideProgressDialog();
     }
 
     @Override
@@ -269,7 +293,6 @@ public class ForumThreadDetailActivity extends AppCompatActivity implements View
 
     @Override
     public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-        Log.d(TAG, "top : " + mPostViewTop);
         int height = -mCommentPostView.getHeight();
         if (mPostViewTop <= 0 && mPostViewTop >= height) {
             mPostViewTop += (oldScrollY - scrollY);
@@ -294,7 +317,7 @@ public class ForumThreadDetailActivity extends AppCompatActivity implements View
                     mCommentPostView.scrollTo(0, height);
                     mPostViewTop = height;
                 }
-                return true;
+                return false;
         }
         return false;
     }

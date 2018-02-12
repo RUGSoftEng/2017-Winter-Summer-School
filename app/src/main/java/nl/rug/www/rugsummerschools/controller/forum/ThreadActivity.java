@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.Map;
 
 import nl.rug.www.rugsummerschools.R;
+import nl.rug.www.rugsummerschools.controller.BaseActivity;
 import nl.rug.www.rugsummerschools.networking.NetworkingService;
 
 /**
@@ -28,7 +29,7 @@ import nl.rug.www.rugsummerschools.networking.NetworkingService;
  * @version 2.0.0
  */
 
-public class ThreadActivity extends AppCompatActivity implements NetworkingService.VolleyCallback {
+public class ThreadActivity extends BaseActivity implements NetworkingService.NetworkCallback {
 
     private static final String TAG = "ThreadActivity";
 
@@ -101,6 +102,7 @@ public class ThreadActivity extends AppCompatActivity implements NetworkingServi
                 if (title.equals("") || description.equals("")) {
                     Toast.makeText(ThreadActivity.this, "Title or description cannot be empty.", Toast.LENGTH_SHORT).show();
                 } else {
+                    showProgressDialog();
                     switch (mFlag) {
                         case INT_ADD :
                             new NetworkingService<>().postPutRequest(this, Request.Method.POST, NetworkingService.getThreadPath(), null, getPostQuery(), this);
@@ -147,11 +149,13 @@ public class ThreadActivity extends AppCompatActivity implements NetworkingServi
             setResult(Activity.RESULT_OK, intent);
         } else
             setResult(Activity.RESULT_CANCELED);
+        hideProgressDialog();
         finish();
     }
 
     @Override
     public void onError(NetworkResponse result) {
         Toast.makeText(this, "Error:" + result, Toast.LENGTH_SHORT).show();
+        hideProgressDialog();
     }
 }

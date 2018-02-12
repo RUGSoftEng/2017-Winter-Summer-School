@@ -116,6 +116,14 @@
     <string name="edit_your_comment">Edit your comment</string>
     <string name="title">Title</string>
     <string name="contents">Contents</string>
-    <string name="delete">Delete</string>
+    <string name="delete">DELETE</string>
+    <string name="passcode_restriction">A code needs to be 8 characters long and can only consist of numbers and lower case letters.</string>
+    <string name="passcode_empty_error">Passcode must not be empty</string>
+    <string name="login_failed">Login failed.</string>
+    <string name="login_success">Login succeeded</string>
+    <string name="notice">Notice</string>
+    <string name="info">Info</string>
+    <string name="staffs">Staffs</string>
+    <string name="schedule">Schedule</string>
 
 </resources>
