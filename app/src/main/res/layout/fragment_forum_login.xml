@@ -16,7 +16,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="32dp"
         android:gravity="center"
-        android:text="Sign in with either Google or Facebook\nto communicate with people!"/>
+        android:text="@string/signin_text_view"/>
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/google_login_button"

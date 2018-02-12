@@ -125,5 +125,6 @@
     <string name="info">Info</string>
     <string name="staffs">Staffs</string>
     <string name="schedule">Schedule</string>
+    <string name="signin_text_view">Sign in with either Google or Facebook to communicate with people!</string>
 
 </resources>

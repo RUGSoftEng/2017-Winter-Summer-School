@@ -43,4 +43,4 @@ public class NetworkingService<T extends Content> {
 ```
 
 ## Author
-* **Jeongkyun Oh** - j.k.oh@student.rug.nl
+* **Jeongkyun Oh** - lasking88@naver.com

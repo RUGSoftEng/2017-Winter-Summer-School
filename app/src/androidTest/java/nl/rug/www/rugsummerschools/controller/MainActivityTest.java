@@ -17,6 +17,9 @@ import org.junit.runner.RunWith;
 import java.util.List;
 
 import nl.rug.www.rugsummerschools.R;
+import nl.rug.www.rugsummerschools.controller.announcement.AnnouncementHolder;
+import nl.rug.www.rugsummerschools.controller.generalinfo.GeneralInfoHolder;
+import nl.rug.www.rugsummerschools.controller.lecturer.LecturerHolder;
 import nl.rug.www.rugsummerschools.model.Announcement;
 import nl.rug.www.rugsummerschools.model.ContentsLab;
 import nl.rug.www.rugsummerschools.model.Event;
@@ -33,6 +36,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
 
 @RunWith(AndroidJUnit4.class)
@@ -97,6 +101,8 @@ public class MainActivityTest {
             i++;
         }
         assertThat(list.size(), is(i));
+        if (i != 0)
+            onView(allOf(withId(R.id.recycler_view), isDisplayed())).perform(RecyclerViewActions.<AnnouncementHolder>actionOnItemAtPosition(0, click()));
     }
 
     @Test
@@ -117,6 +123,8 @@ public class MainActivityTest {
             i++;
         }
         assertThat(list.size(), is(i));
+        if (i != 0)
+            onView(allOf(withId(R.id.recycler_view), isDisplayed())).perform(RecyclerViewActions.<GeneralInfoHolder>actionOnItemAtPosition(0, click()));
     }
 
     @Test
@@ -133,6 +141,8 @@ public class MainActivityTest {
             i++;
         }
         assertThat(list.size(), is(i));
+        if (i != 0)
+            onView(allOf(withId(R.id.recycler_view), isDisplayed())).perform(RecyclerViewActions.<LecturerHolder>actionOnItemAtPosition(0, click()));
     }
 
     @Test
@@ -148,5 +158,4 @@ public class MainActivityTest {
         List<GeneralInfo> list = ContentsLab.get().getGeneralInfos();
         if (list == null) return;
     }
-
 }
