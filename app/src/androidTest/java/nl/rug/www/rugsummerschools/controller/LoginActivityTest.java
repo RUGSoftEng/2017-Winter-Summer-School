@@ -37,7 +37,6 @@ public class LoginActivityTest {
 
     /**
      * Passcode must be 8 characters long and contain only lower letters and digits
-     *
      */
     private static final String DEFAULT_PASSCODE = "11111111";
     private static final String WRONG_PASSCODE = "11111112";
@@ -107,14 +106,10 @@ public class LoginActivityTest {
                 .check(matches(isDisplayed()));
     }
 
-//    @Deprecated
-//    @Test
-//    public void successPasscodeTest() {
-//        mActivityTestRule.launchActivity(null);
-//        onView(withId(R.id.code_edit_text)).perform(clearText()).perform(typeText(DEFAULT_PASSCODE), closeSoftKeyboard());
-//        onView(withId(R.id.login_button)).perform(click());
-//        Intents.init();
-//        intended(hasComponent(MainActivity.class.getName()));
-//        Intents.release();
-//    }
+    @Test
+    public void successPasscodeTest() {
+        mActivityTestRule.launchActivity(null);
+        onView(withId(R.id.code_edit_text)).perform(clearText()).perform(typeText(DEFAULT_PASSCODE), closeSoftKeyboard());
+        onView(withId(R.id.login_button)).perform(click());
+    }
 }

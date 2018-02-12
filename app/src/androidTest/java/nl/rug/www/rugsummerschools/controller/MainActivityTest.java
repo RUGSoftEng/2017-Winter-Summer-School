@@ -4,6 +4,7 @@ import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.text.Html;
+import android.util.Log;
 
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,6 +38,8 @@ import static org.hamcrest.Matchers.is;
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
 
+    private static final String DEFAULT_SCHOOL_ID = "5a5d15a9eff28d521340b136";
+
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
@@ -47,6 +50,7 @@ public class MainActivityTest {
             auth.signOut();
         }
         LoginManager.getInstance().logOut();
+        ContentsLab.get().setSchoolId(DEFAULT_SCHOOL_ID);
     }
 
     @Test
@@ -143,8 +147,6 @@ public class MainActivityTest {
         onView(withId(R.id.navigation_forum)).perform(click());
         List<GeneralInfo> list = ContentsLab.get().getGeneralInfos();
         if (list == null) return;
-
-
     }
 
 }
