@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/RUGSoftEng/2017-Winter-Summer-School-Android.svg?branch=test)](https://travis-ci.org/RUGSoftEng/2017-Winter-Summer-School-Android)
-[![Coverage Status](https://coveralls.io/repos/github/RUGSoftEng/2017-Winter-Summer-School-Android/badge.svg?branch=master)](https://coveralls.io/github/RUGSoftEng/2017-Winter-Summer-School-Android?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/RUGSoftEng/2017-Winter-Summer-School-Android/badge.svg?branch=test)](https://coveralls.io/github/RUGSoftEng/2017-Winter-Summer-School-Android?branch=test)
 # UG Summer & Winter Schools Android Application
 The​ ​Winter​ ​and​ ​Summer​ ​Schools​ ​Android​ ​Application​ ​is​ ​a​ ​project​ ​developed​ ​at​ ​the​ ​RUG​ ​which aims​ ​to​ ​help​ ​to​ ​communicate​ ​between​ ​the​ ​school​ ​organizers​ ​and​ ​the​ ​participants​ ​in​ ​order​ ​for them​ ​to​ ​provide​ ​and​ ​access​ ​general​ ​and​ ​specific​ ​information​ ​and​ ​to​ ​create​ ​community​ ​so​ ​that​ ​it acts​ ​a​ ​communication​ ​hub​ ​in​ ​general.​
 
