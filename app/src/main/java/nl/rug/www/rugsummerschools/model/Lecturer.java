@@ -3,9 +3,9 @@ package nl.rug.www.rugsummerschools.model;
 /**
  * This class is a model of lecturer information that contains
  *
- * @since 13/04/2017
  * @author Jeongkyun
  * @version 2.0.0
+ * @since 13/04/2017
  */
 
 public class Lecturer extends Content {

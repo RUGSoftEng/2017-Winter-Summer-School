@@ -16,9 +16,9 @@ import java.util.List;
 import nl.rug.www.rugsummerschools.R;
 import nl.rug.www.rugsummerschools.controller.ContentAdapter;
 import nl.rug.www.rugsummerschools.controller.ContentHolder;
-import nl.rug.www.rugsummerschools.model.ContentsLab;
 import nl.rug.www.rugsummerschools.controller.ContentsListFragment;
 import nl.rug.www.rugsummerschools.model.Announcement;
+import nl.rug.www.rugsummerschools.model.ContentsLab;
 import nl.rug.www.rugsummerschools.networking.NetworkingService;
 
 /**
@@ -26,8 +26,8 @@ import nl.rug.www.rugsummerschools.networking.NetworkingService;
  * It shows a list of fetched announcements from server filtered with school id.
  *
  * @author Jeongkyun Oh
- * @since 13/04/2017
  * @version 2.0.0
+ * @since 13/04/2017
  */
 
 public class AnnouncementListFragment extends ContentsListFragment<Announcement, ContentHolder<Announcement>> {

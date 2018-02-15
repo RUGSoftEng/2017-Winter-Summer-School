@@ -1,12 +1,6 @@
 package nl.rug.www.rugsummerschools.controller.timetable;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -31,12 +25,12 @@ import nl.rug.www.rugsummerschools.model.EventsPerDay;
  * ViewHolder class for timetable recycler view.
  * It binds a eventsPerDay to the associated view.
  *
- * @since 10/02/2018
  * @author Jeongkyun Oh
  * @version 2.0.0
+ * @since 10/02/2018
  */
 
-public class TimeTableHolder extends RecyclerView.ViewHolder{
+public class TimeTableHolder extends RecyclerView.ViewHolder {
 
     private static final String TAG = "TimeTableHolder";
 
@@ -121,7 +115,7 @@ public class TimeTableHolder extends RecyclerView.ViewHolder{
 
     private void setMonthBackground(int month) {
         switch (month) {
-            case 1 :
+            case 1:
                 Glide.with(mContext).load(R.drawable.bkg_01_january).into(mYearImageView);
                 break;
             case 2:

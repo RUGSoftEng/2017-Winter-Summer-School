@@ -18,8 +18,8 @@ import java.util.List;
 import nl.rug.www.rugsummerschools.R;
 import nl.rug.www.rugsummerschools.controller.ContentAdapter;
 import nl.rug.www.rugsummerschools.controller.ContentHolder;
-import nl.rug.www.rugsummerschools.model.ContentsLab;
 import nl.rug.www.rugsummerschools.controller.ContentsListFragment;
+import nl.rug.www.rugsummerschools.model.ContentsLab;
 import nl.rug.www.rugsummerschools.model.ForumThread;
 import nl.rug.www.rugsummerschools.networking.NetworkingService;
 
@@ -29,8 +29,8 @@ import nl.rug.www.rugsummerschools.networking.NetworkingService;
  * It contains functionality for thread addition and log out.
  *
  * @author Jeongkyun Oh
- * @since 08/12/2017
  * @version 2.0.0
+ * @since 08/12/2017
  */
 
 
@@ -39,10 +39,6 @@ public class ForumThreadListFragment extends ContentsListFragment<ForumThread, C
     private static final String TAG = "ThreadListFragment";
 
     private OnSignOutListener mOnSignOutListener;
-
-    public interface OnSignOutListener {
-        void signOut();
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -120,15 +116,19 @@ public class ForumThreadListFragment extends ContentsListFragment<ForumThread, C
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.log_out_menu :
+            case R.id.log_out_menu:
                 mOnSignOutListener.signOut();
                 return true;
-            case R.id.write_forum_thread :
+            case R.id.write_forum_thread:
                 Intent intent = new Intent(getActivity(), ThreadActivity.class);
                 startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public interface OnSignOutListener {
+        void signOut();
     }
 }

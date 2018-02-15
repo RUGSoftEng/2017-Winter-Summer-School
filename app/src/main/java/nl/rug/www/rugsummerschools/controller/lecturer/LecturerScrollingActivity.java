@@ -28,9 +28,9 @@ import nl.rug.www.rugsummerschools.model.Lecturer;
  * This is scrolling activity for lecturer.
  * It contains information of a lecturer.
  *
- * @since 10/02/2018
  * @author Jeongkyun Oh
  * @version 2.0.0
+ * @since 10/02/2018
  */
 
 public class LecturerScrollingActivity extends AppCompatActivity implements View.OnClickListener {
@@ -82,7 +82,7 @@ public class LecturerScrollingActivity extends AppCompatActivity implements View
             Intent websiteIntent = new Intent(Intent.ACTION_VIEW, website);
             startActivity(websiteIntent);
 
-        } catch (Exception e){
+        } catch (Exception e) {
             Toast.makeText(LecturerScrollingActivity.this, "Failed to visit website", Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }

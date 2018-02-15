@@ -13,9 +13,9 @@ import nl.rug.www.rugsummerschools.model.ForumComment;
  * ViewAdapter class for comment recycler view on forum section
  * This class is to bind view holders with list of comments
  *
- * @since 10/02/2018
- * @version 2.0.0
  * @author Jeongkyun Oh
+ * @version 2.0.0
+ * @since 10/02/2018
  */
 
 public abstract class CommentAdapter extends RecyclerView.Adapter<CommentHolder> {
@@ -23,12 +23,12 @@ public abstract class CommentAdapter extends RecyclerView.Adapter<CommentHolder>
     private Context mContext;
     private List<ForumComment> mForumComments;
 
-    public abstract CommentHolder createHolder(LayoutInflater inflater, ViewGroup parent, Context context);
-
     public CommentAdapter(List<ForumComment> forumComments, Context context) {
         mForumComments = forumComments;
         mContext = context;
     }
+
+    public abstract CommentHolder createHolder(LayoutInflater inflater, ViewGroup parent, Context context);
 
     @Override
     public CommentHolder onCreateViewHolder(ViewGroup parent, int viewType) {

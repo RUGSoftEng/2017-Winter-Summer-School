@@ -1,9 +1,5 @@
 package nl.rug.www.rugsummerschools.controller.forum;
 
-import nl.rug.www.rugsummerschools.R;
-import nl.rug.www.rugsummerschools.controller.ContentHolder;
-import nl.rug.www.rugsummerschools.model.ForumThread;
-
 import android.content.Context;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -18,13 +14,17 @@ import org.joda.time.DateTime;
 
 import java.util.Date;
 
+import nl.rug.www.rugsummerschools.R;
+import nl.rug.www.rugsummerschools.controller.ContentHolder;
+import nl.rug.www.rugsummerschools.model.ForumThread;
+
 /**
  * This is view holder class for forum thread recycler view on forum thread list fragment.
  * It binds the model of each forum to the associated views.
  *
  * @author Jeongkyun Oh
- * @since 09/12/2017
  * @version 2.0.0
+ * @since 09/12/2017
  */
 
 public abstract class ForumThreadHolder extends ContentHolder<ForumThread> implements View.OnClickListener {

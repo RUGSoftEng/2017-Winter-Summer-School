@@ -13,10 +13,15 @@ import org.hamcrest.TypeSafeMatcher;
 
 public class DrawableMatcher extends TypeSafeMatcher<View> {
 
-    private final int expectedId;
-    private String resourceName;
     static private final int EMPTY = -1;
     static private final int ANY = -2;
+    private final int expectedId;
+    private String resourceName;
+
+    public DrawableMatcher(int expectedId) {
+        super(View.class);
+        this.expectedId = expectedId;
+    }
 
     public static Matcher<View> withDrawable(final int resourceId) {
         return new DrawableMatcher(resourceId);
@@ -24,11 +29,6 @@ public class DrawableMatcher extends TypeSafeMatcher<View> {
 
     public static Matcher<View> noDrawable() {
         return new DrawableMatcher(-1);
-    }
-
-    public DrawableMatcher(int expectedId) {
-        super(View.class);
-        this.expectedId = expectedId;
     }
 
     @Override

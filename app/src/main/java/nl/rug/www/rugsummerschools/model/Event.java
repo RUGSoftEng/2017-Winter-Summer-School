@@ -5,9 +5,9 @@ import java.util.Date;
 /**
  * This class is a model of event.
  *
- * @since 13/04/2017
  * @author Jeongkyun Oh
  * @version 2.0.0
+ * @since 13/04/2017
  */
 
 public class Event extends Content {

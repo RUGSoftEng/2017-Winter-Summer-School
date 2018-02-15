@@ -21,7 +21,6 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.anything;
-import static org.junit.Assert.*;
 
 @RunWith(AndroidJUnit4.class)
 public class GeneralInfoScrollingActivityTest {
@@ -30,7 +29,7 @@ public class GeneralInfoScrollingActivityTest {
     public ActivityTestRule<GeneralInfoScrollingActivity> mActivityTestRule = new ActivityTestRule<>(GeneralInfoScrollingActivity.class, true, false);
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         List<GeneralInfo> mGeneralInfos = new ArrayList<>();
         GeneralInfo generalInfo = new GeneralInfo();
         generalInfo.setId("5a7c73a1ab30fc76a07497d3.");

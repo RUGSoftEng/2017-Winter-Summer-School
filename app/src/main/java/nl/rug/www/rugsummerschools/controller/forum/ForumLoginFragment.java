@@ -17,18 +17,13 @@ import nl.rug.www.rugsummerschools.R;
  * This is fragment for facebook or google login in order to use forum section
  *
  * @author Jeongkyun Oh
- * @since 09/02/2018
  * @version 2.0.0
+ * @since 09/02/2018
  */
 
 public class ForumLoginFragment extends Fragment implements View.OnClickListener {
 
     public OnSignInListener mOnSignInListener;
-
-    public interface OnSignInListener {
-        void signInWithGoogle();
-        void signInWithFacebook();
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -59,9 +54,15 @@ public class ForumLoginFragment extends Fragment implements View.OnClickListener
             case R.id.google_login_button:
                 mOnSignInListener.signInWithGoogle();
                 break;
-            case R.id.facebook_login_button :
+            case R.id.facebook_login_button:
                 mOnSignInListener.signInWithFacebook();
                 break;
         }
+    }
+
+    public interface OnSignInListener {
+        void signInWithGoogle();
+
+        void signInWithFacebook();
     }
 }

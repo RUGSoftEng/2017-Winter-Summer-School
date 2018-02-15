@@ -12,8 +12,8 @@ import java.util.List;
 import nl.rug.www.rugsummerschools.R;
 import nl.rug.www.rugsummerschools.controller.ContentAdapter;
 import nl.rug.www.rugsummerschools.controller.ContentHolder;
-import nl.rug.www.rugsummerschools.model.ContentsLab;
 import nl.rug.www.rugsummerschools.controller.ContentsListFragment;
+import nl.rug.www.rugsummerschools.model.ContentsLab;
 import nl.rug.www.rugsummerschools.model.Lecturer;
 import nl.rug.www.rugsummerschools.networking.NetworkingService;
 
@@ -21,9 +21,9 @@ import nl.rug.www.rugsummerschools.networking.NetworkingService;
  * This class is a fragment on main pager activity.
  * It shows a list of titles of all announcements in database.
  *
- * @since 13/04/2017
  * @author Jeongkyun Oh
  * @version 2.0.0
+ * @since 13/04/2017
  */
 public class LecturerListFragment extends ContentsListFragment<Lecturer, ContentHolder<Lecturer>> {
 

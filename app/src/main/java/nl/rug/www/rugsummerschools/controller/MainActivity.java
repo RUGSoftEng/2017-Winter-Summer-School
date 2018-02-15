@@ -59,8 +59,8 @@ import nl.rug.www.rugsummerschools.controller.timetable.TimeTableFragment;
  * It consists of header, viewpager, and buttons.
  * Fragments (Announcements, Generalninfos, ...) will be inflated in view pager.
  *
- * @since 13/04/2017
  * @author Jeongkyun Oh
+ * @since 13/04/2017
  */
 
 public class MainActivity extends BaseActivity implements ForumLoginFragment.OnSignInListener, ForumThreadListFragment.OnSignOutListener {
@@ -148,19 +148,19 @@ public class MainActivity extends BaseActivity implements ForumLoginFragment.OnS
         @Override
         public void onPageSelected(int position) {
             switch (position) {
-                case PAGE_ACCOUNCEMENT :
+                case PAGE_ACCOUNCEMENT:
                     mNavigation.setSelectedItemId(R.id.navigation_announcement);
                     break;
-                case PAGE_GENERAL_INFO :
+                case PAGE_GENERAL_INFO:
                     mNavigation.setSelectedItemId(R.id.navigation_general);
                     break;
-                case PAGE_LECTURER :
+                case PAGE_LECTURER:
                     mNavigation.setSelectedItemId(R.id.navigation_lecturer);
                     break;
-                case PAGE_TIME_TABLE :
+                case PAGE_TIME_TABLE:
                     mNavigation.setSelectedItemId(R.id.navigation_time_table);
                     break;
-                case PAGE_FORUM :
+                case PAGE_FORUM:
                     mNavigation.setSelectedItemId(R.id.navigation_forum);
                     break;
             }
@@ -234,7 +234,7 @@ public class MainActivity extends BaseActivity implements ForumLoginFragment.OnS
             shiftingMode.setAccessible(true);
             shiftingMode.setBoolean(menuView, false);
             shiftingMode.setAccessible(false);
-            for(int i = 0; i < menuView.getChildCount(); i++) {
+            for (int i = 0; i < menuView.getChildCount(); i++) {
                 BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(i);
                 itemView.setShiftingMode(false);
                 itemView.setChecked(itemView.getItemData().isChecked());

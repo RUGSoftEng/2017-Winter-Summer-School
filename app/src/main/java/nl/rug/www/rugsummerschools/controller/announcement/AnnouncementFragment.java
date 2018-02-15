@@ -13,14 +13,12 @@ import android.view.ViewGroup;
 
 import org.joda.time.DateTime;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 import nl.rug.www.rugsummerschools.R;
-import nl.rug.www.rugsummerschools.model.ContentsLab;
 import nl.rug.www.rugsummerschools.databinding.FragmentAnnBinding;
 import nl.rug.www.rugsummerschools.model.Announcement;
+import nl.rug.www.rugsummerschools.model.ContentsLab;
 
 /**
  * Announcement fragment is to show the details of announcement
@@ -28,8 +26,8 @@ import nl.rug.www.rugsummerschools.model.Announcement;
  * This fragment is inflated into AnnouncementPagerActivity
  *
  * @author Jeongkyun Oh
- * @since 13/04/2017
  * @version 2.0.0
+ * @since 13/04/2017
  */
 
 public class AnnouncementFragment extends Fragment {
@@ -64,7 +62,7 @@ public class AnnouncementFragment extends Fragment {
             mBinding.announcementDetail.setText(Html.fromHtml(mAnnouncement.getDescription()));
         }
 
-        GradientDrawable circle = (GradientDrawable)mBinding.initialTextView.getBackground();
+        GradientDrawable circle = (GradientDrawable) mBinding.initialTextView.getBackground();
         circle.setColor(mAnnouncement.getColor());
         Date date = new DateTime(mAnnouncement.getDate()).toDate();
         mBinding.dateTextView.setText(DateUtils.getRelativeTimeSpanString(date.getTime(), System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS));

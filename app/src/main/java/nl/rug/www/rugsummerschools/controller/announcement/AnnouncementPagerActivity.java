@@ -7,15 +7,15 @@ import android.support.v4.app.Fragment;
 import java.util.List;
 
 import nl.rug.www.rugsummerschools.controller.BasePagerActivity;
-import nl.rug.www.rugsummerschools.model.ContentsLab;
 import nl.rug.www.rugsummerschools.model.Announcement;
+import nl.rug.www.rugsummerschools.model.ContentsLab;
 
 /**
  * This class is an acitivty that allows the announcement fragments on this to be slided by.
  *
  * @author Jeongkyun Oh
- * @since 13/04/2017
  * @version 2.0.0
+ * @since 13/04/2017
  */
 
 public class AnnouncementPagerActivity extends BasePagerActivity<Announcement> {

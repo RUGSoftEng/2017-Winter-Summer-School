@@ -1,17 +1,14 @@
 package nl.rug.www.rugsummerschools.controller.forum;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -52,8 +49,8 @@ import static com.android.volley.Request.Method.DELETE;
  * It shows information about the contents of forum and comments.
  *
  * @author Jeongkyun Oh
- * @since 09/02/2018
  * @version 2.0.0
+ * @since 09/02/2018
  */
 
 public class ForumThreadDetailActivity extends BaseActivity implements View.OnClickListener, PopupMenu.OnMenuItemClickListener, NestedScrollView.OnScrollChangeListener, View.OnTouchListener {
@@ -175,7 +172,7 @@ public class ForumThreadDetailActivity extends BaseActivity implements View.OnCl
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.button_post_comment :
+            case R.id.button_post_comment:
                 showProgressDialog();
                 new NetworkingService<>().postPutRequest(ForumThreadDetailActivity.this, Request.Method.POST, createCommentPaths(), null, createPostQuery(), new NetworkingService.NetworkCallback() {
                     @Override
@@ -185,7 +182,7 @@ public class ForumThreadDetailActivity extends BaseActivity implements View.OnCl
                             Toast.makeText(ForumThreadDetailActivity.this, "Post succeeded!", Toast.LENGTH_LONG).show();
                             new FetchForumComments().execute();
                             View view = ForumThreadDetailActivity.this.getCurrentFocus();
-                            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                             if (imm != null && view != null) {
                                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                             }
@@ -201,7 +198,7 @@ public class ForumThreadDetailActivity extends BaseActivity implements View.OnCl
                     }
                 });
                 break;
-            case R.id.btn_more_post :
+            case R.id.btn_more_post:
                 PopupMenu popupMenu = new PopupMenu(ForumThreadDetailActivity.this, v);
                 popupMenu.setOnMenuItemClickListener(ForumThreadDetailActivity.this);
                 MenuInflater inflater = popupMenu.getMenuInflater();
@@ -212,7 +209,7 @@ public class ForumThreadDetailActivity extends BaseActivity implements View.OnCl
     }
 
     private String[] createForumData() {
-        return new String[] {
+        return new String[]{
                 mForumThread.getId(),
                 mForumThread.getTitle(),
                 mForumThread.getDescription()
@@ -231,31 +228,31 @@ public class ForumThreadDetailActivity extends BaseActivity implements View.OnCl
     public boolean onMenuItemClick(MenuItem menuItem) {
         Intent intent;
         switch (menuItem.getItemId()) {
-            case R.id.edit_menu :
+            case R.id.edit_menu:
                 intent = ThreadActivity.newIntent(this, createForumData());
                 startActivityForResult(intent, REQUEST_CODE_EDIT_THREAD);
                 break;
-            case R.id.delete_menu :
+            case R.id.delete_menu:
                 showProgressDialog();
                 new NetworkingService<>().getDeleteRequest(
                         this, DELETE, createThreadPaths(), createDeleteQuery(), new NetworkingService.NetworkCallback() {
-                    @Override
-                    public void onResponse(String result) {
-                        hideProgressDialog();
-                        if ("OK".equals(result) || "200".equals(result)) {
-                            Toast.makeText(ForumThreadDetailActivity.this, "Deletion succeeded!", Toast.LENGTH_LONG).show();
-                            finish();
-                        } else {
-                            Toast.makeText(ForumThreadDetailActivity.this, "Deletion failed!", Toast.LENGTH_LONG).show();
-                        }
-                    }
+                            @Override
+                            public void onResponse(String result) {
+                                hideProgressDialog();
+                                if ("OK".equals(result) || "200".equals(result)) {
+                                    Toast.makeText(ForumThreadDetailActivity.this, "Deletion succeeded!", Toast.LENGTH_LONG).show();
+                                    finish();
+                                } else {
+                                    Toast.makeText(ForumThreadDetailActivity.this, "Deletion failed!", Toast.LENGTH_LONG).show();
+                                }
+                            }
 
-                    @Override
-                    public void onError(NetworkResponse result) {
-                        hideProgressDialog();
-                        errorMessage(result, "Delete forum thread is failed!");
-                    }
-                });
+                            @Override
+                            public void onError(NetworkResponse result) {
+                                hideProgressDialog();
+                                errorMessage(result, "Delete forum thread is failed!");
+                            }
+                        });
                 break;
         }
         return true;
@@ -264,7 +261,7 @@ public class ForumThreadDetailActivity extends BaseActivity implements View.OnCl
     private void errorMessage(NetworkResponse result, String message) {
         if (result != null) {
             switch (result.statusCode) {
-                case 400 :
+                case 400:
                     Toast.makeText(ForumThreadDetailActivity.this, message, Toast.LENGTH_LONG).show();
                     break;
                 default:
@@ -296,7 +293,7 @@ public class ForumThreadDetailActivity extends BaseActivity implements View.OnCl
         int height = -mCommentPostView.getHeight();
         if (mPostViewTop <= 0 && mPostViewTop >= height) {
             mPostViewTop += (oldScrollY - scrollY);
-            if (mPostViewTop > 0){
+            if (mPostViewTop > 0) {
                 mPostViewTop = 0;
             } else if (mPostViewTop < height) {
                 mPostViewTop = height;
@@ -308,9 +305,9 @@ public class ForumThreadDetailActivity extends BaseActivity implements View.OnCl
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         switch (motionEvent.getAction()) {
-            case MotionEvent.ACTION_UP :
+            case MotionEvent.ACTION_UP:
                 int height = -mCommentPostView.getHeight();
-                if (mPostViewTop >= height/2) {
+                if (mPostViewTop >= height / 2) {
                     mCommentPostView.scrollTo(0, 0);
                     mPostViewTop = 0;
                 } else {

@@ -5,9 +5,9 @@ import android.graphics.Color;
 /**
  * Announcement class is a model of contents that contains author and date that is posted.
  *
- * @since 13/04/2017
  * @author Jeongkyun Oh
  * @version 2.0.0
+ * @since 13/04/2017
  */
 
 public class Announcement extends Content {

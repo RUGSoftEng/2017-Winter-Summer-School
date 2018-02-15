@@ -8,7 +8,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
 import java.util.List;
-import java.util.Locale;
 
 import nl.rug.www.rugsummerschools.R;
 import nl.rug.www.rugsummerschools.model.Content;
@@ -17,19 +16,20 @@ import nl.rug.www.rugsummerschools.model.Content;
  * This is base pager activity which is able to slide by each page by page.
  * It applies to announcement only currently.
  *
- * @since 27/11/2017
  * @author Jeongkyun Oh
  * @version 2.0.0
+ * @since 27/11/2017
  */
 
 public abstract class BasePagerActivity<T extends Content> extends AppCompatActivity {
 
     protected static final String EXTRA_CONTENT_ID =
             "nl.rug.www.rugsummerschool.content_id";
+    private List<T> mContents;
 
     protected abstract List<T> getContents();
+
     protected abstract Fragment getFragment(int position);
-    private List<T> mContents;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +49,7 @@ public abstract class BasePagerActivity<T extends Content> extends AppCompatActi
             public Fragment getItem(int position) {
                 return getFragment(position);
             }
+
             @Override
             public int getCount() {
                 return mContents.size();

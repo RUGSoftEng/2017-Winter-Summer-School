@@ -1,11 +1,6 @@
 package nl.rug.www.rugsummerschools.controller.announcement;
 
-import android.content.Intent;
-import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,27 +9,23 @@ import android.widget.TextView;
 
 import org.joda.time.DateTime;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 import nl.rug.www.rugsummerschools.R;
 import nl.rug.www.rugsummerschools.controller.ContentHolder;
 import nl.rug.www.rugsummerschools.model.Announcement;
 import nl.rug.www.rugsummerschools.model.ContentsLab;
 
-import static org.joda.time.DateTimeConstants.MILLIS_PER_DAY;
-
 /**
  * ViewHolder class for announcement recycler view.
  * Its role is to hook up model with view
  *
  * @author Jeongkyun Oh
- * @since 06/12/17
  * @version 2.0.0
+ * @since 06/12/17
  */
 
-public abstract class AnnouncementHolder extends ContentHolder<Announcement> implements View.OnClickListener{
+public abstract class AnnouncementHolder extends ContentHolder<Announcement> implements View.OnClickListener {
 
     private TextView mInitialView;
     private TextView mTitleTextView;
@@ -58,7 +49,7 @@ public abstract class AnnouncementHolder extends ContentHolder<Announcement> imp
         mTitleTextView.setText(mContent.getTitle());
         String poster = mContent.getPoster();
         mInitialView.setText(mContent.getInitial());
-        GradientDrawable circle = (GradientDrawable)mInitialView.getBackground();
+        GradientDrawable circle = (GradientDrawable) mInitialView.getBackground();
         circle.setColor(mContent.getColor());
         String byPoster = "By " + poster;
         mAuthorTextView.setText(byPoster);

@@ -1,9 +1,6 @@
 package nl.rug.www.rugsummerschools.controller.generalinfo;
 
 import android.content.Context;
-import android.content.Intent;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-
-import java.util.HashMap;
 
 import nl.rug.www.rugsummerschools.R;
 import nl.rug.www.rugsummerschools.controller.ContentHolder;
@@ -24,8 +19,8 @@ import nl.rug.www.rugsummerschools.model.GeneralInfo;
  * Its role is to bind a model to the view
  *
  * @author Jeongkyun Oh
- * @since 06/12/17
  * @version 2.0.0
+ * @since 06/12/17
  */
 
 public abstract class GeneralInfoHolder extends ContentHolder<GeneralInfo> implements View.OnClickListener {
@@ -45,7 +40,7 @@ public abstract class GeneralInfoHolder extends ContentHolder<GeneralInfo> imple
         itemView.setOnClickListener(this);
     }
 
-    public void bind(GeneralInfo generalInfo){
+    public void bind(GeneralInfo generalInfo) {
         mContent = generalInfo;
         mTitleTextView.setText(mContent.getTitle());
         mTitleTextView.setSelected(true);

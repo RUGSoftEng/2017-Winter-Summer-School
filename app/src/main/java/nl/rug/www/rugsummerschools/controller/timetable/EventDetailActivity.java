@@ -1,15 +1,11 @@
 package nl.rug.www.rugsummerschools.controller.timetable;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
-import android.os.PersistableBundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
@@ -35,14 +31,16 @@ import nl.rug.www.rugsummerschools.model.Event;
 /**
  * This class is to show detail view for a event.
  *
- * @since 10/02/2018
  * @author Jeongkyun Oh
  * @version 2.0.0
+ * @since 10/02/2018
  */
 
-public class EventDetailActivity extends AppCompatActivity implements OnMapReadyCallback{
+public class EventDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final String EXTRA_EVENT_ID = "nl.rug.www.rugsummerschool.event_id";
+    private static final double LATITUDE_GRONINGEN = 53.219383;
+    private static final double LONGITUDE_GRONINGEN = 6.566502;
 
     private Event mEvent;
     private MapView mMapView;
@@ -133,11 +131,15 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
         mGoogleMap = googleMap;
 
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+
         try {
             List<Address> addresses = geocoder.getFromLocationName(mEvent.getLocation(), 1);
-            LatLng location = new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
+            LatLng location = new LatLng(LATITUDE_GRONINGEN, LONGITUDE_GRONINGEN);
+            if (addresses.size() != 0) {
+                location = new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
+                mGoogleMap.addMarker(new MarkerOptions().position(location));
+            }
 
-            mGoogleMap.addMarker(new MarkerOptions().position(location));
             mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(location));
             mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(13));
         } catch (IOException e) {

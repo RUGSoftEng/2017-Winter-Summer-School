@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 
 public class ContentsLabTest {
@@ -28,10 +28,10 @@ public class ContentsLabTest {
     private ArrayList<String> mLogInCodes;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         mContentsLab = ContentsLab.get();
         mAnnouncements = new ArrayList<>();
-        Announcement[] announcements = new Announcement[] {
+        Announcement[] announcements = new Announcement[]{
                 new Announcement(),
                 new Announcement(),
                 new Announcement()
@@ -41,13 +41,13 @@ public class ContentsLabTest {
             announcements[i].setTitle("title" + i);
             announcements[i].setDescription("Test-driven development (TDD) is a software development process that relies on the repetition of a very short development cycle: Requirements are turned into very specific test cases, then the software is improved to pass the new tests, only. This is opposed to software development that allows software to be added that is not proven to meet requirements." + i);
             announcements[i].setPoster("author" + i);
-            announcements[i].setDate("2018-02-08T15:5" + i +":25.346Z");
+            announcements[i].setDate("2018-02-08T15:5" + i + ":25.346Z");
             mAnnouncements.add(announcements[i]);
         }
         mContentsLab.updateAnnouncements(mAnnouncements);
 
         mGeneralInfos = new ArrayList<>();
-        GeneralInfo[] generalInfos = new GeneralInfo[] {
+        GeneralInfo[] generalInfos = new GeneralInfo[]{
                 new GeneralInfo(),
                 new GeneralInfo(),
                 new GeneralInfo()
@@ -62,7 +62,7 @@ public class ContentsLabTest {
         mContentsLab.updateGeneralInfos(mGeneralInfos);
 
         mLecturers = new ArrayList<>();
-        Lecturer[] lecturers = new Lecturer[] {
+        Lecturer[] lecturers = new Lecturer[]{
                 new Lecturer(),
                 new Lecturer(),
                 new Lecturer()
@@ -78,7 +78,7 @@ public class ContentsLabTest {
         mContentsLab.updateLecturers(mLecturers);
 
         mEvents = new ArrayList<>();
-        Event[] events = new Event[] {
+        Event[] events = new Event[]{
                 new Event(),
                 new Event(),
                 new Event()
@@ -100,7 +100,7 @@ public class ContentsLabTest {
         mContentsLab.updateEvents(mEvents);
 
         mForumComments = new ArrayList<>();
-        ForumComment[] comments = new ForumComment[] {
+        ForumComment[] comments = new ForumComment[]{
                 new ForumComment(),
                 new ForumComment(),
                 new ForumComment()
@@ -113,14 +113,14 @@ public class ContentsLabTest {
             comments[i].setPosterId("id" + i + "@google.com");
             comments[i].setPoster("Comment author Nr. " + i);
             comments[i].setImgUrl("https://graph.facebook.com/" + i + "/picture");
-            comments[i].setDate("2028-12-28T12:1" + i +":25.346Z");
+            comments[i].setDate("2028-12-28T12:1" + i + ":25.346Z");
             comments[i].setTitle("Title Nr." + i);
             mForumComments.add(comments[i]);
         }
         mContentsLab.updateForumComments(mForumComments);
 
         mForumThreads = new ArrayList<>();
-        ForumThread[] threads = new ForumThread[] {
+        ForumThread[] threads = new ForumThread[]{
                 new ForumThread(),
                 new ForumThread(),
                 new ForumThread()
@@ -132,7 +132,7 @@ public class ContentsLabTest {
             threads[i].setPosterId("poster id " + i);
             threads[i].setPoster("Poster" + i);
             threads[i].setImgUrl("http://imgurl.com/" + i);
-            threads[i].setDate("20" + i +"8-12-28T12:11:25.346Z");
+            threads[i].setDate("20" + i + "8-12-28T12:11:25.346Z");
             threads[i].setForumComments(commentsIdList);
             mForumThreads.add(threads[i]);
         }
@@ -140,7 +140,7 @@ public class ContentsLabTest {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         mContentsLab = null;
     }
 
@@ -161,7 +161,7 @@ public class ContentsLabTest {
             assertThat("title" + i, is(test.getTitle()));
             assertThat("Test-driven development (TDD) is a software development process that relies on the repetition of a very short development cycle: Requirements are turned into very specific test cases, then the software is improved to pass the new tests, only. This is opposed to software development that allows software to be added that is not proven to meet requirements." + i, is(test.getDescription()));
             assertThat("author" + i, is(test.getPoster()));
-            assertThat("2018-02-08T15:5" + i +":25.346Z", is(test.getDate()));
+            assertThat("2018-02-08T15:5" + i + ":25.346Z", is(test.getDate()));
             assertThat("A", is(test.getInitial()));
         }
 
@@ -232,8 +232,8 @@ public class ContentsLabTest {
             assertThat("summer school" + i, is(test.getSchool()));
             assertThat("campus" + i, is(test.getLocation()));
             assertThat("This is test description for event" + i, is(test.getDescription()));
-            assertThat((long)151827902 + i, is(test.getStartDate().getTime()));
-            assertThat((long)351827902 + i, is(test.getEndDate().getTime()));
+            assertThat((long) 151827902 + i, is(test.getStartDate().getTime()));
+            assertThat((long) 351827902 + i, is(test.getEndDate().getTime()));
         }
 
         List<Event> newEvents = new ArrayList<>();
@@ -256,7 +256,7 @@ public class ContentsLabTest {
             assertThat("id" + i + "@google.com", is(test.getPosterId()));
             assertThat("Comment author Nr. " + i, is(test.getPoster()));
             assertThat("https://graph.facebook.com/" + i + "/picture", is(test.getImgUrl()));
-            assertThat("2028-12-28T12:1" + i +":25.346Z", is(test.getDate()));
+            assertThat("2028-12-28T12:1" + i + ":25.346Z", is(test.getDate()));
             assertThat("Title Nr." + i, is(test.getTitle()));
         }
 
@@ -279,7 +279,7 @@ public class ContentsLabTest {
             assertThat("poster id " + i, is(test.getPosterId()));
             assertThat("Poster" + i, is(test.getPoster()));
             assertThat("http://imgurl.com/" + i, is(test.getImgUrl()));
-            assertThat("20" + i +"8-12-28T12:11:25.346Z", is(test.getDate()));
+            assertThat("20" + i + "8-12-28T12:11:25.346Z", is(test.getDate()));
             List<String> commentIds = test.getForumComments();
             for (int j = 0; j < 3; ++j) {
                 assertThat("comments nr." + j, is(commentIds.get(j)));

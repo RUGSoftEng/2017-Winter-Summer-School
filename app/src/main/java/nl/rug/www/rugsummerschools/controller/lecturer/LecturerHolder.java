@@ -1,8 +1,6 @@
 package nl.rug.www.rugsummerschools.controller.lecturer;
 
 import android.content.Context;
-import android.content.Intent;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +18,8 @@ import nl.rug.www.rugsummerschools.model.Lecturer;
  * Its role is to bind a model to the view
  *
  * @author Jeongkyun Oh
- * @since 06/12/17
  * @version 2.0.0
+ * @since 06/12/17
  */
 public abstract class LecturerHolder extends ContentHolder<Lecturer> implements View.OnClickListener {
 
@@ -38,7 +36,7 @@ public abstract class LecturerHolder extends ContentHolder<Lecturer> implements 
     }
 
     @Override
-    public void bind(Lecturer lecturer){
+    public void bind(Lecturer lecturer) {
         mContent = lecturer;
         mTitleTextView.setText(mContent.getTitle());
 

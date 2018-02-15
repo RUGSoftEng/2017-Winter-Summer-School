@@ -6,9 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 /**
  * This class is to show progress dialog while threads working
  *
- * @since 10/02/2018
  * @author Jeongkyun Oh
  * @version 2.0.0
+ * @since 10/02/2018
  */
 
 public class BaseActivity extends AppCompatActivity {

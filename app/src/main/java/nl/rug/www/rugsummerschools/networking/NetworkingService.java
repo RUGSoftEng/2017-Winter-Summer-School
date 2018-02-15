@@ -32,7 +32,6 @@ import java.util.Map;
 
 import nl.rug.www.rugsummerschools.model.Announcement;
 import nl.rug.www.rugsummerschools.model.Content;
-import nl.rug.www.rugsummerschools.model.ContentsLab;
 import nl.rug.www.rugsummerschools.model.Event;
 import nl.rug.www.rugsummerschools.model.ForumComment;
 import nl.rug.www.rugsummerschools.model.ForumThread;
@@ -43,15 +42,11 @@ import nl.rug.www.rugsummerschools.model.LoginInfo;
 /**
  * This class is to deal with all networking process with the server.
  *
- * @since 13/04/2017
  * @author Jeongkyun Oh
+ * @since 13/04/2017
  */
 
 public class NetworkingService<T extends Content> {
-
-    private static final String TAG = "NetworkingService";
-
-    private static final String HTTP_URL = "turing13.housing.rug.nl:8800";
 
     public static final int LOGIN_CODE = 0;
     public static final int ANNOUNCEMENT = 1;
@@ -60,10 +55,63 @@ public class NetworkingService<T extends Content> {
     public static final int EVENT = 4;
     public static final int FORUM_THREAD = 5;
     public static final int FORUM_COMMENT = 6;
+    private static final String TAG = "NetworkingService";
+    private static final String HTTP_URL = "turing13.housing.rug.nl:8800";
 
-    public interface NetworkCallback {
-        void onResponse(String result);
-        void onError(NetworkResponse result);
+    public static List<String> getThreadPath() {
+        List<String> paths = new ArrayList<>();
+        paths.add("forum");
+        paths.add("thread");
+        return paths;
+    }
+
+    public static List<String> getCommentPath() {
+        List<String> paths = new ArrayList<>();
+        paths.add("forum");
+        paths.add("comment");
+        return paths;
+    }
+
+    public static Map<String, String> getPostThreadQuery(String title, String description, String author, String posterID, String imgURL, String school) {
+        Map<String, String> map = new HashMap<>();
+        map.put("title", title);
+        map.put("description", description);
+        map.put("author", author);
+        map.put("posterID", posterID);
+        map.put("imgURL", imgURL);
+        map.put("school", school);
+        return map;
+    }
+
+    public static Map<String, String> getPostCommentQuery(String text, String author, String posterID, String parentThread, String imgURL) {
+        Map<String, String> map = new HashMap<>();
+        map.put("text", text);
+        map.put("author", author);
+        map.put("posterID", posterID);
+        map.put("parentThread", parentThread);
+        map.put("imgURL", imgURL);
+        return map;
+    }
+
+    public static Map<String, String> getPutThreadQuery(String id, String title, String description) {
+        Map<String, String> map = new HashMap<>();
+        map.put("id", id);
+        map.put("title", title);
+        map.put("description", description);
+        return map;
+    }
+
+    public static Map<String, String> getPutCommentQuery(String id, String text) {
+        Map<String, String> map = new HashMap<>();
+        map.put("id", id);
+        map.put("text", text);
+        return map;
+    }
+
+    public static Map<String, String> getDeleteQuery(String id) {
+        Map<String, String> map = new HashMap<>();
+        map.put("id", id);
+        return map;
     }
 
     private byte[] getUrlBytes(String urlSpec) throws IOException {
@@ -108,8 +156,8 @@ public class NetworkingService<T extends Content> {
 
         if (queryParams != null) {
             Iterator it = queryParams.keySet().iterator();
-            while(it.hasNext()) {
-                String key = (String)it.next();
+            while (it.hasNext()) {
+                String key = (String) it.next();
                 builder.appendQueryParameter(key, queryParams.get(key));
                 it.remove();
             }
@@ -128,48 +176,48 @@ public class NetworkingService<T extends Content> {
         try {
             String jsonString;
             switch (type) {
-                case LOGIN_CODE :
+                case LOGIN_CODE:
                     paths.add("logincode");
                     queries.put("code", extra);
                     jsonString = getUrlString(buildURL(paths, queries));
-                    parseLoginCode((List<LoginInfo>)data, new JSONObject(jsonString));
-                    updateSchoolName((List<LoginInfo>)data);
+                    parseLoginCode((List<LoginInfo>) data, new JSONObject(jsonString));
+                    updateSchoolName((List<LoginInfo>) data);
                     break;
-                case ANNOUNCEMENT :
+                case ANNOUNCEMENT:
                     paths.add("announcement");
                     queries.put("school", extra);
                     jsonString = getUrlString(buildURL(paths, null));
-                    parseAnnouncements((List<Announcement>)data, new JSONArray(jsonString));
+                    parseAnnouncements((List<Announcement>) data, new JSONArray(jsonString));
                     break;
-                case GENERAL_INFO :
+                case GENERAL_INFO:
                     paths.add("generalinfo");
                     jsonString = getUrlString(buildURL(paths, null));
-                    parseGeneralInfos((List<GeneralInfo>)data, new JSONArray(jsonString));
+                    parseGeneralInfos((List<GeneralInfo>) data, new JSONArray(jsonString));
                     break;
-                case LECTURER :
+                case LECTURER:
                     paths.add("lecturer");
                     jsonString = getUrlString(buildURL(paths, null));
-                    parseLecturers((List<Lecturer>)data, new JSONArray(jsonString));
+                    parseLecturers((List<Lecturer>) data, new JSONArray(jsonString));
                     break;
-                case EVENT :
+                case EVENT:
                     paths.add("event");
                     queries.put("school", extra);
                     jsonString = getUrlString(buildURL(paths, queries));
-                    parseTimeTable((List<Event>)data, new JSONArray(jsonString));
+                    parseTimeTable((List<Event>) data, new JSONArray(jsonString));
                     break;
-                case FORUM_THREAD :
+                case FORUM_THREAD:
                     paths.add("forum");
                     paths.add("thread");
                     queries.put("school", extra);
                     jsonString = getUrlString(buildURL(paths, null));
-                    parseForumThreads((List<ForumThread>)data, new JSONArray(jsonString));
+                    parseForumThreads((List<ForumThread>) data, new JSONArray(jsonString));
                     break;
-                case FORUM_COMMENT :
+                case FORUM_COMMENT:
                     paths.add("forum");
                     paths.add("comment");
                     queries.put("parentThread", extra);
                     jsonString = getUrlString(buildURL(paths, queries));
-                    parseForumComments((List<ForumComment>)data, new JSONArray(jsonString));
+                    parseForumComments((List<ForumComment>) data, new JSONArray(jsonString));
                     break;
             }
         } catch (IOException | JSONException e) {
@@ -313,7 +361,7 @@ public class NetworkingService<T extends Content> {
             JSONArray jsonComments = contentJsonObject.getJSONArray("comments");
             List<String> commentIds = new ArrayList<>();
             for (int j = 0; j < jsonComments.length(); ++j) {
-                commentIds.add((String)jsonComments.get(j));
+                commentIds.add((String) jsonComments.get(j));
             }
             forumThread.setForumComments(commentIds);
             items.add(forumThread);
@@ -335,62 +383,6 @@ public class NetworkingService<T extends Content> {
             forumComment.setDescription(contentJsonObject.getString("text"));
             items.add(forumComment);
         }
-    }
-
-    public static List<String> getThreadPath() {
-        List<String> paths = new ArrayList<>();
-        paths.add("forum");
-        paths.add("thread");
-        return paths;
-    }
-
-    public static List<String> getCommentPath() {
-        List<String> paths = new ArrayList<>();
-        paths.add("forum");
-        paths.add("comment");
-        return paths;
-    }
-
-    public static Map<String, String> getPostThreadQuery(String title, String description, String author, String posterID, String imgURL, String school) {
-        Map<String, String> map = new HashMap<>();
-        map.put("title", title);
-        map.put("description", description);
-        map.put("author", author);
-        map.put("posterID", posterID);
-        map.put("imgURL", imgURL);
-        map.put("school", school);
-        return map;
-    }
-
-    public static Map<String, String> getPostCommentQuery(String text, String author, String posterID, String parentThread, String imgURL) {
-        Map<String, String> map = new HashMap<>();
-        map.put("text", text);
-        map.put("author", author);
-        map.put("posterID", posterID);
-        map.put("parentThread", parentThread);
-        map.put("imgURL", imgURL);
-        return map;
-    }
-
-    public static Map<String, String> getPutThreadQuery(String id, String title, String description) {
-        Map<String, String> map = new HashMap<>();
-        map.put("id", id);
-        map.put("title", title);
-        map.put("description", description);
-        return map;
-    }
-
-    public static Map<String, String> getPutCommentQuery(String id, String text) {
-        Map<String, String> map = new HashMap<>();
-        map.put("id", id);
-        map.put("text", text);
-        return map;
-    }
-
-    public static Map<String, String> getDeleteQuery(String id) {
-        Map<String, String> map = new HashMap<>();
-        map.put("id", id);
-        return map;
     }
 
     public void getDeleteRequest(Context context, int method, List<String> paths, Map<String, String> queryParams, final NetworkCallback callback) {
@@ -441,8 +433,8 @@ public class NetworkingService<T extends Content> {
         queue.add(request);
     }
 
-    public void postRequestFCMID(Context context, String Token){
-        try{
+    public void postRequestFCMID(Context context, String Token) {
+        try {
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("http").encodedAuthority(HTTP_URL);
             builder.appendPath("token").appendQueryParameter("id", Token);
@@ -464,8 +456,14 @@ public class NetworkingService<T extends Content> {
 
             queue.add(stringRequest);
 
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public interface NetworkCallback {
+        void onResponse(String result);
+
+        void onError(NetworkResponse result);
     }
 }

@@ -22,7 +22,7 @@ import nl.rug.www.rugsummerschools.controller.LoginActivity;
 public class FCMService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        Log.d("FCM","Called");
+        Log.d("FCM", "Called");
 
         String bodyFromServer = remoteMessage.getNotification().getBody();
 

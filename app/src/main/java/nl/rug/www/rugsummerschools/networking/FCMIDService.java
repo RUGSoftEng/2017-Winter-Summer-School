@@ -11,6 +11,7 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 
 public class FCMIDService extends FirebaseInstanceIdService {
     private static final String TAG = "FCMIDService";
+
     @Override
     public void onTokenRefresh() {
         // Get updated InstanceID token.

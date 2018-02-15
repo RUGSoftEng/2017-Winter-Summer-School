@@ -8,9 +8,9 @@ import nl.rug.www.rugsummerschools.model.Content;
 /**
  * This class is general contents view holder for recycler view of contents for main activity.
  *
- * @since 06/12/2017
  * @author Jeongkyun Oh
  * @version 2.0.0
+ * @since 06/12/2017
  */
 
 public abstract class ContentHolder<T extends Content> extends RecyclerView.ViewHolder {

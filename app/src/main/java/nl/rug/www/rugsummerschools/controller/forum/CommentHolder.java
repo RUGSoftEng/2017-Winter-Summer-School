@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 
 import nl.rug.www.rugsummerschools.R;
-import nl.rug.www.rugsummerschools.controller.BaseActivity;
 import nl.rug.www.rugsummerschools.model.ForumComment;
 import nl.rug.www.rugsummerschools.networking.NetworkingService;
 
@@ -38,9 +37,9 @@ import static com.android.volley.Request.Method.PUT;
  * This class is to bind a comment to each associated view holder.
  * It provides functionality to modify and delete the comment based on the authority.
  *
- * @since 10/02/2018
- * @version 2.0.0
  * @author Jeongkyun Oh
+ * @version 2.0.0
+ * @since 10/02/2018
  */
 public abstract class CommentHolder extends RecyclerView.ViewHolder implements View.OnClickListener, android.widget.PopupMenu.OnMenuItemClickListener {
 
@@ -56,12 +55,6 @@ public abstract class CommentHolder extends RecyclerView.ViewHolder implements V
     private Button mBodyEditButton;
     private Button mBodyEditCancelButton;
 
-    abstract public void fetchComment();
-    abstract public void hideCommentView();
-    abstract public void showCommentView();
-    abstract public void showProgress();
-    abstract public void hideProgress();
-
     public CommentHolder(LayoutInflater inflater, ViewGroup parent, Context context) {
         super(inflater.inflate(R.layout.item_comment, parent, false));
 
@@ -76,6 +69,16 @@ public abstract class CommentHolder extends RecyclerView.ViewHolder implements V
         mBodyEditButton = itemView.findViewById(R.id.comment_body_edit_button);
         mBodyEditCancelButton = itemView.findViewById(R.id.comment_body_cancel_button);
     }
+
+    abstract public void fetchComment();
+
+    abstract public void hideCommentView();
+
+    abstract public void showCommentView();
+
+    abstract public void showProgress();
+
+    abstract public void hideProgress();
 
     public void bind(ForumComment forumComment) {
         mForumComment = forumComment;
@@ -124,14 +127,14 @@ public abstract class CommentHolder extends RecyclerView.ViewHolder implements V
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btn_more_comment :
+            case R.id.btn_more_comment:
                 android.widget.PopupMenu popupMenu = new android.widget.PopupMenu(mContext, view);
                 popupMenu.setOnMenuItemClickListener(this);
                 MenuInflater inflater = popupMenu.getMenuInflater();
                 inflater.inflate(R.menu.menu_edit_delete, popupMenu.getMenu());
                 popupMenu.show();
                 break;
-            case R.id.comment_body_edit_button :
+            case R.id.comment_body_edit_button:
                 showProgress();
                 new NetworkingService<>().postPutRequest(mContext, PUT, createCommentPaths(), createPutQuery(), null, new NetworkingService.NetworkCallback() {
                     @Override
@@ -153,7 +156,7 @@ public abstract class CommentHolder extends RecyclerView.ViewHolder implements V
                     }
                 });
                 break;
-            case R.id.comment_body_cancel_button :
+            case R.id.comment_body_cancel_button:
                 setTextViews();
                 showCommentView();
                 break;
@@ -163,11 +166,11 @@ public abstract class CommentHolder extends RecyclerView.ViewHolder implements V
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
-            case R.id.edit_menu :
+            case R.id.edit_menu:
                 hideCommentView();
                 setModifyingView();
                 break;
-            case R.id.delete_menu :
+            case R.id.delete_menu:
                 showProgress();
                 new NetworkingService<>().getDeleteRequest(mContext, DELETE, createCommentPaths(), createDeleteQuery(), new NetworkingService.NetworkCallback() {
                     @Override

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -25,25 +24,21 @@ import nl.rug.www.rugsummerschools.networking.NetworkingService;
 /**
  * This is an Activity class to post or edit a forum thread.
  *
- * @since 05/06/2017
  * @author Jeongkyun Oh
  * @version 2.0.0
+ * @since 05/06/2017
  */
 
 public class ThreadActivity extends BaseActivity implements NetworkingService.NetworkCallback {
 
-    private static final String TAG = "ThreadActivity";
-
-    private static final String EXTRA_EDIT_THREAD_DATA = "nl.rug.www.extra_edit_thread_data";
-    private static final String EXTRA_EDITED_TREAD_DATA = "nl.rug.www.extra_edited_thread_data";
-
     public static final int INDEX_ID = 0;
     public static final int INDEX_TITLE = 1;
     public static final int INDEX_DETAIL = 2;
-
     public static final int INT_ADD = 0;
     public static final int INT_EDIT = 1;
-
+    private static final String TAG = "ThreadActivity";
+    private static final String EXTRA_EDIT_THREAD_DATA = "nl.rug.www.extra_edit_thread_data";
+    private static final String EXTRA_EDITED_TREAD_DATA = "nl.rug.www.extra_edited_thread_data";
     private int mFlag = INT_ADD;
     private EditText mTitleEditText;
     private EditText mContentsEditText;
@@ -96,7 +91,7 @@ public class ThreadActivity extends BaseActivity implements NetworkingService.Ne
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.post_menu :
+            case R.id.post_menu:
                 String title = mTitleEditText.getText().toString();
                 String description = mContentsEditText.getText().toString();
 
@@ -105,10 +100,10 @@ public class ThreadActivity extends BaseActivity implements NetworkingService.Ne
                 } else {
                     showProgressDialog();
                     switch (mFlag) {
-                        case INT_ADD :
+                        case INT_ADD:
                             new NetworkingService<>().postPutRequest(this, Request.Method.POST, NetworkingService.getThreadPath(), null, getPostQuery(), this);
                             break;
-                        case INT_EDIT :
+                        case INT_EDIT:
                             new NetworkingService<>().postPutRequest(this, Request.Method.PUT, NetworkingService.getThreadPath(), getPutQuery(), null, this);
                             break;
                     }
@@ -143,7 +138,7 @@ public class ThreadActivity extends BaseActivity implements NetworkingService.Ne
         Toast.makeText(this, result, Toast.LENGTH_SHORT).show();
         if ("OK".equals(result) || "200".equals(result)) {
             Intent intent = new Intent();
-            String[] data = new String[] {
+            String[] data = new String[]{
                     mTitleEditText.getText().toString(),
                     mContentsEditText.getText().toString()
             };

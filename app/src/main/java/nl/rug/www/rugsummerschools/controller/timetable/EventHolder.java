@@ -20,12 +20,12 @@ import nl.rug.www.rugsummerschools.model.Event;
  * ViewHolder class for event recycler view.
  * It binds a event to the associated view.
  *
- * @since 10/02/2018
  * @author Jeongkyun Oh
  * @version 2.0.0
+ * @since 10/02/2018
  */
 
-public class EventHolder extends ContentHolder<Event> implements View.OnClickListener{
+public class EventHolder extends ContentHolder<Event> implements View.OnClickListener {
 
     private Event mEvent;
     private Context mContext;
@@ -60,9 +60,9 @@ public class EventHolder extends ContentHolder<Event> implements View.OnClickLis
         Intent intent = EventDetailActivity.newIntent(mContext, mEvent.getId());
         Bundle bundle;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            bundle = ActivityOptions.makeClipRevealAnimation(itemView, itemView.getWidth() / 2, itemView.getHeight()/2, 0, 0).toBundle();
+            bundle = ActivityOptions.makeClipRevealAnimation(itemView, itemView.getWidth() / 2, itemView.getHeight() / 2, 0, 0).toBundle();
         } else {
-            bundle = ActivityOptions.makeScaleUpAnimation(itemView, itemView.getWidth() / 2, itemView.getHeight()/2, 0, 0).toBundle();
+            bundle = ActivityOptions.makeScaleUpAnimation(itemView, itemView.getWidth() / 2, itemView.getHeight() / 2, 0, 0).toBundle();
         }
         mContext.startActivity(intent, bundle);
     }

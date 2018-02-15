@@ -24,9 +24,9 @@ import nl.rug.www.rugsummerschools.model.GeneralInfo;
  * This is scrolling activity for general information.
  * It contains information of a general information.
  *
- * @since 10/02/2018
  * @author Jeongkyun Oh
  * @version 2.0.0
+ * @since 10/02/2018
  */
 
 public class GeneralInfoScrollingActivity extends AppCompatActivity {

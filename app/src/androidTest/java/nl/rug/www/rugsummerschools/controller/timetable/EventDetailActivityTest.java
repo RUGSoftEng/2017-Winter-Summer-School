@@ -6,7 +6,6 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -27,7 +26,6 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.anything;
-import static org.junit.Assert.*;
 
 @RunWith(AndroidJUnit4.class)
 public class EventDetailActivityTest {
@@ -37,7 +35,7 @@ public class EventDetailActivityTest {
 
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         List<Event> mEvents = new ArrayList<>();
         Date mStartDate;
         Date mEndDate;

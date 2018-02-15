@@ -7,7 +7,6 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -27,22 +26,22 @@ import nl.rug.www.rugsummerschools.networking.NetworkingService;
  * This class is an acitivty started when the application is opened.
  * Only correct code can start main pager activity.
  *
- * @since 13/04/2017
  * @author Jeongkyun Oh
+ * @since 13/04/2017
  */
 
 public class LoginActivity extends BaseActivity {
 
     private static final String TAG = "LoginActivity";
-
-    /** temporary correct code to enter main activity */
+    private static final String IS_STORED = "is_stored";
+    private static final String CODE = "code";
+    /**
+     * temporary correct code to enter main activity
+     */
     private EditText mPasswordEditText;
     private Button mLoginButton;
     private SharedPreferences mSharedPreferences;
     private String mCode;
-
-    private static final String IS_STORED = "is_stored";
-    private static final String CODE = "code";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

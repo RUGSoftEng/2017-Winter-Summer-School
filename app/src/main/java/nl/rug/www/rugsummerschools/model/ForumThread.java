@@ -5,9 +5,9 @@ import java.util.List;
 /**
  * Forum thread model
  *
- * @since 14/05/2017
  * @author Jeongkyun Oh
  * @version 2.0.0
+ * @since 14/05/2017
  **/
 
 public class ForumThread extends Content {

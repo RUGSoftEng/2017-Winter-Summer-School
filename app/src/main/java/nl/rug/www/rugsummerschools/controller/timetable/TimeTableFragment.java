@@ -38,9 +38,9 @@ import nl.rug.www.rugsummerschools.networking.NetworkingService;
  * This fragment is to show list of events per day that inflates main activity.
  * It filter 1st of month to show monthly background and start of week to show week view.
  *
- * @since 10/02/2018
  * @author Jeongkyun Oh
  * @version 2.0.0
+ * @since 10/02/2018
  */
 public class TimeTableFragment extends Fragment {
 
@@ -85,16 +85,16 @@ public class TimeTableFragment extends Fragment {
     }
 
     private void scrollToToday() {
-        ((LinearLayoutManager)mRecyclerView.getLayoutManager()).scrollToPositionWithOffset(mTodayOffset, 0);
+        ((LinearLayoutManager) mRecyclerView.getLayoutManager()).scrollToPositionWithOffset(mTodayOffset, 0);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.today_menu :
+            case R.id.today_menu:
                 scrollToToday();
                 return true;
-            case R.id.refresh_menu :
+            case R.id.refresh_menu:
                 new FetchEvents().execute();
             default:
                 return super.onOptionsItemSelected(item);
@@ -132,7 +132,7 @@ public class TimeTableFragment extends Fragment {
         Calendar today = Calendar.getInstance();
         today.set(Calendar.HOUR, 0);
         today.set(Calendar.MINUTE, 0);
-        for (Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime() ) {
+        for (Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
 
             EventsPerDay newEventsPerDay = new EventsPerDay(date);
             List<Event> eventList = new ArrayList<>();

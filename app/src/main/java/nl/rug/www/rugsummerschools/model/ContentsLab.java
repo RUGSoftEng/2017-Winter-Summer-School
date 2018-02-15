@@ -7,17 +7,19 @@ import java.util.List;
  * ContentsLab stores data that fetched from the database.
  * Singleton pattern is used so that any class can access to the data.
  *
- * @since 13/04/2017
  * @author Jeongkyun Oh
  * @version 2.0.0
+ * @since 13/04/2017
  */
 
 public class ContentsLab {
 
-    /** unique instance of ContentsLab */
+    /**
+     * unique instance of ContentsLab
+     */
     private static ContentsLab sContentsLab;
 
-//    private String mSchoolId;
+    //    private String mSchoolId;
 //    private String mSchoolName;
     private ArrayList<Announcement> mAnnouncements;
     private ArrayList<GeneralInfo> mGeneralInfos;
@@ -26,13 +28,6 @@ public class ContentsLab {
     private ArrayList<ForumThread> mForumThreads;
     private ArrayList<ForumComment> mForumComments;
     private ArrayList<LoginInfo> mSchoolInfos;
-
-    public static ContentsLab get() {
-        if (sContentsLab == null) {
-            sContentsLab = new ContentsLab();
-        }
-        return sContentsLab;
-    }
 
     private ContentsLab() {
         mAnnouncements = new ArrayList<>();
@@ -43,6 +38,12 @@ public class ContentsLab {
         mEvents = new ArrayList<>();
     }
 
+    public static ContentsLab get() {
+        if (sContentsLab == null) {
+            sContentsLab = new ContentsLab();
+        }
+        return sContentsLab;
+    }
 
     public LoginInfo getSchoolInfo() {
         return mSchoolInfos.get(0);
@@ -63,7 +64,9 @@ public class ContentsLab {
         return null;
     }
 
-    public List<Announcement> getAnnouncements() { return mAnnouncements; }
+    public List<Announcement> getAnnouncements() {
+        return mAnnouncements;
+    }
 
     public Announcement getAnnouncement(String id) {
         for (Announcement c : mAnnouncements) {
@@ -72,7 +75,9 @@ public class ContentsLab {
         return null;
     }
 
-    public List<Lecturer> getLecturers() { return mLecturers; }
+    public List<Lecturer> getLecturers() {
+        return mLecturers;
+    }
 
     public Lecturer getLecturer(String id) {
         for (Lecturer c : mLecturers) {
@@ -81,7 +86,9 @@ public class ContentsLab {
         return null;
     }
 
-    public List<Event> getEvents() { return mEvents; }
+    public List<Event> getEvents() {
+        return mEvents;
+    }
 
     public Event getEvent(String id) {
         for (Event e : mEvents) {
@@ -102,7 +109,7 @@ public class ContentsLab {
     }
 
     public void updateForumComments(List<ForumComment> forumComments) {
-        mForumComments = (ArrayList<ForumComment>)forumComments;
+        mForumComments = (ArrayList<ForumComment>) forumComments;
     }
 
     public void updateAnnouncements(List<Announcement> announcements) {

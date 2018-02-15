@@ -3,6 +3,7 @@ package nl.rug.www.rugsummerschools.controller;
 import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -35,8 +36,8 @@ public class RecyclerViewMatcher {
                         idDescription = this.resources.getResourceName(recyclerViewId);
                     } catch (Resources.NotFoundException var4) {
                         idDescription = String.format("%s (resource name not found)",
-                                new Object[] { Integer.valueOf
-                                        (recyclerViewId) });
+                                Integer.valueOf
+                                        (recyclerViewId));
                     }
                 }
 
@@ -49,11 +50,10 @@ public class RecyclerViewMatcher {
 
                 if (childView == null) {
                     RecyclerView recyclerView =
-                            (RecyclerView) view.getRootView().findViewById(recyclerViewId);
+                            view.getRootView().findViewById(recyclerViewId);
                     if (recyclerView != null && recyclerView.getId() == recyclerViewId) {
                         childView = recyclerView.findViewHolderForAdapterPosition(position).itemView;
-                    }
-                    else {
+                    } else {
                         return false;
                     }
                 }
