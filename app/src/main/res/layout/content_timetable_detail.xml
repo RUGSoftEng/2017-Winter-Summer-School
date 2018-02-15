@@ -25,7 +25,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_gravity="center_horizontal"
                 android:src="@drawable/ic_time"/>
 
             <TextView
@@ -51,7 +51,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_gravity="center_horizontal"
                 android:src="@drawable/ic_location"/>
 
             <TextView
@@ -65,6 +65,14 @@
                 tools:text="location"/>
 
         </LinearLayout>
+        
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/map_view"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_marginTop="16dp">
+
+        </com.google.android.gms.maps.MapView>
 
         <LinearLayout
             android:orientation="horizontal"
@@ -77,7 +85,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_gravity="center_horizontal"
                 android:src="@drawable/ic_detail"/>
 
             <TextView

@@ -12,6 +12,16 @@ public class LoginInfo extends Content {
 
     private String mSchoolId;
 
+    public String getSchoolName() {
+        return mSchoolName;
+    }
+
+    public void setSchoolName(String schoolName) {
+        mSchoolName = schoolName;
+    }
+
+    private String mSchoolName;
+
     public String getSchoolId() {
         return mSchoolId;
     }

@@ -19,6 +19,7 @@ import java.util.Map;
 
 import nl.rug.www.rugsummerschools.R;
 import nl.rug.www.rugsummerschools.controller.BaseActivity;
+import nl.rug.www.rugsummerschools.model.ContentsLab;
 import nl.rug.www.rugsummerschools.networking.NetworkingService;
 
 /**
@@ -126,7 +127,8 @@ public class ThreadActivity extends BaseActivity implements NetworkingService.Ne
         String author = user.getDisplayName();
         String posterID = user.getUid();
         String imgURL = user.getPhotoUrl().toString();
-        return NetworkingService.getPostThreadQuery(title, description, author, posterID, imgURL);
+        String school = ContentsLab.get().getSchoolInfo().getSchoolId();
+        return NetworkingService.getPostThreadQuery(title, description, author, posterID, imgURL, school);
     }
 
     private Map<String, String> getPutQuery() {

@@ -167,7 +167,7 @@ public class TimeTableFragment extends Fragment {
         @Override
         protected List<Event> doInBackground(Void... voids) {
             mTodayOffset = -1;
-            String school = ContentsLab.get().getSchoolId();
+            String school = ContentsLab.get().getSchoolInfo().getSchoolId();
             return new NetworkingService<Event>().fetchData(NetworkingService.EVENT, school);
         }
 

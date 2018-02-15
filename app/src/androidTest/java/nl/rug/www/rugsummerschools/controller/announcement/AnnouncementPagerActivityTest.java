@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.text.format.DateUtils;
 
 import org.joda.time.DateTime;
 import org.junit.Before;
@@ -69,9 +70,7 @@ public class AnnouncementPagerActivityTest {
         onView(allOf(withText("author0"), isDisplayed())).check(matches(anything()));
         onView(allOf(withText("Test-driven development (TDD) is a software development process that relies on the repetition of a very short development cycle: Requirements are turned into very specific test cases, then the software is improved to pass the new tests, only. This is opposed to software development that allows software to be added that is not proven to meet requirements.0"), isDisplayed())).check(matches(anything()));
         Date date = new DateTime("2018-02-08T15:50:25.346Z").toDate();
-        SimpleDateFormat parseDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        SimpleDateFormat parseTime = new SimpleDateFormat("hh:mm a", Locale.getDefault());
-        onView(allOf(withText(parseDate.format(date)), isDisplayed())).check(matches(anything()));
-        onView(allOf(withText(parseTime.format(date)), isDisplayed())).check(matches(anything()));
+        String time = DateUtils.getRelativeTimeSpanString(date.getTime(), System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS).toString();
+        onView(allOf(withText(time), isDisplayed())).check(matches(anything()));
     }
 }

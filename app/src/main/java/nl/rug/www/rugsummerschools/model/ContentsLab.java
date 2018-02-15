@@ -17,14 +17,15 @@ public class ContentsLab {
     /** unique instance of ContentsLab */
     private static ContentsLab sContentsLab;
 
-    private String mSchoolId;
+//    private String mSchoolId;
+//    private String mSchoolName;
     private ArrayList<Announcement> mAnnouncements;
     private ArrayList<GeneralInfo> mGeneralInfos;
     private ArrayList<Lecturer> mLecturers;
     private ArrayList<Event> mEvents;
     private ArrayList<ForumThread> mForumThreads;
     private ArrayList<ForumComment> mForumComments;
-    private ArrayList<String> mLogInCodes;
+    private ArrayList<LoginInfo> mSchoolInfos;
 
     public static ContentsLab get() {
         if (sContentsLab == null) {
@@ -38,13 +39,18 @@ public class ContentsLab {
         mGeneralInfos = new ArrayList<>();
         mLecturers = new ArrayList<>();
         mForumThreads = new ArrayList<>();
-        mLogInCodes = new ArrayList<>();
+        mSchoolInfos = new ArrayList<>();
         mEvents = new ArrayList<>();
     }
 
-    public String getSchoolId() { return mSchoolId; }
 
-    public void setSchoolId(String id) { mSchoolId = id; }
+    public LoginInfo getSchoolInfo() {
+        return mSchoolInfos.get(0);
+    }
+
+    public void updateSchoolInfos(List<LoginInfo> schoolInfos) {
+        mSchoolInfos = (ArrayList<LoginInfo>) schoolInfos;
+    }
 
     public List<GeneralInfo> getGeneralInfos() {
         return mGeneralInfos;

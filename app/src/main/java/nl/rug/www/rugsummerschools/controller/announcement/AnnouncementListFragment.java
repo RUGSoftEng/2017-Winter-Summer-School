@@ -47,7 +47,7 @@ public class AnnouncementListFragment extends ContentsListFragment<Announcement,
 
     @Override
     protected List<Announcement> fetchContents() {
-        String schoolId = ContentsLab.get().getSchoolId();
+        String schoolId = ContentsLab.get().getSchoolInfo().getSchoolId();
         return new NetworkingService<Announcement>().fetchData(NetworkingService.ANNOUNCEMENT, schoolId);
     }
 

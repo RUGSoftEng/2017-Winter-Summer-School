@@ -43,26 +43,12 @@
                     android:textColor="@color/colorTitle"
                     tools:text="@{announcement.poster}"/>
 
-                <LinearLayout
-                    android:orientation="vertical"
+                <TextView
+                    android:id="@+id/date_text_view"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:gravity="center">
-
-                    <TextView
-                        android:id="@+id/date_text_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        tools:text="2017-03-23"/>
-
-                    <TextView
-                        android:id="@+id/time_text_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        tools:text="10:20PM"/>
-
-                </LinearLayout>
+                    tools:text="2017-03-23"/>
 
             </LinearLayout>
 

@@ -1,7 +1,9 @@
 package nl.rug.www.rugsummerschools.controller.timetable;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +45,7 @@ public class EventHolder extends ContentHolder<Event> implements View.OnClickLis
     public void bind(Event event) {
         mEvent = event;
         mTitleTextView.setText(mEvent.getTitle());
-        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm", Locale.getDefault());
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
         String time = sdf.format(mEvent.getStartDate()) + " - " + sdf.format(mEvent.getEndDate());
         mTimeTextView.setText(time);
         mLocationTextView.setText(mEvent.getLocation());
@@ -51,7 +53,17 @@ public class EventHolder extends ContentHolder<Event> implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
+        int[] clickCoords = new int[2];
+        itemView.getLocationOnScreen(clickCoords);
+        clickCoords[0] += itemView.getWidth() / 2;
+        clickCoords[1] += itemView.getHeight() / 2;
         Intent intent = EventDetailActivity.newIntent(mContext, mEvent.getId());
-        mContext.startActivity(intent);
+        Bundle bundle;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            bundle = ActivityOptions.makeClipRevealAnimation(itemView, itemView.getWidth() / 2, itemView.getHeight()/2, 0, 0).toBundle();
+        } else {
+            bundle = ActivityOptions.makeScaleUpAnimation(itemView, itemView.getWidth() / 2, itemView.getHeight()/2, 0, 0).toBundle();
+        }
+        mContext.startActivity(intent, bundle);
     }
 }

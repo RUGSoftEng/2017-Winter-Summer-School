@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import nl.rug.www.rugsummerschools.R;
 import nl.rug.www.rugsummerschools.databinding.FragmentListBinding;

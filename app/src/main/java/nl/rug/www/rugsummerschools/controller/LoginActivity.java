@@ -3,8 +3,11 @@ package nl.rug.www.rugsummerschools.controller;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +15,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 import nl.rug.www.rugsummerschools.R;
@@ -44,6 +48,10 @@ public class LoginActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        Configuration configuration = new Configuration(Resources.getSystem().getConfiguration());
+        configuration.locale = Locale.ENGLISH;
+        Resources.getSystem().updateConfiguration(configuration, null);
 
         mLoginButton = findViewById(R.id.login_button);
         mPasswordEditText = findViewById(R.id.code_edit_text);
@@ -101,7 +109,7 @@ public class LoginActivity extends BaseActivity {
                 ed.clear();
                 ed.apply();
             } else {
-                ContentsLab.get().setSchoolId(loginInfos.get(0).getSchoolId());
+                ContentsLab.get().updateSchoolInfos(loginInfos);
                 if (!mSharedPreferences.getBoolean(IS_STORED, false)) {
                     SharedPreferences.Editor ed = mSharedPreferences.edit();
                     ed.putBoolean(IS_STORED, true);

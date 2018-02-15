@@ -67,7 +67,7 @@ public class TimeTableHolder extends RecyclerView.ViewHolder{
 
     private void restrictFirstday(Calendar calendar, Date date) {
         if (calendar.get(Calendar.DATE) == 1) {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy - MMM", Locale.getDefault());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy - MMMM", Locale.getDefault());
             SimpleDateFormat month = new SimpleDateFormat("MM", Locale.getDefault());
             setMonthBackground(Integer.valueOf(month.format(date)));
             mYearTextView.setText(sdf.format(date));
@@ -78,11 +78,17 @@ public class TimeTableHolder extends RecyclerView.ViewHolder{
     private void restrictStartOfWeek(Calendar calendar, Date date) {
         if (Calendar.MONDAY == calendar.get(Calendar.DAY_OF_WEEK)) {
             String week = "";
-            SimpleDateFormat sdf = new SimpleDateFormat("MMM d", Locale.getDefault());
-            week += sdf.format(date);
+            SimpleDateFormat sdfm = new SimpleDateFormat("MMM", Locale.getDefault());
+            SimpleDateFormat sdfd = new SimpleDateFormat("d", Locale.getDefault());
+            String startMonth = sdfm.format(date);
+            week += startMonth;
+            week += " " + sdfd.format(date);
             week += " - ";
             calendar.add(Calendar.DATE, 6);
-            week += sdf.format(calendar.getTime());
+            String endMonth = sdfm.format(calendar.getTime());
+            if (!startMonth.equals(endMonth))
+                week += endMonth;
+            week += " " + sdfd.format(calendar.getTime());
             mWeekTextView.setText(week);
             mWeekTextView.setVisibility(View.VISIBLE);
         }

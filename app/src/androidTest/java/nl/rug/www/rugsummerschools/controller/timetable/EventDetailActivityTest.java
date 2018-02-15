@@ -18,11 +18,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import nl.rug.www.rugsummerschools.R;
 import nl.rug.www.rugsummerschools.model.ContentsLab;
 import nl.rug.www.rugsummerschools.model.Event;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.anything;
 import static org.junit.Assert.*;
@@ -64,14 +66,14 @@ public class EventDetailActivityTest {
     public void eventdetailTest() {
         onView(withText("new event")).check(matches(anything()));
         onView(withText("campus")).check(matches(anything()));
+        onView(withId(R.id.map_view)).check(matches(anything()));
         onView(withText("This is test description for event")).check(matches(anything()));
         Date mStartDate = new Date();
         mStartDate.setTime(151827902);
         Date mEndDate = new Date();
         mEndDate.setTime(351827902);
 
-        SimpleDateFormat parseDate = new SimpleDateFormat("dd-MMM", Locale.getDefault());
-        SimpleDateFormat parseTime = new SimpleDateFormat("hh:mm", Locale.getDefault());
+        SimpleDateFormat parseTime = new SimpleDateFormat("HH:mm", Locale.getDefault());
         String timePeriod = parseTime.format(mStartDate) + " - " + parseTime.format(mEndDate);
         onView(withText(timePeriod)).check(matches(anything()));
     }

@@ -54,7 +54,7 @@ public class MainActivityTest {
             auth.signOut();
         }
         LoginManager.getInstance().logOut();
-        ContentsLab.get().setSchoolId(DEFAULT_SCHOOL_ID);
+        ContentsLab.get().getSchoolInfo().setSchoolId(DEFAULT_SCHOOL_ID);
     }
 
     @Test

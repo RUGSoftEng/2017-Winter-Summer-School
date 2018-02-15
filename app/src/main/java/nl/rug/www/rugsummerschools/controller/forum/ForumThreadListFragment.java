@@ -69,7 +69,8 @@ public class ForumThreadListFragment extends ContentsListFragment<ForumThread, C
 
     @Override
     protected List<ForumThread> fetchContents() {
-        return new NetworkingService<ForumThread>().fetchData(NetworkingService.FORUM_THREAD, null);
+        String school = ContentsLab.get().getSchoolInfo().getSchoolId();
+        return new NetworkingService<ForumThread>().fetchData(NetworkingService.FORUM_THREAD, school);
     }
 
     @Override

@@ -8,6 +8,8 @@
     <string name="fb_login_protocol_scheme">fb270526376748352</string>
     <string name="facebook_app_id">270526376748352</string>
 
+    <string name="google_map_api_key">AIzaSyAw4CPVYL3eefTC-WoDiK9alGIVAsdY7YM</string>
+
     <string name="announcement">Announcement</string>
     <string name="forum">Forum</string>
     <string name="general_info">General Information</string>

@@ -32,6 +32,7 @@ import java.util.Map;
 
 import nl.rug.www.rugsummerschools.model.Announcement;
 import nl.rug.www.rugsummerschools.model.Content;
+import nl.rug.www.rugsummerschools.model.ContentsLab;
 import nl.rug.www.rugsummerschools.model.Event;
 import nl.rug.www.rugsummerschools.model.ForumComment;
 import nl.rug.www.rugsummerschools.model.ForumThread;
@@ -132,6 +133,7 @@ public class NetworkingService<T extends Content> {
                     queries.put("code", extra);
                     jsonString = getUrlString(buildURL(paths, queries));
                     parseLoginCode((List<LoginInfo>)data, new JSONObject(jsonString));
+                    updateSchoolName((List<LoginInfo>)data);
                     break;
                 case ANNOUNCEMENT :
                     paths.add("announcement");
@@ -158,6 +160,7 @@ public class NetworkingService<T extends Content> {
                 case FORUM_THREAD :
                     paths.add("forum");
                     paths.add("thread");
+                    queries.put("school", extra);
                     jsonString = getUrlString(buildURL(paths, null));
                     parseForumThreads((List<ForumThread>)data, new JSONArray(jsonString));
                     break;
@@ -169,11 +172,26 @@ public class NetworkingService<T extends Content> {
                     parseForumComments((List<ForumComment>)data, new JSONArray(jsonString));
                     break;
             }
-//            Log.d(TAG, "JSONString: " + jsonString);
         } catch (IOException | JSONException e) {
+            Log.e(TAG, e.getMessage());
             e.printStackTrace();
         }
         return data;
+    }
+
+    private void updateSchoolName(List<LoginInfo> items) throws IOException, JSONException {
+        List<String> paths = new ArrayList<>();
+        Map<String, String> map = new HashMap<>();
+        paths.add("school");
+        map.put("id", items.get(0).getSchoolId());
+        String jsonString = getUrlString(buildURL(paths, map));
+        JSONArray array = new JSONArray(jsonString);
+        JSONObject object = array.getJSONObject(0);
+        String schoolName = "Unknown";
+        if (!object.isNull("name")) {
+            schoolName = object.getString("name");
+        }
+        items.get(0).setSchoolName(schoolName);
     }
 
     private void parseLoginCode(List<LoginInfo> items, JSONObject jsonObject) throws JSONException {
@@ -262,13 +280,16 @@ public class NetworkingService<T extends Content> {
             lecturer.setTitle(contentJsonObject.getString("name"));
             lecturer.setDescription(contentJsonObject.getString("description"));
             lecturer.setWebsite(contentJsonObject.getString("website"));
-//            Uri.Builder builder = new Uri.Builder();
-//            builder.scheme("http")
-//                    .encodedAuthority(HTTP_URL)
-//                    .appendPath(contentJsonObject.getString("imagepath"));
-//            Log.d(TAG, "URL string :" + builder.toString());
-//            lecturer.setImgurl(builder.toString());
-            lecturer.setImgurl("");
+            if (!contentJsonObject.isNull("imagepath")) {
+                Uri.Builder builder = new Uri.Builder();
+                builder.scheme("http")
+                        .encodedAuthority(HTTP_URL)
+                        .appendPath(contentJsonObject.getString("imagepath"));
+                Log.d(TAG, "URL string :" + builder.toString());
+                lecturer.setImgurl(builder.toString());
+            } else {
+                lecturer.setImgurl("");
+            }
 
             items.add(lecturer);
         }
@@ -330,13 +351,14 @@ public class NetworkingService<T extends Content> {
         return paths;
     }
 
-    public static Map<String, String> getPostThreadQuery(String title, String description, String author, String posterID, String imgURL) {
+    public static Map<String, String> getPostThreadQuery(String title, String description, String author, String posterID, String imgURL, String school) {
         Map<String, String> map = new HashMap<>();
         map.put("title", title);
         map.put("description", description);
         map.put("author", author);
         map.put("posterID", posterID);
         map.put("imgURL", imgURL);
+        map.put("school", school);
         return map;
     }
 

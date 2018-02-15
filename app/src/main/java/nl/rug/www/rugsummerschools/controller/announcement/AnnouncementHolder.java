@@ -1,6 +1,8 @@
 package nl.rug.www.rugsummerschools.controller.announcement;
 
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +21,7 @@ import java.util.Locale;
 import nl.rug.www.rugsummerschools.R;
 import nl.rug.www.rugsummerschools.controller.ContentHolder;
 import nl.rug.www.rugsummerschools.model.Announcement;
+import nl.rug.www.rugsummerschools.model.ContentsLab;
 
 import static org.joda.time.DateTimeConstants.MILLIS_PER_DAY;
 
@@ -51,6 +54,7 @@ public abstract class AnnouncementHolder extends ContentHolder<Announcement> imp
     @Override
     public void bind(Announcement announcement) {
         mContent = announcement;
+        mContent.setPoster(ContentsLab.get().getSchoolInfo().getSchoolName());
         mTitleTextView.setText(mContent.getTitle());
         String poster = mContent.getPoster();
         mInitialView.setText(mContent.getInitial());
@@ -59,6 +63,7 @@ public abstract class AnnouncementHolder extends ContentHolder<Announcement> imp
         String byPoster = "By " + poster;
         mAuthorTextView.setText(byPoster);
         Date date = new DateTime(mContent.getDate()).toDate();
+
         mRelativeTimeView.setText(DateUtils.getRelativeTimeSpanString(date.getTime(), System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS));
     }
 }

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.Html;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,10 +67,7 @@ public class AnnouncementFragment extends Fragment {
         GradientDrawable circle = (GradientDrawable)mBinding.initialTextView.getBackground();
         circle.setColor(mAnnouncement.getColor());
         Date date = new DateTime(mAnnouncement.getDate()).toDate();
-        SimpleDateFormat parseDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        SimpleDateFormat parseTime = new SimpleDateFormat("hh:mm a", Locale.getDefault());
-        mBinding.dateTextView.setText(parseDate.format(date));
-        mBinding.timeTextView.setText(parseTime.format(date));
+        mBinding.dateTextView.setText(DateUtils.getRelativeTimeSpanString(date.getTime(), System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS));
 
         return mBinding.getRoot();
     }
