@@ -186,7 +186,7 @@ public class NetworkingService<T extends Content> {
                 case ANNOUNCEMENT:
                     paths.add("announcement");
                     queries.put("school", extra);
-                    jsonString = getUrlString(buildURL(paths, null));
+                    jsonString = getUrlString(buildURL(paths, queries));
                     parseAnnouncements((List<Announcement>) data, new JSONArray(jsonString));
                     break;
                 case GENERAL_INFO:
@@ -209,7 +209,7 @@ public class NetworkingService<T extends Content> {
                     paths.add("forum");
                     paths.add("thread");
                     queries.put("school", extra);
-                    jsonString = getUrlString(buildURL(paths, null));
+                    jsonString = getUrlString(buildURL(paths, queries));
                     parseForumThreads((List<ForumThread>) data, new JSONArray(jsonString));
                     break;
                 case FORUM_COMMENT:

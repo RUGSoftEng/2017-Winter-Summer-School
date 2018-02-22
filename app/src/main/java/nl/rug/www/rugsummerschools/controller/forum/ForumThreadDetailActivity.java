@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.VisibleForTesting;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -60,6 +61,7 @@ public class ForumThreadDetailActivity extends BaseActivity implements View.OnCl
             "nl.rug.www.rugsummerschool.forum_thread_id";
     private static final int REQUEST_CODE_EDIT_THREAD = 0;
 
+    private FirebaseAuth mAuth;
     private ForumThread mForumThread;
     private List<ForumComment> mForumComments;
     private TextView mTitleView;
@@ -92,7 +94,8 @@ public class ForumThreadDetailActivity extends BaseActivity implements View.OnCl
         ImageView commentPostImageView = findViewById(R.id.comment_post_photo);
         ImageView moreButton = findViewById(R.id.btn_more_post);
         moreButton.setOnClickListener(this);
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
         Glide.with(this).load(user.getPhotoUrl()).into(commentPostImageView);
         mForumThread = ContentsLab.get().getForumThread(threadId);
         if (user.getUid().equals(mForumThread.getPosterId()))
@@ -165,7 +168,7 @@ public class ForumThreadDetailActivity extends BaseActivity implements View.OnCl
     }
 
     private Map<String, String> createPostQuery() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser user = mAuth.getCurrentUser();
         return NetworkingService.getPostCommentQuery(mCommentEditText.getText().toString(), user.getDisplayName(), user.getUid(), mForumThread.getId(), user.getPhotoUrl().toString());
     }
 
@@ -333,5 +336,10 @@ public class ForumThreadDetailActivity extends BaseActivity implements View.OnCl
             setupAdapter();
             ContentsLab.get().updateForumComments(forumComments);
         }
+    }
+
+    @VisibleForTesting
+    public void setAuthForTest(FirebaseAuth auth) {
+        mAuth = auth;
     }
 }

@@ -28,11 +28,12 @@ android {
         applicationId "nl.rug.www.rugsummerschools"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 4
-        versionName '1.5'
+        versionCode 8
+        versionName '2.0.2'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
+        versionNameSuffix '-alpha'
     }
     buildTypes {
         release {

@@ -7,12 +7,15 @@ import android.text.Html;
 
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import nl.rug.www.rugsummerschools.R;
@@ -24,6 +27,7 @@ import nl.rug.www.rugsummerschools.model.ContentsLab;
 import nl.rug.www.rugsummerschools.model.Event;
 import nl.rug.www.rugsummerschools.model.GeneralInfo;
 import nl.rug.www.rugsummerschools.model.Lecturer;
+import nl.rug.www.rugsummerschools.model.LoginInfo;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -35,15 +39,19 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
 
+    private static final String DEFAULT_SCHOOL_NAME = "TestSchool";
     private static final String DEFAULT_SCHOOL_ID = "5a5d15a9eff28d521340b136";
 
     @Rule
-    public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+    public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class, true, false);
 
     @Before
     public void setUp() {
@@ -52,7 +60,14 @@ public class MainActivityTest {
             auth.signOut();
         }
         LoginManager.getInstance().logOut();
-        ContentsLab.get().getSchoolInfo().setSchoolId(DEFAULT_SCHOOL_ID);
+        List<LoginInfo> loginInfos = new ArrayList<>();
+        LoginInfo loginInfo = new LoginInfo();
+        loginInfo.setSchoolName(DEFAULT_SCHOOL_NAME);
+        loginInfo.setSchoolId(DEFAULT_SCHOOL_ID);
+        loginInfos.add(loginInfo);
+        ContentsLab.get().updateSchoolInfos(loginInfos);
+
+        mActivityTestRule.launchActivity(null);
     }
 
     @Test
@@ -153,7 +168,5 @@ public class MainActivityTest {
     @Test
     public void forumTest() {
         onView(withId(R.id.navigation_forum)).perform(click());
-        List<GeneralInfo> list = ContentsLab.get().getGeneralInfos();
-        if (list == null) return;
     }
 }
