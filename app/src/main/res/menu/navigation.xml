@@ -14,7 +14,7 @@
     <item
         android:id="@+id/navigation_lecturer"
         android:icon="@drawable/ic_lecturer"
-        android:title="@string/staffs"/>
+        android:title="@string/staff"/>
 
     <item
         android:id="@+id/navigation_time_table"

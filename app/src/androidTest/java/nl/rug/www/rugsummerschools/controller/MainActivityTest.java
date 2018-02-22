@@ -7,13 +7,11 @@ import android.text.Html;
 
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +40,6 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
@@ -89,7 +86,7 @@ public class MainActivityTest {
     public void bottomSheetTest() {
         onView(withId(R.id.navigation)).check(matches(hasDescendant(withText(R.string.notice))));
         onView(withId(R.id.navigation)).check(matches(hasDescendant(withText(R.string.info))));
-        onView(withId(R.id.navigation)).check(matches(hasDescendant(withText(R.string.staffs))));
+        onView(withId(R.id.navigation)).check(matches(hasDescendant(withText(R.string.staff))));
         onView(withId(R.id.navigation)).check(matches(hasDescendant(withText(R.string.schedule))));
         onView(withId(R.id.navigation)).check(matches(hasDescendant(withText(R.string.forum))));
     }
