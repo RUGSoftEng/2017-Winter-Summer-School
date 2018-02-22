@@ -11,6 +11,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,6 +35,8 @@ import nl.rug.www.rugsummerschools.model.Lecturer;
  */
 
 public class LecturerScrollingActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private static final String TAG = "LecturerSclActivity";
 
     protected static final String EXTRA_CONTENT_ID =
             "nl.rug.www.rugsummerschool.content_id";
@@ -78,10 +81,10 @@ public class LecturerScrollingActivity extends AppCompatActivity implements View
     public void onClick(View view) {
         String url = mLecturer.getWebsite();
         try {
-            Uri website = Uri.parse(new URL(url).toURI().toString());
+            Uri website = new Uri.Builder().scheme("https")
+                    .authority(url).build();
             Intent websiteIntent = new Intent(Intent.ACTION_VIEW, website);
             startActivity(websiteIntent);
-
         } catch (Exception e) {
             Toast.makeText(LecturerScrollingActivity.this, "Failed to visit website", Toast.LENGTH_LONG).show();
             e.printStackTrace();
