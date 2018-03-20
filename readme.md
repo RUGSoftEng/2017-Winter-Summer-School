@@ -1,47 +1,46 @@
-# Summer Schools Android Application
+[![Build Status](https://travis-ci.org/RUGSoftEng/2017-Winter-Summer-School-Android.svg?branch=test)](https://travis-ci.org/RUGSoftEng/2017-Winter-Summer-School-Android)
+[![Coverage Status](https://coveralls.io/repos/github/RUGSoftEng/2017-Winter-Summer-School-Android/badge.svg?branch=test)](https://coveralls.io/github/RUGSoftEng/2017-Winter-Summer-School-Android?branch=test)
+# UG Summer & Winter Schools Android Application
+The​ ​Winter​ ​and​ ​Summer​ ​Schools​ ​Android​ ​Application​ ​is​ ​a​ ​project​ ​developed​ ​at​ ​the​ ​RUG​ ​which aims​ ​to​ ​help​ ​to​ ​communicate​ ​between​ ​the​ ​school​ ​organizers​ ​and​ ​the​ ​participants​ ​in​ ​order​ ​for them​ ​to​ ​provide​ ​and​ ​access​ ​general​ ​and​ ​specific​ ​information​ ​and​ ​to​ ​create​ ​community​ ​so​ ​that​ ​it acts​ ​a​ ​communication​ ​hub​ ​in​ ​general.​
+
+Download Current Version on Google Play : [UG Summer & Winter Schools](https://play.google.com/store/apps/details?id=nl.rug.www.rugsummerschools)
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+This instructions provide you with installation process to run the application on local machine using Android Studio.
 
 ### Prerequisites
 
-Android Studio | Git Bash
+* Android Studio 3.1 Beta+
+* Android SDK 27+
+* Gradle 4.5+
+* Build tool version : 27.0.3
+* Minimum SDK version 19
 
-Provided by us:
-Firebase | Facebook Developer Account
+### Installation
 
-### Pulling of Project with Git Bash
+Clone this project where you want to install. Run Android Studio and import project. Sync the project with Gradle files and build. You may have to install or download required files.
+
+Build on command line :
 ```
-Change directory to the folder for storing the project
-1) cd <dir>
-Clone from specific branch
-2) git clone -b <specific Branch> https://github.com/RUGSoftEng/2017-Winter-Summer-School.git
-
+./gradlew build
 ```
 
 ### Adding Android Studio SHA1 key to Firebase Console
 
-You have to do this step to allow your android studio to be recognised as a trusted machine, failing to do so will result in google sign in not working
+This project authenticates users using Firebase via Facebook or Google account for forum section. In order to authenticate using Firebase, you have to add Android Studio SHA1 key to Firebase Console. Please contact to us to add your key.
+
+### Setting up the sever
+
+As default, the application is connected to the actual running server [Web application](http://turing13.housing.rug.nl:8800).
+The application will be working normally. Also, you can run the application with local server (See : [2017-Winter-Summer-School-App](https://github.com/RUGSoftEng/2017-Winter-Summer-School-App)). In order to communicate with local server, you have to change the server URL to your local server address on `NetworkingService` class.
+
 ```
-1) log into the firebase developer account(schoolsummer70@gmail) on https://console.firebase.google.com
-2) Click on gear button(beside Overview) to expand Settings list -> Project Settings
-3) Add your SHA1 key here
-
-To retrieve SHA1 key in Android Studio:
-1) Click on gradle tab on the right ->  expand SummerSchool(root) -> expand android -> double click Signing Report
-2) Click on gradle Console tab on the bottom right corner, you should see SHA1 : XX:XX:XX:XX:XX:XX....
+public class NetworkingService<T extends Content> {
+    ...
+    private static final String HTTP_URL = /* put your local server address here */;
+    ...
 ```
 
-## Deployment
-
-
-## Contributing
-
-
-## Versioning
-
-
-## Authors
-
-## License
+## Author
+* **Jeongkyun Oh** - lasking88@naver.com
