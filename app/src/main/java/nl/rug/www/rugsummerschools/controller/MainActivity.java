@@ -75,6 +75,9 @@ public class MainActivity extends BaseActivity implements ForumLoginFragment.OnS
     private static final int FRAGMENTS_SIZE = 5;
     private static final int RC_SIGN_IN = 9001;
 
+    private static final String mFacebookScheme = "https://graph.facebook.com/";
+    private static final String mFacebookQuery = "/picture?width=500&height=500";
+
     private FirebaseAuth mAuth;
     private LoginButton mInvisibleFacebookLoginButton;
     private CallbackManager mCallbackManager;
@@ -280,7 +283,7 @@ public class MainActivity extends BaseActivity implements ForumLoginFragment.OnS
 
                 Uri profilePicture;
                 try {
-                    profilePicture = Uri.parse("https://graph.facebook.com/" + object.getString("id") + "/picture?width=500&height=500");
+                    profilePicture = Uri.parse(mFacebookScheme + object.getString("id") + mFacebookQuery);
                     Log.d(TAG, "profile picture : profilePicture");
                     UserProfileChangeRequest.Builder builder = new UserProfileChangeRequest.Builder();
                     user.updateProfile(builder.setPhotoUri(profilePicture).build());

@@ -11,6 +11,14 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
+/**
+ * This class is a type matcher for a drawable in order to test whether or not a drawable matches
+ * the one that is supposed to appear.
+ *
+ * @author Daniele Bottillo
+ * @link https://medium.com/@dbottillo/android-ui-test-espresso-matcher-for-imageview-1a28c832626f
+ */
+
 public class DrawableMatcher extends TypeSafeMatcher<View> {
 
     static private final int EMPTY = -1;
