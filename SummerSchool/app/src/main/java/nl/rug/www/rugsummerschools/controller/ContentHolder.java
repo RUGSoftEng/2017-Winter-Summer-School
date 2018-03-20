@@ -6,7 +6,11 @@ import android.view.View;
 import nl.rug.www.rugsummerschools.model.Content;
 
 /**
- * Created by jk on 17. 12. 6.
+ * This class is general contents view holder for recycler view of contents for main activity.
+ *
+ * @since 06/12/2017
+ * @author Jeongkyun Oh
+ * @version 2.0.0
  */
 
 public abstract class ContentHolder<T extends Content> extends RecyclerView.ViewHolder {

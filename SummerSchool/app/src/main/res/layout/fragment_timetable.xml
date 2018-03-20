@@ -16,34 +16,6 @@
         android:textStyle="bold"
         tools:text="Section"/>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:id="@+id/previous_week_button"
-            android:background="@android:color/transparent"
-            android:layout_alignParentStart="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:text="@string/previous"
-            android:textColor="@android:color/black"/>
-
-        <Button
-            android:id="@+id/next_week_button"
-            android:background="@android:color/transparent"
-            android:layout_alignParentEnd="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-            android:text="@string/next"
-            android:textColor="@android:color/black"
-            tools:ignore="RelativeOverlap"/>
-
-
-    </RelativeLayout>
-    
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
@@ -58,7 +30,6 @@
         </android.support.v7.widget.RecyclerView>
 
     </android.support.v4.widget.SwipeRefreshLayout>
-
 
 </LinearLayout>
 

@@ -2,6 +2,7 @@ package nl.rug.www.rugsummerschools.controller;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
@@ -10,7 +11,6 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -20,6 +20,8 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -36,9 +38,12 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.UserProfileChangeRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 
 import nl.rug.www.rugsummerschools.R;
 import nl.rug.www.rugsummerschools.controller.announcement.AnnouncementListFragment;
@@ -57,7 +62,7 @@ import nl.rug.www.rugsummerschools.controller.timetable.TimeTableFragment;
  * @author Jeongkyun Oh
  */
 
-public class MainActivity extends AppCompatActivity implements ForumLoginFragment.OnSignInListener, ForumThreadListFragment.OnSignOutListener {
+public class MainActivity extends BaseActivity implements ForumLoginFragment.OnSignInListener, ForumThreadListFragment.OnSignOutListener {
 
     private static final String TAG = "MainActivity";
     private static final int PAGE_ACCOUNCEMENT = 0;
@@ -171,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements ForumLoginFragmen
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(null);
 
-        mNavigation = (BottomNavigationView) findViewById(R.id.navigation);
+        mNavigation = findViewById(R.id.navigation);
         mNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         disableShiftingNavigationMode();
 
@@ -180,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements ForumLoginFragmen
 
         mAuth = FirebaseAuth.getInstance();
 
-        mViewPager = (ViewPager)findViewById(R.id.main_view_pager);
+        mViewPager = findViewById(R.id.main_view_pager);
         mViewPager.addOnPageChangeListener(mSimpleOnPageChangeListener);
         mViewPager.setAdapter(mFragmentStatePagerAdapter);
     }
@@ -199,13 +204,13 @@ public class MainActivity extends AppCompatActivity implements ForumLoginFragmen
             @Override
             public void onCancel() {
                 Log.d(TAG, "facebook:onCancel");
-                // ...
+                Toast.makeText(MainActivity.this, "Facebook login failed", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onError(FacebookException error) {
                 Log.d(TAG, "facebook:onError", error);
-                // ...
+                Toast.makeText(MainActivity.this, "Error:" + error.toString(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -236,8 +241,9 @@ public class MainActivity extends AppCompatActivity implements ForumLoginFragmen
         }
     }
 
-    private void handleFacebookAccessToken(AccessToken token) {
+    private void handleFacebookAccessToken(final AccessToken token) {
         Log.d(TAG, "handleFacebookAccessToken:" + token);
+        showProgressDialog();
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -247,18 +253,44 @@ public class MainActivity extends AppCompatActivity implements ForumLoginFragmen
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
+                            handleProfilePicture(token, user);
+                            updateUI();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(MainActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            updateUI(null);
+                            updateUI();
                         }
-
-                        // ...
+                        hideProgressDialog();
                     }
                 });
+    }
+
+    private void handleProfilePicture(AccessToken token, final FirebaseUser user) {
+        GraphRequest request = GraphRequest.newMeRequest(token, new GraphRequest.GraphJSONObjectCallback() {
+            @Override
+            public void onCompleted(JSONObject object, GraphResponse response) {
+                Log.d(TAG, object.toString());
+                Log.d(TAG, response.toString());
+
+                Uri profilePicture;
+                try {
+                    profilePicture = Uri.parse("https://graph.facebook.com/" + object.getString("id") + "/picture?width=500&height=500");
+                    Log.d(TAG, "profile picture : profilePicture");
+                    UserProfileChangeRequest.Builder builder = new UserProfileChangeRequest.Builder();
+                    user.updateProfile(builder.setPhotoUri(profilePicture).build());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+        //Here we put the requested fields to be returned from the JSONObject
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id, picture");
+        request.setParameters(parameters);
+        request.executeAsync();
     }
 
 
@@ -266,15 +298,13 @@ public class MainActivity extends AppCompatActivity implements ForumLoginFragmen
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
+        updateUI();
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
@@ -284,23 +314,19 @@ public class MainActivity extends AppCompatActivity implements ForumLoginFragmen
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);
-                // [START_EXCLUDE]
-                updateUI(null);
-                // [END_EXCLUDE]
+                updateUI();
             }
         }
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void updateUI(FirebaseUser user) {
+    private void updateUI() {
         mFragmentStatePagerAdapter.notifyDataSetChanged();
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
-        // [START_EXCLUDE silent]
-//        showProgressDialog();
-        // [END_EXCLUDE]
+        showProgressDialog();
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
@@ -311,18 +337,15 @@ public class MainActivity extends AppCompatActivity implements ForumLoginFragmen
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
+                            updateUI();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(MainActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            updateUI(null);
+                            updateUI();
                         }
-
-                        // [START_EXCLUDE]
-//                        hideProgressDialog();
-                        // [END_EXCLUDE]
+                        hideProgressDialog();
                     }
                 });
     }
@@ -330,20 +353,6 @@ public class MainActivity extends AppCompatActivity implements ForumLoginFragmen
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
-
-    private void signOut() {
-        // Firebase sign out
-        mAuth.signOut();
-
-        // Google sign out
-        mGoogleSignInClient.signOut().addOnCompleteListener(this,
-                new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-//                        updateUI(null);
-                    }
-                });
     }
 
     private void revokeAccess() {
@@ -355,7 +364,7 @@ public class MainActivity extends AppCompatActivity implements ForumLoginFragmen
                 new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        updateUI(null);
+                        updateUI();
                     }
                 });
 
@@ -372,7 +381,7 @@ public class MainActivity extends AppCompatActivity implements ForumLoginFragmen
     }
 
     @Override
-    public void signOutGoogle() {
+    public void signOut() {
         revokeAccess();
         LoginManager.getInstance().logOut();
     }

@@ -1,31 +1,43 @@
 package nl.rug.www.rugsummerschools.model;
 
+import java.util.Date;
+
 /**
- * This class is a model of time table.
+ * This class is a model of event.
  *
  * @since 13/04/2017
  * @author Jeongkyun Oh
+ * @version 2.0.0
  */
 
 public class Event extends Content {
 
-    private String mStartDate;
-    private String mEndDate;
+    private String mSchool;
+    private Date mStartDate;
+    private Date mEndDate;
     private String mLocation;
 
-    public String getStartDate() {
+    public String getSchool() {
+        return mSchool;
+    }
+
+    public void setSchool(String school) {
+        mSchool = school;
+    }
+
+    public Date getStartDate() {
         return mStartDate;
     }
 
-    public void setStartDate(String startDate) {
+    public void setStartDate(Date startDate) {
         mStartDate = startDate;
     }
 
-    public String getEndDate() {
+    public Date getEndDate() {
         return mEndDate;
     }
 
-    public void setEndDate(String endDate) {
+    public void setEndDate(Date endDate) {
         mEndDate = endDate;
     }
 

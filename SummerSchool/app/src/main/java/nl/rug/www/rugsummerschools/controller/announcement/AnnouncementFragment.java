@@ -1,14 +1,14 @@
 package nl.rug.www.rugsummerschools.controller.announcement;
 
-import android.graphics.Color;
+import android.databinding.DataBindingUtil;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import org.joda.time.DateTime;
 
@@ -18,28 +18,28 @@ import java.util.Locale;
 
 import nl.rug.www.rugsummerschools.R;
 import nl.rug.www.rugsummerschools.controller.ContentsLab;
+import nl.rug.www.rugsummerschools.databinding.FragmentAnnBinding;
 import nl.rug.www.rugsummerschools.model.Announcement;
 
 /**
  * Announcement fragment is to show the details of announcement
  * when any item is clicked on AnnouncementListFragment.
+ * This fragment is inflated into AnnouncementPagerActivity
  *
- * @since 13/04/2017
  * @author Jeongkyun Oh
+ * @since 13/04/2017
+ * @version 2.0.0
  */
 
 public class AnnouncementFragment extends Fragment {
 
-    /** key for transferring announcement id */
     private static final String ARG_ANNOUNCEMENT_ID = "announcement_id";
-
-    /** instance of the announcement shown on this fragment */
+    private FragmentAnnBinding mBinding;
     private Announcement mAnnouncement;
 
     public static AnnouncementFragment newInstance(String announcementId) {
         Bundle args = new Bundle();
         args.putString(ARG_ANNOUNCEMENT_ID, announcementId);
-
         AnnouncementFragment fragment = new AnnouncementFragment();
         fragment.setArguments(args);
         return fragment;
@@ -48,38 +48,29 @@ public class AnnouncementFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        assert getArguments() != null;
         String announcementId = getArguments().getString(ARG_ANNOUNCEMENT_ID);
         mAnnouncement = ContentsLab.get().getAnnouncement(announcementId);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_announcement, container, false);
-
-        TextView mDescription = (TextView)view.findViewById(R.id.announcement_detail);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mBinding = DataBindingUtil.inflate(LayoutInflater.from(getActivity()), R.layout.fragment_ann, container, false);
+        mBinding.setAnnouncement(mAnnouncement);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            mDescription.setText(Html.fromHtml(mAnnouncement.getDescription(), Html.FROM_HTML_MODE_LEGACY));
+            mBinding.announcementDetail.setText(Html.fromHtml(mAnnouncement.getDescription(), Html.FROM_HTML_MODE_LEGACY));
         } else {
-            mDescription.setText(Html.fromHtml(mAnnouncement.getDescription()));
+            mBinding.announcementDetail.setText(Html.fromHtml(mAnnouncement.getDescription()));
         }
 
-        TextView mPoster = (TextView)view.findViewById(R.id.poster_text_view);
-        String poster = mAnnouncement.getPoster();
-        mPoster.setText(poster);
-        TextView initialCircle = (TextView)view.findViewById(R.id.initial_text_view);
-        String initial = poster.toUpperCase().charAt(0) + "";
-        initialCircle.setText(initial);
-        GradientDrawable circle = (GradientDrawable)initialCircle.getBackground();
+        GradientDrawable circle = (GradientDrawable)mBinding.initialTextView.getBackground();
         circle.setColor(mAnnouncement.getColor());
-        TextView mDate = (TextView)view.findViewById(R.id.date_text_view);
-        TextView mTime = (TextView)view.findViewById(R.id.time_text_view);
         Date date = new DateTime(mAnnouncement.getDate()).toDate();
-        SimpleDateFormat parseDate = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
+        SimpleDateFormat parseDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         SimpleDateFormat parseTime = new SimpleDateFormat("hh:mm a", Locale.getDefault());
-        mDate.setText(parseDate.format(date));
-        mTime.setText(parseTime.format(date));
+        mBinding.dateTextView.setText(parseDate.format(date));
+        mBinding.timeTextView.setText(parseTime.format(date));
 
-        return view;
+        return mBinding.getRoot();
     }
 }

@@ -20,7 +20,11 @@ import nl.rug.www.rugsummerschools.model.Content;
 
 
 /**
- * Created by jk on 17. 11. 27.
+ * This class is general contents list fragment that inflates main activity.
+ *
+ * @since 10/02/2018
+ * @author Jeongkyun Oh
+ * @version 2.0.0
  */
 
 public abstract class ContentsListFragment<T extends Content, K extends ContentHolder<T>> extends Fragment {
@@ -33,8 +37,6 @@ public abstract class ContentsListFragment<T extends Content, K extends ContentH
     /** instance of the contents list */
     protected List<T> mItems = new ArrayList<>();
 
-//    private ThumbnailDownloader<K> mThumbnailDownloader;
-
     protected abstract void bindViews();
     protected abstract int getSectionStringId();
     protected abstract List<T> fetchContents();
@@ -44,18 +46,6 @@ public abstract class ContentsListFragment<T extends Content, K extends ContentH
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-
-//        Handler responseHandler = new Handler();
-//        mThumbnailDownloader = new ThumbnailDownloader<>(responseHandler);
-//        mThumbnailDownloader.setThumbnailDownloadListener(new ThumbnailDownloader.ThumbnailDownloadListener<K>() {
-//            @Override
-//            public void onThumbnailDownladed(K target, Object thumbnail) {
-//                //TODO : hook up handler with this list fragment.
-//            }
-//        });
-//        mThumbnailDownloader.start();
-//        mThumbnailDownloader.getLooper();
-//        Log.i(TAG, "Background thread started");
     }
 
     @Override
@@ -78,19 +68,6 @@ public abstract class ContentsListFragment<T extends Content, K extends ContentH
 
         new FetchTask().execute();
         return mBinding.getRoot();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-//        mThumbnailDownloader.clearQueue();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-//        mThumbnailDownloader.quit();
-//        Log.i(TAG, "Background thread destroyed");
     }
 
     protected abstract void setupAdatper();

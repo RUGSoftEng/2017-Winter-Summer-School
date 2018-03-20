@@ -7,14 +7,12 @@ import android.graphics.Color;
  *
  * @since 13/04/2017
  * @author Jeongkyun Oh
+ * @version 2.0.0
  */
 
 public class Announcement extends Content {
 
-    /** name of person who upload the announcement */
     private String mPoster;
-
-    /** date that the announcement is posted */
     private String mDate;
 
     public String getPoster() {
@@ -31,6 +29,10 @@ public class Announcement extends Content {
 
     public void setDate(String date) {
         mDate = date;
+    }
+
+    public String getInitial() {
+        return mPoster.charAt(0) + "";
     }
 
     public int getColor() {

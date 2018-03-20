@@ -14,7 +14,11 @@ import com.google.android.gms.common.SignInButton;
 import nl.rug.www.rugsummerschools.R;
 
 /**
- * Created by RavenSP on 30/5/2017.
+ * This is fragment for facebook or google login in order to use forum section
+ *
+ * @author Jeongkyun Oh
+ * @since 09/02/2018
+ * @version 2.0.0
  */
 
 public class ForumLoginFragment extends Fragment implements View.OnClickListener {

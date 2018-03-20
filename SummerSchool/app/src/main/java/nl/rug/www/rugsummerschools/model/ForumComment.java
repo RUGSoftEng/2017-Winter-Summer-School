@@ -1,28 +1,23 @@
 package nl.rug.www.rugsummerschools.model;
 
 /**
- * Created by jk on 5/14/17.
- */
+ * Forum comment model
+ *
+ * @since 14/05/2017
+ * @author Jeongkyun Oh
+ * @version 2.0.0
+ **/
 
-public class ForumComment {
 
-    private String mCommentId;
+public class ForumComment extends Content {
+
     private String mPosterId;
     private String mPoster;
     private String mDate;
-    private String mText;
     private String mImgUrl;
 
     public String getImgUrl() {
         return mImgUrl;
-    }
-
-    public String getCommentId() {
-        return mCommentId;
-    }
-
-    public void setCommentId(String commentId) {
-        mCommentId = commentId;
     }
 
     public void setImgUrl(String imgUrl) {
@@ -51,13 +46,5 @@ public class ForumComment {
 
     public void setDate(String date) {
         mDate = date;
-    }
-
-    public String getText() {
-        return mText;
-    }
-
-    public void setText(String text) {
-        mText = text;
     }
 }

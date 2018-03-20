@@ -16,9 +16,13 @@ import nl.rug.www.rugsummerschools.controller.ContentHolder;
 import nl.rug.www.rugsummerschools.model.Lecturer;
 
 /**
- * Created by jk on 17. 12. 6.
+ * ViewHolder class for lecturer recycler view.
+ * Its role is to bind a model to the view
+ *
+ * @author Jeongkyun Oh
+ * @since 06/12/17
+ * @version 2.0.0
  */
-
 public abstract class LecturerHolder extends ContentHolder<Lecturer> implements View.OnClickListener {
 
     private Context mContext;
@@ -28,8 +32,8 @@ public abstract class LecturerHolder extends ContentHolder<Lecturer> implements 
     public LecturerHolder(LayoutInflater inflater, ViewGroup parent, Context context) {
         super(inflater.inflate(R.layout.list_item_lecturer, parent, false));
         mContext = context;
-        mTitleTextView = (TextView)itemView.findViewById(R.id.lecturer_item_name_text_view);
-        mLecturerImageView = (ImageView)itemView.findViewById(R.id.lecturer_image_view);
+        mTitleTextView = itemView.findViewById(R.id.lecturer_item_name_text_view);
+        mLecturerImageView = itemView.findViewById(R.id.lecturer_image_view);
         itemView.setOnClickListener(this);
     }
 

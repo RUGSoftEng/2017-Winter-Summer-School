@@ -26,6 +26,15 @@ import nl.rug.www.rugsummerschools.controller.ContentsLab;
 import nl.rug.www.rugsummerschools.model.GeneralInfo;
 import nl.rug.www.rugsummerschools.model.Lecturer;
 
+/**
+ * This is scrolling activity for general information.
+ * It contains information of a general information.
+ *
+ * @since 10/02/2018
+ * @author Jeongkyun Oh
+ * @version 2.0.0
+ */
+
 public class GeneralInfoScrollingActivity extends AppCompatActivity {
 
     protected static final String EXTRA_CONTENT_ID =
@@ -39,6 +48,20 @@ public class GeneralInfoScrollingActivity extends AppCompatActivity {
         return intent;
     }
 
+    private void inflateDrawable(String category, ImageView view) {
+        if ("Food".equals(category)) {
+            Glide.with(this).load(R.drawable.bg_food).into(view);
+        } else if ("Location".equals(category)) {
+            Glide.with(this).load(R.drawable.bg_map).into(view);
+        } else if ("Internet".equals(category)) {
+            Glide.with(this).load(R.drawable.bg_internet).into(view);
+        } else if ("Accommodation".equals(category)) {
+            Glide.with(this).load(R.drawable.bg_accomodation).into(view);
+        } else {
+            Glide.with(this).load(R.drawable.bg_info).into(view);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,25 +72,10 @@ public class GeneralInfoScrollingActivity extends AppCompatActivity {
         TextView detailTextView = findViewById(R.id.contents);
         ImageView backgroudView = findViewById(R.id.background_app_bar);
 
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(mGeneralInfo.getTitle());
-        switch (mGeneralInfo.getCategory()) {
-            case 0 :
-                backgroudView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.bg_food));
-                break;
-            case 1:
-                backgroudView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.bg_map));
-                break;
-            case 2:
-                backgroudView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.bg_internet));
-                break;
-            case 3:
-                backgroudView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.bg_accomodation));
-                break;
-            case 4:
-                backgroudView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.bg_info));
-                break;
-        }
+        String category = mGeneralInfo.getCategory();
+        inflateDrawable(category, backgroudView);
         backgroudView.setColorFilter(Color.DKGRAY, PorterDuff.Mode.LIGHTEN);
         setSupportActionBar(toolbar);
 
@@ -79,7 +87,7 @@ public class GeneralInfoScrollingActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setVisibility(View.GONE);
     }
 }
