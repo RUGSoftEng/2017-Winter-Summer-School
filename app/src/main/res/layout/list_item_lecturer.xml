@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="1dp">
+
+    <ImageView
+        android:id="@+id/lecturer_image_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/ic_profile_holder"
+        android:scaleType="centerCrop"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_chainStyle="spread_inside"
+        android:contentDescription="@string/generalinfo_content_image"/>
+
+    <TextView
+        android:id="@+id/lecturer_item_name_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#A6000000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/lecturer_image_view"
+        android:paddingTop="8dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="8dp"
+        android:textSize="16sp"
+        android:textColor="@android:color/white"
+        tools:text="Lecturer Name"/>
+
+</android.support.constraint.ConstraintLayout>
