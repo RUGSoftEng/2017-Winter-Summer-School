@@ -26,14 +26,13 @@ android {
     buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "nl.rug.www.rugsummerschools"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 27
-        versionCode 8
-        versionName '2.0.2'
+        versionCode 10
+        versionName '2.0.4'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
-        versionNameSuffix '-alpha'
     }
     buildTypes {
         release {

@@ -134,21 +134,19 @@ public class TimeTableFragment extends Fragment {
         today.set(Calendar.MINUTE, 0);
         for (Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
 
-            EventsPerDay newEventsPerDay = new EventsPerDay(date);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.add(Calendar.DATE, -1);
+            EventsPerDay newEventsPerDay = new EventsPerDay(calendar.getTime());
             List<Event> eventList = new ArrayList<>();
             while (idx < events.size() && date.compareTo(events.get(idx).getStartDate()) > 0) {
                 eventList.add(events.get(idx));
                 idx++;
             }
 
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(date);
-            if (calendar.get(Calendar.DATE) == 1 || Calendar.MONDAY == calendar.get(Calendar.DAY_OF_WEEK)) {
-                mEventsPerDayList.add(newEventsPerDay);
-                if (today.after(calendar))
-                    mTodayOffset++;
-            } else if (eventList.size() != 0) {
-                newEventsPerDay.setEvents(eventList);
+            if (calendar.get(Calendar.DATE) == 1 || Calendar.MONDAY == calendar.get(Calendar.DAY_OF_WEEK) || eventList.size() != 0) {
+                if (eventList.size() != 0)
+                    newEventsPerDay.setEvents(eventList);
                 mEventsPerDayList.add(newEventsPerDay);
                 if (today.after(calendar))
                     mTodayOffset++;

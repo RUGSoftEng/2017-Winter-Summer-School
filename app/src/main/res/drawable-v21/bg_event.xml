@@ -4,8 +4,8 @@
         android:state_enabled="true"
         android:state_pressed="false">
         <shape>
-            <solid android:color="@color/colorAccent"/>
-            <stroke android:width="3dip" android:color="@color/colorAccent" />
+            <solid android:color="@color/colorEvent"/>
+            <stroke android:width="3dip" android:color="@color/colorEvent" />
             <corners android:radius="2dp"/>
             <padding android:left="0dip" android:top="0dip" android:right="0dip" android:bottom="0dip" />
         </shape>
@@ -15,8 +15,8 @@
         android:state_enabled="true"
         android:state_pressed="true">
         <shape>
-            <solid android:color="@color/colorAccentDark"/>
-            <stroke android:width="3dip" android:color="@color/colorAccentDark" />
+            <solid android:color="@color/colorEventDark"/>
+            <stroke android:width="3dip" android:color="@color/colorEventDark" />
             <corners android:radius="2dp"/>
             <padding android:left="0dip" android:top="0dip" android:right="0dip" android:bottom="0dip" />
         </shape>

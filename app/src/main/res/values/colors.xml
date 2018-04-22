@@ -6,4 +6,7 @@
     <color name="colorAccentDark">#006db8</color>
     <color name="colorGray">#B4BAC0</color>
     <color name="colorTitle">#2B3D4D</color>
+    <color name="colorEvent">#455A64</color>
+    <color name="colorEventDark">#37474F</color>
+    <color name="colorButton">#cddc39</color>
 </resources>
