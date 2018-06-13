@@ -40,7 +40,8 @@ public class LecturerListFragment extends ContentsListFragment<Lecturer, Content
 
     @Override
     protected List<Lecturer> fetchContents() {
-        return new NetworkingService<Lecturer>().fetchData(NetworkingService.LECTURER, null);
+        String schoolId = ContentsLab.get().getSchoolInfo().getSchoolId();
+        return new NetworkingService<Lecturer>().fetchData(NetworkingService.LECTURER, schoolId);
     }
 
     @Override

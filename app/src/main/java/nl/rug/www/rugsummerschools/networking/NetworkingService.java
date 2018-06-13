@@ -191,12 +191,14 @@ public class NetworkingService<T extends Content> {
                     break;
                 case GENERAL_INFO:
                     paths.add("generalinfo");
-                    jsonString = getUrlString(buildURL(paths, null));
+                    queries.put("school", extra);
+                    jsonString = getUrlString(buildURL(paths, queries));
                     parseGeneralInfos((List<GeneralInfo>) data, new JSONArray(jsonString));
                     break;
                 case LECTURER:
                     paths.add("lecturer");
-                    jsonString = getUrlString(buildURL(paths, null));
+                    queries.put("school", extra);
+                    jsonString = getUrlString(buildURL(paths, queries));
                     parseLecturers((List<Lecturer>) data, new JSONArray(jsonString));
                     break;
                 case EVENT:

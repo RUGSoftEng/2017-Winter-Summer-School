@@ -80,9 +80,10 @@ public class LecturerScrollingActivity extends AppCompatActivity implements View
     @Override
     public void onClick(View view) {
         String url = mLecturer.getWebsite();
+        if (!url.matches("^(http|https)://.*"))
+            url = "https://" + url;
         try {
-            Uri website = new Uri.Builder().scheme("https")
-                    .authority(url).build();
+            Uri website = Uri.parse(url);
             Intent websiteIntent = new Intent(Intent.ACTION_VIEW, website);
             startActivity(websiteIntent);
         } catch (Exception e) {

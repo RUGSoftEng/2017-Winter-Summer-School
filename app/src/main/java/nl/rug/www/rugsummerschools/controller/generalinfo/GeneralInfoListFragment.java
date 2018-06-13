@@ -41,7 +41,8 @@ public class GeneralInfoListFragment extends ContentsListFragment<GeneralInfo, C
 
     @Override
     protected List<GeneralInfo> fetchContents() {
-        return new NetworkingService<GeneralInfo>().fetchData(NetworkingService.GENERAL_INFO, null);
+        String schoolId = ContentsLab.get().getSchoolInfo().getSchoolId();
+        return new NetworkingService<GeneralInfo>().fetchData(NetworkingService.GENERAL_INFO, schoolId);
     }
 
     @Override
